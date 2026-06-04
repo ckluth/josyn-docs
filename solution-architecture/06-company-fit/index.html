@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Company Fit — josyn-docs</title>
+  <link rel="stylesheet" href="../site.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-header">josyn-docs</div>
+    <a href="../index.html" class="nav-home">Solution Architecture</a>
+<div class="nav-section">Context</div>
+<a href="../01-context/index.html" class="nav-link">Overview</a>
+<a href="../01-context/josyn-and-jobsystem.html" class="nav-link">JOSYN and its Predecessor</a>
+<div class="nav-section">Constraints And Settled Decisions</div>
+<a href="../02-constraints-and-settled-decisions/index.html" class="nav-link">Overview</a>
+<a href="../02-constraints-and-settled-decisions/settled-decisions.html" class="nav-link">Settled Decisions</a>
+<div class="nav-section">Physical Architecture</div>
+<a href="../03-physical-architecture/index.html" class="nav-link">Overview</a>
+<a href="../03-physical-architecture/folder-layout.html" class="nav-link">Folder Layout</a>
+<a href="../03-physical-architecture/job-registry.html" class="nav-link">Job Registry</a>
+<a href="../03-physical-architecture/machine-topology.html" class="nav-link">Machine Topology</a>
+<a href="../03-physical-architecture/services-and-executables.html" class="nav-link">Services and Executables</a>
+<a href="../03-physical-architecture/session-store.html" class="nav-link">Session Store</a>
+<div class="nav-section">Identity And Security</div>
+<a href="../04-identity-and-security/index.html" class="nav-link">Overview</a>
+<a href="../04-identity-and-security/identity-and-impersonation.html" class="nav-link">Identity and Impersonation</a>
+<div class="nav-section">Deployment And Operations</div>
+<a href="../05-deployment-and-operations/index.html" class="nav-link">Overview</a>
+<a href="../05-deployment-and-operations/job-deployment.html" class="nav-link">Job Deployment</a>
+<div class="nav-section">Company Fit</div>
+<a href="index.html" class="nav-link active">Overview</a>
+<a href="audit-and-session-record.html" class="nav-link">Audit and the Session Record</a>
+<a href="coexistence-with-jobsystem.html" class="nav-link">Coexistence with JobSystem</a>
+<a href="isolation-vs-integration.html" class="nav-link">Isolation vs. Integration</a>
+<a href="maintainability-and-knowledge-transfer.html" class="nav-link">Maintainability and Knowledge Transfer</a>
+<div class="nav-section">Evolution And Lifecycle</div>
+<a href="../07-evolution-and-lifecycle/index.html" class="nav-link">Overview</a>
+<a href="../07-evolution-and-lifecycle/evolution-horizon.html" class="nav-link">Evolution Horizon</a>
+<a href="../07-evolution-and-lifecycle/yagni-decisions.html" class="nav-link">YAGNI Decisions</a>
+<div class="nav-section">Documentation And Training</div>
+<a href="../08-documentation-and-training/index.html" class="nav-link">Overview</a>
+<a href="../08-documentation-and-training/overview.html" class="nav-link">Documentation and Training — Overview</a>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="company-fit">Company Fit</h1>
+<p>Describes how JOSYN fits into the company's world — technically, organisationally, and
+over time. This chapter asks three questions: How does JOSYN protect its platform identity
+while adapting to a specific company? How does the company migrate from JobSystem without
+disruption? And how does the system remain maintainable as the people who built it move on?</p>
+<h2 id="in-scope">In Scope</h2>
+<ul>
+<li>JOSYN's agnostic identity vs. company-specific tailoring (adapters, extension points)</li>
+<li>The MIT-licence angle — what platform agnosticity means in practice</li>
+<li>Integration with the company's development and release process</li>
+<li>Governance — who owns what decisions</li>
+<li>Compliance and regulatory obligations</li>
+<li>Audit-readiness — what must be logged and traceable</li>
+<li>Migration from JobSystem — parallel existence, what to keep, what to overcome</li>
+<li>Maintainability and knowledge transfer — no expert dependencies, no tribal knowledge</li>
+<li>Organisational identity management (Active Directory, policies)</li>
+</ul>
+<h2 id="out-of-scope">Out of Scope</h2>
+<ul>
+<li>Technical security implementation → see <a href="../04-identity-and-security/index.html">04-identity-and-security/</a></li>
+<li>Deployment procedures → see <a href="../05-deployment-and-operations/index.html">05-deployment-and-operations/</a></li>
+</ul>
+<h2 id="gray-areas-dependencies">Gray Areas &amp; Dependencies</h2>
+<table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Here</th>
+<th>Elsewhere</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity management</td>
+<td>Organisational: AD governance, access policies</td>
+<td>Technical: impersonation, service accounts → <a href="../04-identity-and-security/index.html">04-identity-and-security/</a></td>
+</tr>
+<tr>
+<td>Job registry governance</td>
+<td>Who is allowed to register jobs, approval process</td>
+<td>Physical structure of the registry → <a href="../03-physical-architecture/index.html">03-physical-architecture/</a></td>
+</tr>
+<tr>
+<td>Extension points</td>
+<td>What the contracts are and who owns what</td>
+<td>Physical implementation (e.g. GlobalConfig) → <a href="../03-physical-architecture/index.html">03-physical-architecture/</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="isolation-vs-integration.html">isolation-vs-integration.md</a> — Platform agnosticity, extension points, MIT-licence intent</li>
+<li><a href="coexistence-with-jobsystem.html">coexistence-with-jobsystem.md</a> — Migration model, parallel existence, what to keep vs overcome</li>
+<li><a href="audit-and-session-record.html">audit-and-session-record.md</a> — Session store as audit trail, current gaps, compliance considerations (TBD)</li>
+<li><a href="maintainability-and-knowledge-transfer.html">maintainability-and-knowledge-transfer.md</a> — No expert dependencies, knowledge transfer as a design constraint</li>
+</ul>
+<h2 id="related-decisions">Related Decisions</h2>
+<p><em>(none yet)</em></p>
+
+    </article>
+  </main>
+</body>
+</html>

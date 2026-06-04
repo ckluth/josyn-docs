@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Solution Architecture — josyn-docs</title>
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-header">josyn-docs</div>
+    <a href="index.html" class="nav-home active">Solution Architecture</a>
+<div class="nav-section">Context</div>
+<a href="01-context/index.html" class="nav-link">Overview</a>
+<a href="01-context/josyn-and-jobsystem.html" class="nav-link">JOSYN and its Predecessor</a>
+<div class="nav-section">Constraints And Settled Decisions</div>
+<a href="02-constraints-and-settled-decisions/index.html" class="nav-link">Overview</a>
+<a href="02-constraints-and-settled-decisions/settled-decisions.html" class="nav-link">Settled Decisions</a>
+<div class="nav-section">Physical Architecture</div>
+<a href="03-physical-architecture/index.html" class="nav-link">Overview</a>
+<a href="03-physical-architecture/folder-layout.html" class="nav-link">Folder Layout</a>
+<a href="03-physical-architecture/job-registry.html" class="nav-link">Job Registry</a>
+<a href="03-physical-architecture/machine-topology.html" class="nav-link">Machine Topology</a>
+<a href="03-physical-architecture/services-and-executables.html" class="nav-link">Services and Executables</a>
+<a href="03-physical-architecture/session-store.html" class="nav-link">Session Store</a>
+<div class="nav-section">Identity And Security</div>
+<a href="04-identity-and-security/index.html" class="nav-link">Overview</a>
+<a href="04-identity-and-security/identity-and-impersonation.html" class="nav-link">Identity and Impersonation</a>
+<div class="nav-section">Deployment And Operations</div>
+<a href="05-deployment-and-operations/index.html" class="nav-link">Overview</a>
+<a href="05-deployment-and-operations/job-deployment.html" class="nav-link">Job Deployment</a>
+<div class="nav-section">Company Fit</div>
+<a href="06-company-fit/index.html" class="nav-link">Overview</a>
+<a href="06-company-fit/audit-and-session-record.html" class="nav-link">Audit and the Session Record</a>
+<a href="06-company-fit/coexistence-with-jobsystem.html" class="nav-link">Coexistence with JobSystem</a>
+<a href="06-company-fit/isolation-vs-integration.html" class="nav-link">Isolation vs. Integration</a>
+<a href="06-company-fit/maintainability-and-knowledge-transfer.html" class="nav-link">Maintainability and Knowledge Transfer</a>
+<div class="nav-section">Evolution And Lifecycle</div>
+<a href="07-evolution-and-lifecycle/index.html" class="nav-link">Overview</a>
+<a href="07-evolution-and-lifecycle/evolution-horizon.html" class="nav-link">Evolution Horizon</a>
+<a href="07-evolution-and-lifecycle/yagni-decisions.html" class="nav-link">YAGNI Decisions</a>
+<div class="nav-section">Documentation And Training</div>
+<a href="08-documentation-and-training/index.html" class="nav-link">Overview</a>
+<a href="08-documentation-and-training/overview.html" class="nav-link">Documentation and Training — Overview</a>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="solution-architecture">Solution Architecture</h1>
+<p>This section describes JOSYN as a <strong>concrete, deployed system in a company's reality</strong>.
+It is the Solution Architecture view — distinct from the platform and code architecture
+documented elsewhere in this repo. Where the platform view asks <em>&quot;how is JOSYN designed?&quot;</em>,
+this view asks <em>&quot;how does JOSYN actually exist — on machines, in organisations, over time?&quot;</em></p>
+<h2 id="chapters">Chapters</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Chapter</th>
+<th>What it covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><a href="01-context/index.html">Context</a></td>
+<td>What JOSYN is, who uses it, what it replaces, what it connects to</td>
+</tr>
+<tr>
+<td>2</td>
+<td><a href="02-constraints-and-settled-decisions/index.html">Constraints &amp; Settled Decisions</a></td>
+<td>The eternals — things that are fixed and not up for discussion</td>
+</tr>
+<tr>
+<td>3</td>
+<td><a href="03-physical-architecture/index.html">Physical Architecture</a></td>
+<td>Machines, folder layout, services, backend structure, database, job registry</td>
+</tr>
+<tr>
+<td>4</td>
+<td><a href="04-identity-and-security/index.html">Identity &amp; Security</a></td>
+<td>Certificates, impersonation, domain users, authentication</td>
+</tr>
+<tr>
+<td>5</td>
+<td><a href="05-deployment-and-operations/index.html">Deployment &amp; Operations</a></td>
+<td>Installer, bootstrapping, conventions, maintenance</td>
+</tr>
+<tr>
+<td>6</td>
+<td><a href="06-company-fit/index.html">Company Fit</a></td>
+<td>Governance, compliance, audit-readiness, politics, development process</td>
+</tr>
+<tr>
+<td>7</td>
+<td><a href="07-evolution-and-lifecycle/index.html">Evolution &amp; Lifecycle</a></td>
+<td>Docker/Linux horizon, YAGNI boundaries, multi-runtime jobs</td>
+</tr>
+<tr>
+<td>8</td>
+<td><a href="08-documentation-and-training/index.html">Documentation &amp; Training</a></td>
+<td>Public documentation, training materials, onboarding</td>
+</tr>
+</tbody>
+</table>
+<h2 id="how-to-navigate">How to Navigate</h2>
+<p>Start with a chapter that matches your question. Each chapter README describes its scope,
+what it explicitly excludes, and where overlapping topics are handled instead. Content lives
+in dedicated files within each chapter folder — the README is the map, not the territory.</p>
+<p>Architectural decisions are stored canonically in <a href="../decisions/"><code>decisions/</code></a> at the repo
+root. You will never need to browse that folder directly — every decision relevant to a topic
+is linked from the content that depends on it.</p>
+
+    </article>
+  </main>
+</body>
+</html>

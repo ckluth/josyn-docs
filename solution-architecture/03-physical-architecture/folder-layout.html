@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Folder Layout — josyn-docs</title>
+  <link rel="stylesheet" href="../site.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-header">josyn-docs</div>
+    <a href="../index.html" class="nav-home">Solution Architecture</a>
+<div class="nav-section">Context</div>
+<a href="../01-context/index.html" class="nav-link">Overview</a>
+<a href="../01-context/josyn-and-jobsystem.html" class="nav-link">JOSYN and its Predecessor</a>
+<div class="nav-section">Constraints And Settled Decisions</div>
+<a href="../02-constraints-and-settled-decisions/index.html" class="nav-link">Overview</a>
+<a href="../02-constraints-and-settled-decisions/settled-decisions.html" class="nav-link">Settled Decisions</a>
+<div class="nav-section">Physical Architecture</div>
+<a href="index.html" class="nav-link">Overview</a>
+<a href="folder-layout.html" class="nav-link active">Folder Layout</a>
+<a href="job-registry.html" class="nav-link">Job Registry</a>
+<a href="machine-topology.html" class="nav-link">Machine Topology</a>
+<a href="services-and-executables.html" class="nav-link">Services and Executables</a>
+<a href="session-store.html" class="nav-link">Session Store</a>
+<div class="nav-section">Identity And Security</div>
+<a href="../04-identity-and-security/index.html" class="nav-link">Overview</a>
+<a href="../04-identity-and-security/identity-and-impersonation.html" class="nav-link">Identity and Impersonation</a>
+<div class="nav-section">Deployment And Operations</div>
+<a href="../05-deployment-and-operations/index.html" class="nav-link">Overview</a>
+<a href="../05-deployment-and-operations/job-deployment.html" class="nav-link">Job Deployment</a>
+<div class="nav-section">Company Fit</div>
+<a href="../06-company-fit/index.html" class="nav-link">Overview</a>
+<a href="../06-company-fit/audit-and-session-record.html" class="nav-link">Audit and the Session Record</a>
+<a href="../06-company-fit/coexistence-with-jobsystem.html" class="nav-link">Coexistence with JobSystem</a>
+<a href="../06-company-fit/isolation-vs-integration.html" class="nav-link">Isolation vs. Integration</a>
+<a href="../06-company-fit/maintainability-and-knowledge-transfer.html" class="nav-link">Maintainability and Knowledge Transfer</a>
+<div class="nav-section">Evolution And Lifecycle</div>
+<a href="../07-evolution-and-lifecycle/index.html" class="nav-link">Overview</a>
+<a href="../07-evolution-and-lifecycle/evolution-horizon.html" class="nav-link">Evolution Horizon</a>
+<a href="../07-evolution-and-lifecycle/yagni-decisions.html" class="nav-link">YAGNI Decisions</a>
+<div class="nav-section">Documentation And Training</div>
+<a href="../08-documentation-and-training/index.html" class="nav-link">Overview</a>
+<a href="../08-documentation-and-training/overview.html" class="nav-link">Documentation and Training — Overview</a>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="folder-layout">Folder Layout</h1>
+<p>JOSYN has well-known, fixed locations on a machine. The convention of predictable paths
+is intentional — it makes deployment, troubleshooting, and automation reliable.</p>
+<h2 id="backend-installation-folder">Backend Installation Folder</h2>
+<p>The backend executables and services reside in a well-defined location on the machine.</p>
+<p><em>(Exact path TBD — to be aligned with the installer design.)</em></p>
+<h2 id="job-repository">Job Repository</h2>
+<pre><code>JobRepository/
+└── &lt;JobName&gt;/
+    ├── &lt;JobName&gt;.exe
+    └── &lt;dependencies — if not self-contained&gt;
+</code></pre>
+<p>Jobs physically reside on the same machine as the backend that orchestrates their execution.
+Each job has its own subfolder within the <code>JobRepository</code> root. The folder name identifies
+the job. A job consists of one or more binaries in its subfolder.</p>
+<p>This is a direct carry-over from <code>JobSystem</code>, where the equivalent was <code>JobSystem.JobRepository</code>.
+The key improvement: jobs are now executables (<code>job.exe</code>) rather than class-library assemblies
+(<code>.dll</code>). Assembly-resolve pain is gone. Shared process-space is gone.</p>
+<h2 id="log-folder">Log Folder</h2>
+<p>Each process writes its logs to a well-known log directory.
+The <code>LocalLog</code> component (<code>JOSYN.Jap.Shared.Log</code>) writes per-date files:</p>
+<pre><code>&lt;LogDirectory&gt;/
+├── &lt;causer&gt;/
+│   └── yyyy-MM-dd.log     ← causer-specific (error routing by source process)
+└── yyyy-MM-dd.log         ← process-level log
+</code></pre>
+<p><em>(Log directory paths TBD — to be aligned with installer/deployment conventions.)</em></p>
+
+    </article>
+  </main>
+</body>
+</html>

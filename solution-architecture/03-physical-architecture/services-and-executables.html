@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Services and Executables — josyn-docs</title>
+  <link rel="stylesheet" href="../site.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-header">josyn-docs</div>
+    <a href="../index.html" class="nav-home">Solution Architecture</a>
+<div class="nav-section">Context</div>
+<a href="../01-context/index.html" class="nav-link">Overview</a>
+<a href="../01-context/josyn-and-jobsystem.html" class="nav-link">JOSYN and its Predecessor</a>
+<div class="nav-section">Constraints And Settled Decisions</div>
+<a href="../02-constraints-and-settled-decisions/index.html" class="nav-link">Overview</a>
+<a href="../02-constraints-and-settled-decisions/settled-decisions.html" class="nav-link">Settled Decisions</a>
+<div class="nav-section">Physical Architecture</div>
+<a href="index.html" class="nav-link">Overview</a>
+<a href="folder-layout.html" class="nav-link">Folder Layout</a>
+<a href="job-registry.html" class="nav-link">Job Registry</a>
+<a href="machine-topology.html" class="nav-link">Machine Topology</a>
+<a href="services-and-executables.html" class="nav-link active">Services and Executables</a>
+<a href="session-store.html" class="nav-link">Session Store</a>
+<div class="nav-section">Identity And Security</div>
+<a href="../04-identity-and-security/index.html" class="nav-link">Overview</a>
+<a href="../04-identity-and-security/identity-and-impersonation.html" class="nav-link">Identity and Impersonation</a>
+<div class="nav-section">Deployment And Operations</div>
+<a href="../05-deployment-and-operations/index.html" class="nav-link">Overview</a>
+<a href="../05-deployment-and-operations/job-deployment.html" class="nav-link">Job Deployment</a>
+<div class="nav-section">Company Fit</div>
+<a href="../06-company-fit/index.html" class="nav-link">Overview</a>
+<a href="../06-company-fit/audit-and-session-record.html" class="nav-link">Audit and the Session Record</a>
+<a href="../06-company-fit/coexistence-with-jobsystem.html" class="nav-link">Coexistence with JobSystem</a>
+<a href="../06-company-fit/isolation-vs-integration.html" class="nav-link">Isolation vs. Integration</a>
+<a href="../06-company-fit/maintainability-and-knowledge-transfer.html" class="nav-link">Maintainability and Knowledge Transfer</a>
+<div class="nav-section">Evolution And Lifecycle</div>
+<a href="../07-evolution-and-lifecycle/index.html" class="nav-link">Overview</a>
+<a href="../07-evolution-and-lifecycle/evolution-horizon.html" class="nav-link">Evolution Horizon</a>
+<a href="../07-evolution-and-lifecycle/yagni-decisions.html" class="nav-link">YAGNI Decisions</a>
+<div class="nav-section">Documentation And Training</div>
+<a href="../08-documentation-and-training/index.html" class="nav-link">Overview</a>
+<a href="../08-documentation-and-training/overview.html" class="nav-link">Documentation and Training — Overview</a>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="services-and-executables">Services and Executables</h1>
+<h2 id="overview">Overview</h2>
+<p>The JOSYN backend is a set of executables. Some are Windows services (long-running daemons);
+some are short-lived per-session processes. Future evolution may include Linux daemons.</p>
+<h2 id="current-state-poc-phase">Current State (PoC Phase)</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Type</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JOSYN.Jap.JAPServer.exe</code></td>
+<td>Console EXE (spawned per session)</td>
+<td>Per-session JAP protocol server; bridges backend and job process</td>
+</tr>
+<tr>
+<td><code>JOSYN.Backend.Demo.FakeSessionStarterConsumer.exe</code></td>
+<td>Console EXE (PoC demo only)</td>
+<td>Proves end-to-end session round-trip; not a production component</td>
+</tr>
+</tbody>
+</table>
+<h2 id="planned-components-replacing-jobsystem">Planned Components (Replacing JobSystem)</h2>
+<table>
+<thead>
+<tr>
+<th>Future Component</th>
+<th>Replaces</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JOSYN.Backend.Service</code></td>
+<td><code>JobSystem.Service</code> (WCF server)</td>
+<td>Windows service; receives &quot;start job&quot; requests</td>
+</tr>
+<tr>
+<td><code>JOSYN.Backend.TriggerAgent</code></td>
+<td><code>JobSystem.TriggerAgent</code></td>
+<td>Windows service; polls once per minute for scheduled executions</td>
+</tr>
+<tr>
+<td><code>JOSYN.Backend.Scheduling</code></td>
+<td><code>JobSystem.Scheduling</code></td>
+<td>Time-scheduling logic</td>
+</tr>
+<tr>
+<td><code>JOSYN.Backend.WorkflowAdapter</code></td>
+<td><code>JobSystem.WorkflowAdapter</code></td>
+<td>Activates a job as a step in a proprietary workflow</td>
+</tr>
+<tr>
+<td>listener-service EXE</td>
+<td>—</td>
+<td>Future: receives &quot;start job&quot; requests</td>
+</tr>
+<tr>
+<td>ticker-service EXE</td>
+<td>—</td>
+<td>Future: polls for scheduled executions</td>
+</tr>
+<tr>
+<td>operator CLI EXE</td>
+<td>—</td>
+<td>Future: command-line tool for operators</td>
+</tr>
+</tbody>
+</table>
+<h2 id="per-session-japserver">Per-Session: JAPServer</h2>
+<p>Each job execution spawns a fresh <code>JAPServer.exe</code> instance with a unique session GUID:</p>
+<pre><code>josyn-backend (SessionStarter)
+    └──spawns──► JAPServer.exe JOSYN-IPC &lt;sessionGUID&gt;
+                     └──spawns──► job.exe JOSYN-IPC &lt;sessionGUID&gt;
+</code></pre>
+<p><code>JAPServer.exe</code> lives for the duration of one session only. It is not a long-running daemon.
+It listens on a pair of GUID-named pipes, serves the JAP protocol to the job process, and exits.</p>
+<h2 id="cli-contract">CLI Contract</h2>
+<p>Both <code>JAPServer.exe</code> and <code>job.exe</code> receive the session GUID via their command-line arguments:</p>
+<pre><code>JAPServer.exe  JOSYN-IPC &lt;sessionGUID&gt;
+job.exe        JOSYN-IPC &lt;sessionGUID&gt;
+</code></pre>
+<p>The GUID names the pipes both processes use to communicate with each other.
+Session isolation is structural — two sessions can never interfere because each has unique pipe names.</p>
+
+    </article>
+  </main>
+</body>
+</html>

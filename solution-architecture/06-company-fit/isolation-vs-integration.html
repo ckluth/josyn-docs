@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Isolation vs. Integration — josyn-docs</title>
+  <link rel="stylesheet" href="../site.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-header">josyn-docs</div>
+    <a href="../index.html" class="nav-home">Solution Architecture</a>
+<div class="nav-section">Context</div>
+<a href="../01-context/index.html" class="nav-link">Overview</a>
+<a href="../01-context/josyn-and-jobsystem.html" class="nav-link">JOSYN and its Predecessor</a>
+<div class="nav-section">Constraints And Settled Decisions</div>
+<a href="../02-constraints-and-settled-decisions/index.html" class="nav-link">Overview</a>
+<a href="../02-constraints-and-settled-decisions/settled-decisions.html" class="nav-link">Settled Decisions</a>
+<div class="nav-section">Physical Architecture</div>
+<a href="../03-physical-architecture/index.html" class="nav-link">Overview</a>
+<a href="../03-physical-architecture/folder-layout.html" class="nav-link">Folder Layout</a>
+<a href="../03-physical-architecture/job-registry.html" class="nav-link">Job Registry</a>
+<a href="../03-physical-architecture/machine-topology.html" class="nav-link">Machine Topology</a>
+<a href="../03-physical-architecture/services-and-executables.html" class="nav-link">Services and Executables</a>
+<a href="../03-physical-architecture/session-store.html" class="nav-link">Session Store</a>
+<div class="nav-section">Identity And Security</div>
+<a href="../04-identity-and-security/index.html" class="nav-link">Overview</a>
+<a href="../04-identity-and-security/identity-and-impersonation.html" class="nav-link">Identity and Impersonation</a>
+<div class="nav-section">Deployment And Operations</div>
+<a href="../05-deployment-and-operations/index.html" class="nav-link">Overview</a>
+<a href="../05-deployment-and-operations/job-deployment.html" class="nav-link">Job Deployment</a>
+<div class="nav-section">Company Fit</div>
+<a href="index.html" class="nav-link">Overview</a>
+<a href="audit-and-session-record.html" class="nav-link">Audit and the Session Record</a>
+<a href="coexistence-with-jobsystem.html" class="nav-link">Coexistence with JobSystem</a>
+<a href="isolation-vs-integration.html" class="nav-link active">Isolation vs. Integration</a>
+<a href="maintainability-and-knowledge-transfer.html" class="nav-link">Maintainability and Knowledge Transfer</a>
+<div class="nav-section">Evolution And Lifecycle</div>
+<a href="../07-evolution-and-lifecycle/index.html" class="nav-link">Overview</a>
+<a href="../07-evolution-and-lifecycle/evolution-horizon.html" class="nav-link">Evolution Horizon</a>
+<a href="../07-evolution-and-lifecycle/yagni-decisions.html" class="nav-link">YAGNI Decisions</a>
+<div class="nav-section">Documentation And Training</div>
+<a href="../08-documentation-and-training/index.html" class="nav-link">Overview</a>
+<a href="../08-documentation-and-training/overview.html" class="nav-link">Documentation and Training — Overview</a>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="isolation-vs.integration">Isolation vs. Integration</h1>
+<h2 id="josyns-identity-as-a-platform">JOSYN's Identity as a Platform</h2>
+<p>JOSYN started as — and could remain as — a standalone, MIT-licensed platform.
+It has no hard dependency on any specific company's infrastructure, tooling, or conventions.
+This is deliberate. It is what makes JOSYN reusable and portable.</p>
+<p>This agnosticity is an asset worth protecting. It must not be quietly eroded by convenience
+shortcuts that bake in company-specific assumptions at the platform level.</p>
+<h2 id="the-tension">The Tension</h2>
+<p>Every real deployment of JOSYN lives inside a specific company's world:</p>
+<ul>
+<li>A specific Active Directory domain</li>
+<li>A specific SQL Server installation</li>
+<li>A specific config-manager or job registry</li>
+<li>A specific deployment process and governance structure</li>
+<li>A specific set of business conventions</li>
+</ul>
+<p>JOSYN must fit that world smoothly — but without <em>becoming</em> it.</p>
+<h2 id="the-solution-explicit-extension-points">The Solution: Explicit Extension Points</h2>
+<p>The answer to this tension is <strong>explicit, named extension points</strong> — adapters, plugins,
+and configuration interfaces that separate the stable platform core from the company-specific
+layer.</p>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Platform responsibility</th>
+<th>Company responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Session store</td>
+<td><code>ISessionStore</code> contract + EF Core implementation</td>
+<td>Connection string, schema location, retention policy</td>
+</tr>
+<tr>
+<td>Global config</td>
+<td><code>IGlobalConfig</code> contract</td>
+<td><code>CompanyConfig</code> implementation with real values</td>
+</tr>
+<tr>
+<td>Job registry</td>
+<td>Registry contract (TBD)</td>
+<td>Where registry data lives (config-manager, own table)</td>
+</tr>
+<tr>
+<td>Scheduling</td>
+<td>Trigger and ticker contracts</td>
+<td>Actual schedule definitions per job</td>
+</tr>
+<tr>
+<td>Identity / impersonation</td>
+<td>Impersonation hook (TBD)</td>
+<td>Domain user mapping per job</td>
+</tr>
+</tbody>
+</table>
+<p>The platform owns the contracts. The company owns the implementations.
+This keeps JOSYN honest about its boundaries and gives companies a clear, stable surface to build on.</p>
+<h2 id="what-this-means-in-practice">What This Means in Practice</h2>
+<ul>
+<li><strong>No company-specific code in platform packages.</strong> <code>JOSYN.Foundation.*</code>, <code>JOSYN.Jap.*</code>,
+<code>JOSYN.JobHost</code> must never contain any reference to HAEVG AG, the company config-manager,
+or any other company-specific concept.</li>
+<li><strong><code>HardcodedGlobalConfig</code> is a PoC placeholder</strong>, not a model. The real <code>GlobalConfig</code>
+implementation belongs to the company adapter layer — outside the platform proper.</li>
+<li><strong>Extension points should be documented as such.</strong> A company should be able to read the
+platform docs and understand exactly where to plug in — without reverse-engineering internals.</li>
+</ul>
+<h2 id="the-mit-licence-angle">The MIT Licence Angle</h2>
+<p>The MIT licence is not just a legal choice — it signals intent. JOSYN is meant to be
+reusable beyond HAEVG AG. Keeping the platform agnostic is what makes that real.
+If company-specific logic bleeds into the platform core, the licence becomes fiction.</p>
+
+    </article>
+  </main>
+</body>
+</html>

@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Session Store — josyn-docs</title>
+  <link rel="stylesheet" href="../site.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-header">josyn-docs</div>
+    <a href="../index.html" class="nav-home">Solution Architecture</a>
+<div class="nav-section">Context</div>
+<a href="../01-context/index.html" class="nav-link">Overview</a>
+<a href="../01-context/josyn-and-jobsystem.html" class="nav-link">JOSYN and its Predecessor</a>
+<div class="nav-section">Constraints And Settled Decisions</div>
+<a href="../02-constraints-and-settled-decisions/index.html" class="nav-link">Overview</a>
+<a href="../02-constraints-and-settled-decisions/settled-decisions.html" class="nav-link">Settled Decisions</a>
+<div class="nav-section">Physical Architecture</div>
+<a href="index.html" class="nav-link">Overview</a>
+<a href="folder-layout.html" class="nav-link">Folder Layout</a>
+<a href="job-registry.html" class="nav-link">Job Registry</a>
+<a href="machine-topology.html" class="nav-link">Machine Topology</a>
+<a href="services-and-executables.html" class="nav-link">Services and Executables</a>
+<a href="session-store.html" class="nav-link active">Session Store</a>
+<div class="nav-section">Identity And Security</div>
+<a href="../04-identity-and-security/index.html" class="nav-link">Overview</a>
+<a href="../04-identity-and-security/identity-and-impersonation.html" class="nav-link">Identity and Impersonation</a>
+<div class="nav-section">Deployment And Operations</div>
+<a href="../05-deployment-and-operations/index.html" class="nav-link">Overview</a>
+<a href="../05-deployment-and-operations/job-deployment.html" class="nav-link">Job Deployment</a>
+<div class="nav-section">Company Fit</div>
+<a href="../06-company-fit/index.html" class="nav-link">Overview</a>
+<a href="../06-company-fit/audit-and-session-record.html" class="nav-link">Audit and the Session Record</a>
+<a href="../06-company-fit/coexistence-with-jobsystem.html" class="nav-link">Coexistence with JobSystem</a>
+<a href="../06-company-fit/isolation-vs-integration.html" class="nav-link">Isolation vs. Integration</a>
+<a href="../06-company-fit/maintainability-and-knowledge-transfer.html" class="nav-link">Maintainability and Knowledge Transfer</a>
+<div class="nav-section">Evolution And Lifecycle</div>
+<a href="../07-evolution-and-lifecycle/index.html" class="nav-link">Overview</a>
+<a href="../07-evolution-and-lifecycle/evolution-horizon.html" class="nav-link">Evolution Horizon</a>
+<a href="../07-evolution-and-lifecycle/yagni-decisions.html" class="nav-link">YAGNI Decisions</a>
+<div class="nav-section">Documentation And Training</div>
+<a href="../08-documentation-and-training/index.html" class="nav-link">Overview</a>
+<a href="../08-documentation-and-training/overview.html" class="nav-link">Documentation and Training — Overview</a>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="session-store">Session Store</h1>
+<h2 id="overview">Overview</h2>
+<p>Every JOSYN job execution creates a <strong>session record</strong> in the session store.
+The session store is a SQL Server database that serves three roles:</p>
+<ol>
+<li><strong>Argument transfer</strong> — the backend writes job arguments into the session row; <code>JAPServer</code> reads them</li>
+<li><strong>Result collection</strong> — <code>JAPServer</code> writes the job result (or error) back into the row</li>
+<li><strong>Audit trail</strong> — every execution is permanently recorded</li>
+</ol>
+<h2 id="technology">Technology</h2>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Choice</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Database engine</td>
+<td>SQL Server</td>
+</tr>
+<tr>
+<td>ORM</td>
+<td>EF Core (<code>Microsoft.EntityFrameworkCore.SqlServer</code>)</td>
+</tr>
+<tr>
+<td>Schema namespace</td>
+<td><code>josyn</code></td>
+</tr>
+<tr>
+<td>Package</td>
+<td><code>JOSYN.Backend.SessionStore</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="session-lifecycle">Session Lifecycle</h2>
+<pre><code>SessionStarter  ──creates row──►  session store  (GUID + arguments)
+JAPServer       ──reads args──►   session store  (GetRawArguments)
+JAPServer       ──writes result─► session store  (PutRawResult / PutError)
+Backend         ──polls result──► session store  (completion detection)
+</code></pre>
+<p><em>(The current PoC backend uses a 500 ms poll loop to detect completion.
+A production implementation will use a push signal.)</em></p>
+<h2 id="known-poc-limitations">Known PoC Limitations</h2>
+<ul>
+<li>No <strong>session status column</strong> — orphaned rows from failed process spawns are
+indistinguishable from running sessions. A <code>status</code> field (pending / running /
+complete / failed) is needed for production.</li>
+<li>No separated <strong>start / end timestamps</strong>.</li>
+<li>No explicit <strong>job identity</strong> column linking the session to a registered job name.</li>
+</ul>
+<p>These are known gaps in the PoC, not final design choices.</p>
+
+    </article>
+  </main>
+</body>
+</html>

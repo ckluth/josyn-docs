@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Identity and Impersonation — josyn-docs</title>
+  <link rel="stylesheet" href="../site.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-header">josyn-docs</div>
+    <a href="../index.html" class="nav-home">Solution Architecture</a>
+<div class="nav-section">Context</div>
+<a href="../01-context/index.html" class="nav-link">Overview</a>
+<a href="../01-context/josyn-and-jobsystem.html" class="nav-link">JOSYN and its Predecessor</a>
+<div class="nav-section">Constraints And Settled Decisions</div>
+<a href="../02-constraints-and-settled-decisions/index.html" class="nav-link">Overview</a>
+<a href="../02-constraints-and-settled-decisions/settled-decisions.html" class="nav-link">Settled Decisions</a>
+<div class="nav-section">Physical Architecture</div>
+<a href="../03-physical-architecture/index.html" class="nav-link">Overview</a>
+<a href="../03-physical-architecture/folder-layout.html" class="nav-link">Folder Layout</a>
+<a href="../03-physical-architecture/job-registry.html" class="nav-link">Job Registry</a>
+<a href="../03-physical-architecture/machine-topology.html" class="nav-link">Machine Topology</a>
+<a href="../03-physical-architecture/services-and-executables.html" class="nav-link">Services and Executables</a>
+<a href="../03-physical-architecture/session-store.html" class="nav-link">Session Store</a>
+<div class="nav-section">Identity And Security</div>
+<a href="index.html" class="nav-link">Overview</a>
+<a href="identity-and-impersonation.html" class="nav-link active">Identity and Impersonation</a>
+<div class="nav-section">Deployment And Operations</div>
+<a href="../05-deployment-and-operations/index.html" class="nav-link">Overview</a>
+<a href="../05-deployment-and-operations/job-deployment.html" class="nav-link">Job Deployment</a>
+<div class="nav-section">Company Fit</div>
+<a href="../06-company-fit/index.html" class="nav-link">Overview</a>
+<a href="../06-company-fit/audit-and-session-record.html" class="nav-link">Audit and the Session Record</a>
+<a href="../06-company-fit/coexistence-with-jobsystem.html" class="nav-link">Coexistence with JobSystem</a>
+<a href="../06-company-fit/isolation-vs-integration.html" class="nav-link">Isolation vs. Integration</a>
+<a href="../06-company-fit/maintainability-and-knowledge-transfer.html" class="nav-link">Maintainability and Knowledge Transfer</a>
+<div class="nav-section">Evolution And Lifecycle</div>
+<a href="../07-evolution-and-lifecycle/index.html" class="nav-link">Overview</a>
+<a href="../07-evolution-and-lifecycle/evolution-horizon.html" class="nav-link">Evolution Horizon</a>
+<a href="../07-evolution-and-lifecycle/yagni-decisions.html" class="nav-link">YAGNI Decisions</a>
+<div class="nav-section">Documentation And Training</div>
+<a href="../08-documentation-and-training/index.html" class="nav-link">Overview</a>
+<a href="../08-documentation-and-training/overview.html" class="nav-link">Documentation and Training — Overview</a>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="identity-and-impersonation">Identity and Impersonation</h1>
+<h2 id="service-accounts">Service Accounts</h2>
+<p>The JOSYN backend services (future <code>TriggerAgent</code>, <code>Service</code>, etc.) run under Windows service
+accounts. These accounts need sufficient privileges to:</p>
+<ul>
+<li>Read the job repository folder</li>
+<li>Connect to the SQL Server session store</li>
+<li>Spawn child processes (<code>JAPServer.exe</code>, <code>job.exe</code>)</li>
+</ul>
+<p><em>(Specific account requirements, naming conventions, and privilege scopes: TBD)</em></p>
+<h2 id="job-impersonation">Job Impersonation</h2>
+<p>Each registered job is associated with a <strong>domain user account</strong> for impersonation.
+When a job executes, it runs under that domain identity — not the backend service account.</p>
+<p>This is a carry-over from <code>JobSystem</code> and serves important purposes:</p>
+<ul>
+<li>Jobs that access company resources (file shares, databases, APIs) do so under the
+appropriate business identity</li>
+<li>Audit logs in downstream systems reflect the correct user, not a generic service account</li>
+<li>Privilege separation: the backend service account is not over-privileged</li>
+</ul>
+<p>The impersonation user is configured in the job registry — see
+<a href="../03-physical-architecture/job-registry.html">job-registry.md</a>.</p>
+<h2 id="named-pipe-access-control">Named Pipe Access Control</h2>
+<p>Named pipes used by JIP (<code>JOSYN-REQ-&lt;guid&gt;</code>, <code>JOSYN-RSP-&lt;guid&gt;</code>) are per-session and
+GUID-named. Because both <code>JAPServer.exe</code> and <code>job.exe</code> are spawned by the same backend
+(or by <code>JAPServer</code> itself), pipe access control must permit both processes to connect.</p>
+<p><em>(Access control configuration and security descriptor requirements: TBD)</em></p>
+<h2 id="certificates">Certificates</h2>
+<p><em>(TBD — no information available yet on what certificates JOSYN requires, if any.
+Likely relevant if the backend exposes HTTP endpoints or uses certificate-based
+authentication for inter-service communication.)</em></p>
+
+    </article>
+  </main>
+</body>
+</html>

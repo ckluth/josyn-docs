@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Identity &amp; Security — josyn-docs</title>
+  <link rel="stylesheet" href="../site.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-header">josyn-docs</div>
+    <a href="../index.html" class="nav-home">Solution Architecture</a>
+<div class="nav-section">Context</div>
+<a href="../01-context/index.html" class="nav-link">Overview</a>
+<a href="../01-context/josyn-and-jobsystem.html" class="nav-link">JOSYN and its Predecessor</a>
+<div class="nav-section">Constraints And Settled Decisions</div>
+<a href="../02-constraints-and-settled-decisions/index.html" class="nav-link">Overview</a>
+<a href="../02-constraints-and-settled-decisions/settled-decisions.html" class="nav-link">Settled Decisions</a>
+<div class="nav-section">Physical Architecture</div>
+<a href="../03-physical-architecture/index.html" class="nav-link">Overview</a>
+<a href="../03-physical-architecture/folder-layout.html" class="nav-link">Folder Layout</a>
+<a href="../03-physical-architecture/job-registry.html" class="nav-link">Job Registry</a>
+<a href="../03-physical-architecture/machine-topology.html" class="nav-link">Machine Topology</a>
+<a href="../03-physical-architecture/services-and-executables.html" class="nav-link">Services and Executables</a>
+<a href="../03-physical-architecture/session-store.html" class="nav-link">Session Store</a>
+<div class="nav-section">Identity And Security</div>
+<a href="index.html" class="nav-link active">Overview</a>
+<a href="identity-and-impersonation.html" class="nav-link">Identity and Impersonation</a>
+<div class="nav-section">Deployment And Operations</div>
+<a href="../05-deployment-and-operations/index.html" class="nav-link">Overview</a>
+<a href="../05-deployment-and-operations/job-deployment.html" class="nav-link">Job Deployment</a>
+<div class="nav-section">Company Fit</div>
+<a href="../06-company-fit/index.html" class="nav-link">Overview</a>
+<a href="../06-company-fit/audit-and-session-record.html" class="nav-link">Audit and the Session Record</a>
+<a href="../06-company-fit/coexistence-with-jobsystem.html" class="nav-link">Coexistence with JobSystem</a>
+<a href="../06-company-fit/isolation-vs-integration.html" class="nav-link">Isolation vs. Integration</a>
+<a href="../06-company-fit/maintainability-and-knowledge-transfer.html" class="nav-link">Maintainability and Knowledge Transfer</a>
+<div class="nav-section">Evolution And Lifecycle</div>
+<a href="../07-evolution-and-lifecycle/index.html" class="nav-link">Overview</a>
+<a href="../07-evolution-and-lifecycle/evolution-horizon.html" class="nav-link">Evolution Horizon</a>
+<a href="../07-evolution-and-lifecycle/yagni-decisions.html" class="nav-link">YAGNI Decisions</a>
+<div class="nav-section">Documentation And Training</div>
+<a href="../08-documentation-and-training/index.html" class="nav-link">Overview</a>
+<a href="../08-documentation-and-training/overview.html" class="nav-link">Documentation and Training — Overview</a>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="identity-security">Identity &amp; Security</h1>
+<p>Describes how JOSYN handles identity and secures itself and the jobs it runs. This chapter
+answers: who is allowed to do what, how are domain identities used, and how is trust
+established between components.</p>
+<h2 id="in-scope">In Scope</h2>
+<ul>
+<li>Windows identity and service accounts</li>
+<li>Job impersonation — domain users connected to jobs</li>
+<li>Certificates — purpose, location, lifecycle</li>
+<li>Authentication between components</li>
+</ul>
+<h2 id="out-of-scope">Out of Scope</h2>
+<ul>
+<li>Network and firewall rules (infrastructure team concern, outside JOSYN)</li>
+<li>Application-level authorisation logic → see <a href="../../architecture/">architecture/</a></li>
+<li>Compliance and audit requirements around identity → see <a href="../06-company-fit/index.html">06-company-fit/</a></li>
+</ul>
+<h2 id="gray-areas-dependencies">Gray Areas &amp; Dependencies</h2>
+<table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Here</th>
+<th>Elsewhere</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Certificates</td>
+<td>Technical: what certs, where, how used</td>
+<td>Deployment: how certs are provisioned → <a href="../05-deployment-and-operations/index.html">05-deployment-and-operations/</a></td>
+</tr>
+<tr>
+<td>Identity management</td>
+<td>Technical configuration and impersonation</td>
+<td>Organisational: AD governance, policies → <a href="../06-company-fit/index.html">06-company-fit/</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="identity-and-impersonation.html">identity-and-impersonation.md</a> — Service accounts, per-job domain user impersonation, named pipe access control, certificates (TBD)</li>
+</ul>
+<h2 id="related-decisions">Related Decisions</h2>
+<p><em>(none yet)</em></p>
+
+    </article>
+  </main>
+</body>
+</html>

@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Deployment &amp; Operations — josyn-docs</title>
+  <link rel="stylesheet" href="../site.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-header">josyn-docs</div>
+    <a href="../index.html" class="nav-home">Solution Architecture</a>
+<div class="nav-section">Context</div>
+<a href="../01-context/index.html" class="nav-link">Overview</a>
+<a href="../01-context/josyn-and-jobsystem.html" class="nav-link">JOSYN and its Predecessor</a>
+<div class="nav-section">Constraints And Settled Decisions</div>
+<a href="../02-constraints-and-settled-decisions/index.html" class="nav-link">Overview</a>
+<a href="../02-constraints-and-settled-decisions/settled-decisions.html" class="nav-link">Settled Decisions</a>
+<div class="nav-section">Physical Architecture</div>
+<a href="../03-physical-architecture/index.html" class="nav-link">Overview</a>
+<a href="../03-physical-architecture/folder-layout.html" class="nav-link">Folder Layout</a>
+<a href="../03-physical-architecture/job-registry.html" class="nav-link">Job Registry</a>
+<a href="../03-physical-architecture/machine-topology.html" class="nav-link">Machine Topology</a>
+<a href="../03-physical-architecture/services-and-executables.html" class="nav-link">Services and Executables</a>
+<a href="../03-physical-architecture/session-store.html" class="nav-link">Session Store</a>
+<div class="nav-section">Identity And Security</div>
+<a href="../04-identity-and-security/index.html" class="nav-link">Overview</a>
+<a href="../04-identity-and-security/identity-and-impersonation.html" class="nav-link">Identity and Impersonation</a>
+<div class="nav-section">Deployment And Operations</div>
+<a href="index.html" class="nav-link active">Overview</a>
+<a href="job-deployment.html" class="nav-link">Job Deployment</a>
+<div class="nav-section">Company Fit</div>
+<a href="../06-company-fit/index.html" class="nav-link">Overview</a>
+<a href="../06-company-fit/audit-and-session-record.html" class="nav-link">Audit and the Session Record</a>
+<a href="../06-company-fit/coexistence-with-jobsystem.html" class="nav-link">Coexistence with JobSystem</a>
+<a href="../06-company-fit/isolation-vs-integration.html" class="nav-link">Isolation vs. Integration</a>
+<a href="../06-company-fit/maintainability-and-knowledge-transfer.html" class="nav-link">Maintainability and Knowledge Transfer</a>
+<div class="nav-section">Evolution And Lifecycle</div>
+<a href="../07-evolution-and-lifecycle/index.html" class="nav-link">Overview</a>
+<a href="../07-evolution-and-lifecycle/evolution-horizon.html" class="nav-link">Evolution Horizon</a>
+<a href="../07-evolution-and-lifecycle/yagni-decisions.html" class="nav-link">YAGNI Decisions</a>
+<div class="nav-section">Documentation And Training</div>
+<a href="../08-documentation-and-training/index.html" class="nav-link">Overview</a>
+<a href="../08-documentation-and-training/overview.html" class="nav-link">Documentation and Training — Overview</a>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="deployment-operations">Deployment &amp; Operations</h1>
+<p>Describes how JOSYN gets onto a machine and stays running. This chapter answers: how is
+the system installed, how is it bootstrapped, how is it upgraded, and what must an operator
+know to run it day-to-day.</p>
+<h2 id="in-scope">In Scope</h2>
+<ul>
+<li>Installer — what it does, what it assumes</li>
+<li>Bootstrapping sequence</li>
+<li>Upgrade and rollback procedures</li>
+<li>Operator conventions and responsibilities</li>
+<li>Database backup and migration</li>
+</ul>
+<h2 id="out-of-scope">Out of Scope</h2>
+<ul>
+<li>Physical folder structure and service topology → see <a href="../03-physical-architecture/index.html">03-physical-architecture/</a></li>
+<li>Certificate and identity setup → see <a href="../04-identity-and-security/index.html">04-identity-and-security/</a></li>
+<li>Compliance and audit logging → see <a href="../06-company-fit/index.html">06-company-fit/</a></li>
+</ul>
+<h2 id="gray-areas-dependencies">Gray Areas &amp; Dependencies</h2>
+<table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Here</th>
+<th>Elsewhere</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Certificate installation</td>
+<td>Operational procedure: how certs are deployed</td>
+<td>What certs are and why → <a href="../04-identity-and-security/index.html">04-identity-and-security/</a></td>
+</tr>
+<tr>
+<td>Database migration</td>
+<td>Operational: when and how to run migrations</td>
+<td>Schema and purpose → <a href="../03-physical-architecture/index.html">03-physical-architecture/</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="job-deployment.html">job-deployment.md</a> — Job repository layout, self-contained vs framework-dependent, installer (TBD), bootstrapping (TBD)</li>
+</ul>
+<h2 id="related-decisions">Related Decisions</h2>
+<p><em>(none yet)</em></p>
+
+    </article>
+  </main>
+</body>
+</html>

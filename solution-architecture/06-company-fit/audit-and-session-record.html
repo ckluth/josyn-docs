@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Audit and the Session Record — josyn-docs</title>
+  <link rel="stylesheet" href="../site.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-header">josyn-docs</div>
+    <a href="../index.html" class="nav-home">Solution Architecture</a>
+<div class="nav-section">Context</div>
+<a href="../01-context/index.html" class="nav-link">Overview</a>
+<a href="../01-context/josyn-and-jobsystem.html" class="nav-link">JOSYN and its Predecessor</a>
+<div class="nav-section">Constraints And Settled Decisions</div>
+<a href="../02-constraints-and-settled-decisions/index.html" class="nav-link">Overview</a>
+<a href="../02-constraints-and-settled-decisions/settled-decisions.html" class="nav-link">Settled Decisions</a>
+<div class="nav-section">Physical Architecture</div>
+<a href="../03-physical-architecture/index.html" class="nav-link">Overview</a>
+<a href="../03-physical-architecture/folder-layout.html" class="nav-link">Folder Layout</a>
+<a href="../03-physical-architecture/job-registry.html" class="nav-link">Job Registry</a>
+<a href="../03-physical-architecture/machine-topology.html" class="nav-link">Machine Topology</a>
+<a href="../03-physical-architecture/services-and-executables.html" class="nav-link">Services and Executables</a>
+<a href="../03-physical-architecture/session-store.html" class="nav-link">Session Store</a>
+<div class="nav-section">Identity And Security</div>
+<a href="../04-identity-and-security/index.html" class="nav-link">Overview</a>
+<a href="../04-identity-and-security/identity-and-impersonation.html" class="nav-link">Identity and Impersonation</a>
+<div class="nav-section">Deployment And Operations</div>
+<a href="../05-deployment-and-operations/index.html" class="nav-link">Overview</a>
+<a href="../05-deployment-and-operations/job-deployment.html" class="nav-link">Job Deployment</a>
+<div class="nav-section">Company Fit</div>
+<a href="index.html" class="nav-link">Overview</a>
+<a href="audit-and-session-record.html" class="nav-link active">Audit and the Session Record</a>
+<a href="coexistence-with-jobsystem.html" class="nav-link">Coexistence with JobSystem</a>
+<a href="isolation-vs-integration.html" class="nav-link">Isolation vs. Integration</a>
+<a href="maintainability-and-knowledge-transfer.html" class="nav-link">Maintainability and Knowledge Transfer</a>
+<div class="nav-section">Evolution And Lifecycle</div>
+<a href="../07-evolution-and-lifecycle/index.html" class="nav-link">Overview</a>
+<a href="../07-evolution-and-lifecycle/evolution-horizon.html" class="nav-link">Evolution Horizon</a>
+<a href="../07-evolution-and-lifecycle/yagni-decisions.html" class="nav-link">YAGNI Decisions</a>
+<div class="nav-section">Documentation And Training</div>
+<a href="../08-documentation-and-training/index.html" class="nav-link">Overview</a>
+<a href="../08-documentation-and-training/overview.html" class="nav-link">Documentation and Training — Overview</a>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="audit-and-the-session-record">Audit and the Session Record</h1>
+<h2 id="the-session-store-as-audit-trail">The Session Store as Audit Trail</h2>
+<p>Every JOSYN job execution creates a persistent session record in the SQL Server session store.
+This provides a built-in, structured audit trail:</p>
+<ul>
+<li>When did the job run?</li>
+<li>What arguments was it called with?</li>
+<li>What result did it produce?</li>
+<li>Did it succeed or fail? With what error?</li>
+</ul>
+<p>For a company that must demonstrate audit-readiness, this is a significant improvement
+over log-file-based approaches — the record is structured, queryable, and permanent.</p>
+<h2 id="audit-gaps-in-the-current-poc">Audit Gaps in the Current PoC</h2>
+<p>The current PoC session store has known gaps that must be addressed before it qualifies
+as production audit-ready:</p>
+<table>
+<thead>
+<tr>
+<th>Gap</th>
+<th>Impact</th>
+<th>Required fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No session status column</td>
+<td>Orphaned rows (failed spawns) look like running sessions</td>
+<td>Add <code>status</code> enum column</td>
+</tr>
+<tr>
+<td>No separated timestamps</td>
+<td>Cannot measure job duration</td>
+<td>Add <code>StartedAt</code> and <code>CompletedAt</code> columns</td>
+</tr>
+<tr>
+<td>No job identity column</td>
+<td>Session row not linked to a registered job name</td>
+<td>Add <code>JobName</code> or <code>JobId</code> foreign key</td>
+</tr>
+</tbody>
+</table>
+<p>These are known PoC limitations, not permanent design choices.</p>
+<h2 id="compliance-considerations">Compliance Considerations</h2>
+<p><em>(TBD — what specific regulatory or company-policy obligations apply to job execution records?
+E.g.: minimum retention period, access control on session data, personal data handling.)</em></p>
+
+    </article>
+  </main>
+</body>
+</html>
