@@ -1,0 +1,220 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ADR-007 — The JOSYN Storage Realm — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../../architecture/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../../../architecture/components/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../architecture/platform/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details open>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../index.html" class="nav-link">Overview</a>
+<details open>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-platform]/decisions/ADR-007-storage-realm.md</div><h1 id="adr-007-the-josyn-storage-realm">ADR-007 — The JOSYN Storage Realm</h1>
+<p><strong>Date:</strong> 2026-06-04
+<strong>Status:</strong> Accepted</p>
+<hr />
+<h2 id="context">Context</h2>
+<p>The legacy job system has no owned, governed storage concept. Durable state is
+scattered across a SQL table, convention-based file-system locations, and the company
+configuration manager. There is no single place that answers &quot;what does this system
+know and remember?&quot; and no model for how schema changes are applied.</p>
+<p>JOSYN must not inherit this disorder. As the platform grows — session records, job
+registrations, error records, infrastructure configuration — an explicit storage model
+is required before more domains are added.</p>
+<hr />
+<h2 id="decision">Decision</h2>
+<h3 id="the-josyn-storage-realm">1. The JOSYN Storage Realm</h3>
+<p>JOSYN has a single, owned, governed storage space: the <strong>JOSYN Storage Realm</strong>.
+It is the authoritative location for all durable platform state.</p>
+<p>Current and anticipated domains:</p>
+<table>
+<thead>
+<tr>
+<th>Domain</th>
+<th>Table</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Session records</td>
+<td><code>josyn.SessionStore</code></td>
+<td>Existing</td>
+</tr>
+<tr>
+<td>Job registrations</td>
+<td><code>josyn.JobRegistrations</code></td>
+<td>Planned</td>
+</tr>
+<tr>
+<td>Error records</td>
+<td><code>josyn.ErrorStore</code></td>
+<td>Existing</td>
+</tr>
+<tr>
+<td>Infrastructure registry</td>
+<td><em>(table TBD)</em></td>
+<td>Future</td>
+</tr>
+</tbody>
+</table>
+<p>Each new domain requires a decision recorded either as an ADR or in the owning
+component's documentation. The table list is append-only — existing tables are
+never dropped or repurposed.</p>
+<h3 id="technology-sql-server-ef-core-behind-a-per-domain-abstraction">2. Technology: SQL Server + EF Core, behind a per-domain abstraction</h3>
+<p>SQL Server is the storage technology. EF Core (SQL Server provider) is the access
+mechanism. Neither leaks into the public API of any storage package.</p>
+<p>The abstraction is the per-domain interface (<code>ISessionStore</code>, <code>IJobRegistry</code>, etc.).
+Consumers depend on the interface only — they are unaware of SQL Server, EF Core, or
+schema details. A different storage technology is substitutable at the composition
+root without touching consumers.</p>
+<p>No single umbrella <code>IStore</code> interface is introduced. Per-domain interfaces are the
+correct granularity: consumers need only the operations relevant to their domain.</p>
+<h3 id="ixxxrecord-naming-convention-for-stored-data-contracts">3. <code>IxxxRecord</code> — naming convention for stored data contracts</h3>
+<p>All public interfaces representing a stored data record follow the <code>IxxxRecord</code>
+convention:</p>
+<pre><code class="language-csharp">public interface IJobSessionRecord { ... }
+public interface IJobRegistrationRecord { ... }
+</code></pre>
+<p>Concrete implementations are <code>public sealed record</code> types:</p>
+<pre><code class="language-csharp">public sealed record JobSessionRecord(...) : IJobSessionRecord { ... }
+</code></pre>
+<p>EF Core internals — entity types (<code>xxxEntity</code>) and context types (<code>xxxDbContext</code>) —
+are always <code>internal sealed</code> and never part of the public API.</p>
+<h3 id="align-existing-types-retroactive-rename">4. Align existing types — retroactive rename</h3>
+<p><code>IJobSession</code> and <code>JobSession</code> in <code>JOSYN.Backend.SessionStore</code> are renamed to
+<code>IJobSessionRecord</code> and <code>JobSessionRecord</code>. All consumers are updated in the same
+session. The package version is bumped to mark the breaking change.</p>
+<p><code>IJobRegistration</code> and <code>JobRegistration</code> in the planned <code>JOSYN.Backend.JobRegistry</code>
+(ADR-005) are renamed to <code>IJobRegistrationRecord</code> and <code>JobRegistrationRecord</code> before
+implementation begins. ADR-005 is updated accordingly.</p>
+<h3 id="ddl-scripts-location-and-naming-convention">5. DDL scripts — location and naming convention</h3>
+<p>SQL DDL scripts live in <code>josyn-backend/db/</code>. This is the single owning repo for all
+current storage domains.</p>
+<p>Structure:</p>
+<pre><code>josyn-backend/db/
+├── bootstrap-local-dev.sql          ← creates DB, schema, dev login (dev only)
+└── migrations/
+    ├── V001__session_store.sql      ← josyn.SessionStore
+    ├── V002__job_registrations.sql  ← josyn.JobRegistrations
+    └── ...                          ← one file per schema change, append-only
+</code></pre>
+<p>Scripts are applied manually — no migration runner tool is required. The
+<code>migrations/</code> folder is the ordered, append-only history of all schema changes.</p>
+<p>The <code>josyn-playground/db/create-database.sql</code> (formerly in <code>josyn-sandbox</code>) is the origin of <code>bootstrap-local-dev.sql</code>
+and <code>migrations/V001__session_store.sql</code>. That file is superseded by these.</p>
+<h3 id="architecture-documentation">6. Architecture documentation</h3>
+<p><code>architecture/storage.md</code> is the canonical reference for the JOSYN Storage Realm:
+schema overview, domain table, technology stack, naming conventions, script location,
+and developer setup instructions. It is the first document a developer reads when
+setting up a local database or adding a new storage domain.</p>
+<hr />
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>All durable platform state has a single, documented home</li>
+<li><code>IxxxRecord</code> is the platform-wide convention; existing types are aligned now, while
+the platform is young and the breaking change is cheap</li>
+<li>Storage technology is substitutable at the composition root without touching consumers</li>
+<li>DDL history is auditable: every schema change is a versioned SQL file in
+<code>josyn-backend/db/migrations/</code></li>
+<li>A new developer can bootstrap a local database by reading <code>architecture/storage.md</code>
+and running two scripts</li>
+<li>The <code>josyn-playground/db/</code> SQL script is superseded and no longer the reference source</li>
+</ul>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Evolution Horizon — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details open>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../../index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../../../components/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../platform/index.html" class="nav-link">Overview</a>
+</details>
+<details open>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../../decisions/platform/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-platform]/solution-architecture/07-evolution-and-lifecycle/evolution-horizon.md</div><h1 id="evolution-horizon">Evolution Horizon</h1>
+<h2 id="linux-and-docker">Linux and Docker</h2>
+<p><strong>Current state:</strong> JOSYN is Windows-only. Backend services are Windows services.
+Named pipes are used for IPC (supported on both Windows and Linux in .NET, but pipe naming
+conventions and security descriptor handling differ). SQL Server is the session store.</p>
+<p><strong>Horizon:</strong> Linux and Docker are not planned, but the architecture does not structurally
+exclude them. The technical work required would be:</p>
+<table>
+<thead>
+<tr>
+<th>Blocker</th>
+<th>Effort</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Windows-service hosting</td>
+<td>Replace with daemon / systemd equivalent</td>
+</tr>
+<tr>
+<td>Named pipe access control</td>
+<td>Minor differences on Linux, likely small</td>
+</tr>
+<tr>
+<td>SQL Server</td>
+<td>Runs on Linux; operationally different but not a fundamental blocker</td>
+</tr>
+<tr>
+<td>Installer</td>
+<td>Entirely different toolchain</td>
+</tr>
+</tbody>
+</table>
+<p>The named-pipe IPC choice (<code>JOSYN.Foundation.JIP</code>) is the most Windows-specific part
+of the platform. It is a settled decision for now but would be the first thing to
+reconsider if a Linux port became a real requirement.</p>
+<h2 id="multi-runtime-jobs-go-python-etc">Multi-Runtime Jobs (Go, Python, etc.)</h2>
+<p><strong>Current state:</strong> All first-party jobs are .NET executables.</p>
+<p><strong>Horizon:</strong> Any process that can:</p>
+<ol>
+<li>Receive <code>JOSYN-IPC &lt;guid&gt;</code> as command-line arguments</li>
+<li>Connect to the two GUID-named pipes (<code>JOSYN-REQ-&lt;guid&gt;</code>, <code>JOSYN-RSP-&lt;guid&gt;</code>)</li>
+<li>Speak the JIP wire format: length-prefixed (int32 LE) UTF-8 JSON</li>
+<li>Implement the three JAP operations: <code>GetRawArguments</code> / <code>PutRawResult</code> / <code>PutError</code></li>
+</ol>
+<p>...can be a JOSYN job — regardless of language. A Go job would need a small JAP client
+library (~200 lines). The platform does not need to change.</p>
+<p>This is noted as a <strong>feasible future capability</strong>, not a current commitment. The question
+of whether to officially support non-.NET jobs (with documentation, client libraries, and
+testing) is separate from the question of whether it is technically possible.</p>
+<h2 id="scalability">Scalability</h2>
+<p><strong>Current state:</strong> One backend per machine. No horizontal scaling.</p>
+<p><strong>The question:</strong> What would real scalability cost — and is it justified here?</p>
+<p>Supporting multi-machine, coordinated, load-balanced JOSYN would require:</p>
+<ul>
+<li>Distributed session coordination (who owns which session?)</li>
+<li>A shared or replicated session store</li>
+<li>Failover protocols</li>
+<li>Changes to the <code>SessionStarter</code> and <code>TriggerAgent</code> design</li>
+</ul>
+<p>For the current company scale, this is not justified. The right answer today is YAGNI.
+If job volume grows to where a single machine cannot handle the load, the evolution path
+would be re-evaluated from first principles at that point — not speculatively designed today.</p>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

@@ -1,0 +1,424 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ADR-006 — ErrorHandler — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../../../../architecture/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../../../../../architecture/components/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../../../architecture/platform/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../../../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details open>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../../../index.html" class="nav-link">Overview</a>
+<details open>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-platform]/repos/josyn-backend/decisions/ADR-006-error-handler.md</div><h1 id="adr-006-errorhandler">ADR-006 — ErrorHandler</h1>
+<p><strong>Date:</strong> 2026-06-05
+<strong>Status:</strong> Proposed</p>
+<p><strong>Depends on:</strong> ADR-008 (LocalLog Relocation to josyn-commons)</p>
+<hr />
+<h2 id="context">Context</h2>
+<p>When the happy path is left, operators and maintainers need to know exactly what went wrong,
+where, and why. The platform already has a stub: <code>JOSYN.Backend.ErrorHandler</code> with an
+<code>IErrorHandler</code> contract and a <code>FileSystemErrorHandler</code> that writes to a temp file.
+This stub must be replaced with a real, governed, durable error-handling component.</p>
+<p>Several concerns must be resolved:</p>
+<ul>
+<li>Error information needs durable, queryable storage — not just a temp file</li>
+<li>Not all errors are equal: some are tied to a specific job execution; others are
+platform-level failures with no job context</li>
+<li>The error handler sits exclusively in the backend — <code>job.exe</code> and <code>josyn-job-host</code>
+cannot reference it; a bridging mechanism already exists (<code>PutError</code> over IPC)</li>
+<li>When the error handler itself fails, error information must not be silently lost</li>
+</ul>
+<hr />
+<h2 id="decision">Decision</h2>
+<h3 id="error-records-are-a-first-class-storage-realm-domain">1. Error records are a first-class Storage Realm domain</h3>
+<p>Error records are durable platform state. They belong in the JOSYN Storage Realm
+(SQL Server, <code>josyn</code> schema) — the same database and schema already used by
+<code>SessionStore</code> and <code>JobRegistry</code>.</p>
+<p>The new storage domain:</p>
+<table>
+<thead>
+<tr>
+<th>Domain</th>
+<th>Package</th>
+<th>Table</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Error records</td>
+<td><code>JOSYN.Backend.ErrorHandler</code></td>
+<td><code>josyn.ErrorStore</code></td>
+<td>This ADR</td>
+</tr>
+</tbody>
+</table>
+<p>This updates the domain table in ADR-007 and <code>architecture/storage.md</code>.</p>
+<h3 id="two-error-kinds-distinguished-by-nullable-context-fields">2. Two error kinds — distinguished by nullable context fields</h3>
+<p>Errors are classified by the context they carry:</p>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th><code>JobName</code></th>
+<th><code>SessionGuid</code></th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>System error</td>
+<td><code>null</code></td>
+<td><code>null</code></td>
+<td>Ticker fails to read job registry</td>
+</tr>
+<tr>
+<td>Job error, no session</td>
+<td>set</td>
+<td><code>null</code></td>
+<td>SessionStarter fails before session row is written</td>
+</tr>
+<tr>
+<td>Job error, with session</td>
+<td>set</td>
+<td>set</td>
+<td>Job execution fails; JAPServer receives PutError</td>
+</tr>
+</tbody>
+</table>
+<p>There is no explicit enum column. The nullable pattern is sufficient — the kind is
+inferrable directly from the data.</p>
+<h3 id="error-record-schema-ierrorrecord">3. Error record schema — <code>IErrorRecord</code></h3>
+<pre><code class="language-csharp">public interface IErrorRecord
+{
+    Guid            Id                 { get; init; }  // generated on storage
+    DateTimeOffset  OccurredAt         { get; init; }
+    string          Causer             { get; init; }  // process or component name
+    string          Message            { get; init; }
+    string?         CallStack          { get; init; }  // Result chain or stack trace
+    string?         ExceptionDetails   { get; init; }  // serialized exception, if any
+    string?         JobName            { get; init; }  // null for system errors
+    Guid?           SessionGuid        { get; init; }  // null if no session established
+}
+</code></pre>
+<p>Concrete type follows the platform <code>IxxxRecord</code> convention (ADR-007):</p>
+<pre><code class="language-csharp">public sealed record ErrorRecord(...) : IErrorRecord;
+</code></pre>
+<h3 id="ierrorhandler-contract">4. <code>IErrorHandler</code> contract</h3>
+<p><code>IErrorHandler</code> is a fire-and-forget contract. It never throws. Callers do not inspect
+the outcome — the handler is responsible for its own fallback.</p>
+<pre><code class="language-csharp">public interface IErrorHandler
+{
+    void Handle(
+        string          message,
+        string?         callStack        = null,
+        string?         exceptionDetails = null,
+        string?         jobName          = null,
+        Guid?           sessionGuid      = null,
+        [CallerMemberName] string caller = &quot;&quot;);
+}
+</code></pre>
+<p><code>[CallerMemberName]</code> is captured automatically at the call site — callers do not provide
+it explicitly. It identifies the method that observed the terminal failure and invoked the
+handler. <code>[CallerFilePath]</code> is deliberately excluded: it would store absolute machine-specific
+source paths in durable SQL records, producing noisy, environment-dependent data with no
+diagnostic value beyond what <code>caller</code> already provides.</p>
+<p>The existing <code>FileSystemErrorHandler</code> is replaced by <code>SqlErrorHandler</code>, which:</p>
+<ol>
+<li>Constructs an <code>ErrorRecord</code> from the call site and supplied parameters</li>
+<li>Persists it to <code>josyn.ErrorStore</code> via EF Core</li>
+<li>On any storage failure, falls back to <code>LocalLog</code> (<code>JOSYN.Commons.Log</code>) silently</li>
+</ol>
+<pre><code class="language-csharp">public sealed class SqlErrorHandler(string connectionString) : IErrorHandler
+</code></pre>
+<h3 id="where-the-error-handler-is-called-placement-rule">5. Where the error handler is called — placement rule</h3>
+<p><code>JOSYN.Backend.ErrorHandler</code> is a <strong>backend-only component</strong>. It cannot be referenced
+by <code>josyn-jap</code>, <code>josyn-job-host</code>, or <code>job.exe</code> — the dependency direction forbids it.</p>
+<p>The placement rule:</p>
+<blockquote>
+<p>The error handler is called at every point in backend code where a <code>Result</code> chain
+terminates without a further caller — and when a <code>PutError</code> message arrives from
+a job via IPC.</p>
+</blockquote>
+<p>Concretely:</p>
+<table>
+<thead>
+<tr>
+<th>Call site</th>
+<th>Error kind</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JAPServer.PutError()</code> receives a report</td>
+<td>Job error, with session</td>
+<td>Bridge for all job-side failures</td>
+</tr>
+<tr>
+<td><code>JAPServer</code> observes unexpected job process exit</td>
+<td>Job error, with session</td>
+<td>Job died before it could call PutError</td>
+</tr>
+<tr>
+<td><code>josyn-backend</code> orchestration entry points (ticker, service, session-starter)</td>
+<td>Job or system</td>
+<td>Depends on whether job context is known</td>
+</tr>
+</tbody>
+</table>
+<p>Within a process, the <code>Result</code> pattern propagates failures. The error handler fires only
+at the terminal boundary — where no further caller exists to receive the <code>Result</code>.</p>
+<p><code>job.exe</code> is explicitly outside the error handler's reach. Its contract is:
+<code>LocalLog</code> for local visibility; <code>PutError</code> over IPC to hand off to the backend.
+<code>PutError</code> is the bridge — it is the point where a job-side failure enters the backend
+and reaches <code>IErrorHandler</code>.</p>
+<h3 id="a.jobname-and-sessionguid-enrichment-at-the-puterror-call-site">5a. JobName and SessionGuid enrichment at the PutError call site</h3>
+<p>When JAPServer receives <code>PutError</code>, the <code>IErrorReport</code> payload contains no <code>JobName</code> or
+<code>SessionGuid</code> — the job does not know its own registered name, and the IPC wire type
+(<code>JOSYN.Jap.Shared.Contract</code>) carries no backend context.</p>
+<p>Enrichment rule:</p>
+<ul>
+<li><code>SessionGuid</code> — known to JAPServer at construction (passed by <code>SessionStarter</code> at spawn time)</li>
+<li><code>JobName</code> — passed to JAPServer as a constructor argument by <code>SessionStarter</code> at spawn time,
+alongside <code>SessionGuid</code></li>
+</ul>
+<p><code>SessionStarter</code> holds both values when it spawns <code>JAPServer.exe</code>. Passing them at
+construction is simpler and more resilient than looking up the session record at error time —
+a DB lookup on a failure path adds latency and a new failure mode when the DB is the cause
+of the error.</p>
+<h3 id="fallback-strategy-two-tier-persistence">6. Fallback strategy — two-tier persistence</h3>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Mechanism</th>
+<th>When used</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Primary</td>
+<td><code>josyn.ErrorStore</code> (SQL)</td>
+<td>Normal operation</td>
+</tr>
+<tr>
+<td>Fallback</td>
+<td><code>LocalLog</code> (<code>JOSYN.Commons.Log</code>)</td>
+<td>SQL unavailable or storage call fails</td>
+</tr>
+</tbody>
+</table>
+<p>The handler swallows its own failures — it never propagates them to the caller.
+This matches the <code>LocalLog</code> silent-failure policy and prevents error-handling from
+becoming an error source.</p>
+<p>Note: the fallback depends on <code>JOSYN.Commons.Log</code> being available (ADR-008 prerequisite).</p>
+<h4 id="no-swallow-guarantee">No-swallow guarantee</h4>
+<p>The fallback chain is closed — no error can be silently lost inside <code>SqlErrorHandler</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SQL write succeeds</td>
+<td>Record persisted to <code>josyn.ErrorStore</code></td>
+</tr>
+<tr>
+<td>SQL write fails (any exception)</td>
+<td><code>catch</code> fires → <code>LocalLog.WriteError(...)</code></td>
+</tr>
+<tr>
+<td><code>LocalLog</code> write fails (disk/permissions)</td>
+<td><code>LocalLog.AppendEntry</code> has its own bare <code>catch {}</code> — process is not endangered</td>
+</tr>
+</tbody>
+</table>
+<p>The only total loss scenario is SQL down <strong>and</strong> filesystem write fails simultaneously —
+an infrastructure failure no in-process mechanism can recover from.</p>
+<p>This guarantee is the reason call sites must <strong>not</strong> duplicate <code>LocalLog</code> calls alongside
+<code>errorHandler.Handle()</code>. The fallback is owned entirely by <code>SqlErrorHandler</code>; adding it
+at call sites produces redundant double-logging without improving coverage.</p>
+<h3 id="filesystemerrorhandler-is-removed">7. <code>FileSystemErrorHandler</code> is removed</h3>
+<p>The stub <code>FileSystemErrorHandler</code> is deleted. <code>SqlErrorHandler</code> is the sole production
+implementation. No file-based permanent implementation is retained — <code>LocalLog</code> fallback
+serves as the safety net.</p>
+<h3 id="deferred-propagation-and-access-follow-on-adr">8. Deferred — propagation and access (follow-on ADR)</h3>
+<p>The following concerns are explicitly out of scope for this ADR:</p>
+<ul>
+<li><strong>Active propagation:</strong> notifying operators via email, messenger, or other channels
+when errors are recorded</li>
+<li><strong>Access and search:</strong> viewing, filtering, printing, and exporting error records via
+an operator shell or similar tool</li>
+</ul>
+<p>A follow-on ADR for these concerns depends on this ADR being accepted first. The
+<code>josyn.ErrorStore</code> table and <code>IErrorRecord</code> schema defined here are the foundation
+for that work.</p>
+<hr />
+<h2 id="decision-challenge-objections-and-rebuttals">Decision challenge — objections and rebuttals</h2>
+<p><strong>Attacker:</strong> Error records belong in a log file, not a SQL table. The DB is often the cause
+of backend failures — storing error records in the same database risks losing exactly the
+errors you most need to see.</p>
+<p><strong>Defender:</strong> The two-tier fallback directly addresses this. SQL is the primary store for
+normal operation: it makes error records queryable by job, session, time range, and causer —
+something a flat file can never offer. <code>LocalLog</code> is the fallback precisely for the case where
+SQL is unavailable. The combination means you never depend on SQL alone, but you gain all its
+advantages when it is healthy.</p>
+<hr />
+<p><strong>Attacker:</strong> An explicit <code>ErrorKind</code> enum column would make error classification
+self-documenting in the database. Querying &quot;all system errors&quot; requires no knowledge of
+the nullable convention — just <code>WHERE ErrorKind = 'System'</code>.</p>
+<p><strong>Defender:</strong> The nullable fields <code>JobName</code> and <code>SessionGuid</code> <em>are</em> the classification — they
+carry the actual context, not just a label. An enum column would duplicate information already
+present, creating a surface for inconsistency: what does <code>ErrorKind = 'Job'</code> with
+<code>JobName = null</code> mean? The nullable pattern is stricter — the data itself encodes the kind
+with no redundancy to maintain.</p>
+<hr />
+<p><strong>Attacker:</strong> <code>IErrorHandler</code> with <code>void Handle()</code> is fire-and-forget, but SQL persistence
+is async. A <code>void</code> contract forces either synchronous blocking I/O or hidden background tasks
+— both are problematic in an async-first platform.</p>
+<p><strong>Defender:</strong> This is a valid tension that the ADR acknowledges. The resolution is an
+implementation concern, not a contract concern: <code>SqlErrorHandler</code> may perform a synchronous
+blocking write (acceptable for a rarely-called error path) or marshal to a background task
+with appropriate shutdown coordination. The contract stays <code>void</code> because the caller's
+contract with the error handler is genuinely fire-and-forget — callers should never be
+blocked by or made aware of persistence mechanics. The implementation shape is decided when
+the handler is built, informed by the async characteristics of EF Core in this context.</p>
+<hr />
+<p><strong>Attacker:</strong> The error handler is backend-only, so job-side errors are only persisted when
+<code>PutError</code> arrives over IPC. If IPC fails — the pipe is broken, the job crashes before
+calling <code>PutError</code> — the error is only in <code>LocalLog</code> on the job machine. That's a significant
+gap in coverage.</p>
+<p><strong>Defender:</strong> This is the correct and honest boundary. When IPC fails, the backend has no
+channel to the job — it cannot reach in and extract error information. <code>LocalLog</code> on the job
+side is the last-resort record for those cases. The backend <em>can</em> observe the symptom (job
+process exits with non-zero code, no <code>PutRawResult</code> recorded in the session store) and record
+a system-level error for that session — but the job's internal failure detail is only in
+<code>LocalLog</code>. This is acknowledged in the placement rule: JAPServer observing an unexpected job
+exit is itself a call site for <code>Handle()</code>.</p>
+<hr />
+<p><strong>Attacker:</strong> The <code>Result</code> pattern already propagates call-stack information through the chain.
+Why capture <code>[CallerMemberName]</code> / <code>[CallerFilePath]</code> at the <code>Handle()</code> call site too?</p>
+<p><strong>Defender:</strong> By the time <code>Handle()</code> is called, the <code>Result</code> chain has terminated — its
+<code>CallStack</code> is passed in as the <code>callStack</code> parameter. The <code>[CallerMemberName]</code> capture is
+different: it identifies the backend component that made the decision to call <code>Handle()</code>.
+That is the <code>Causer</code> field — not the internal failure origin, but the architectural boundary
+where the error was observed and handed to the handler. These are complementary, not redundant.</p>
+<hr />
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>Error information survives process restarts and is queryable by job, session,
+time range, and causer</li>
+<li>The two-tier fallback guarantees that an error is never silently lost, even when
+the database is unavailable</li>
+<li><code>IErrorHandler</code> is fire-and-forget: callers are never burdened with error-handler
+failures</li>
+<li><code>[CallerMemberName]</code> / <code>[CallerFilePath]</code> give stored records precise provenance
+without requiring call sites to self-identify</li>
+<li>The placement rule makes it unambiguous where <code>Handle()</code> must be called in backend code</li>
+<li><code>PutError</code> as the IPC bridge keeps the dependency boundary clean: job-side code never
+references backend packages</li>
+<li><code>FileSystemErrorHandler</code> is replaced; the temp-file stub is gone</li>
+<li>The storage domain table in ADR-007 and <code>architecture/storage.md</code> is updated to
+reflect <code>josyn.ErrorStore</code> as an active domain</li>
+</ul>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

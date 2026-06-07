@@ -1,0 +1,168 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ADR-005 — Documentation Governance and Agentic Way of Work — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../../architecture/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../../../architecture/components/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../architecture/platform/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details open>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../index.html" class="nav-link">Overview</a>
+<details open>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-platform]/decisions/ADR-005-documentation-governance.md</div><h1 id="adr-005-documentation-governance-and-agentic-way-of-work">ADR-005 — Documentation Governance and Agentic Way of Work</h1>
+<p><strong>Date:</strong> 2026-06-02
+<strong>Status:</strong> Accepted</p>
+<hr />
+<h2 id="context">Context</h2>
+<p><code>josyn-platform</code> is the single source of truth for platform architecture and coding standards.
+As <code>josyn-backend</code> evolves — and as other subject repos grow — each will accumulate its own
+sub-architecture, component-level decisions, and operational detail. The question this ADR
+answers: does that content stay in <code>josyn-platform</code>, or does it migrate into each subject repo?</p>
+<p>A second related question: how should agent sessions be bootstrapped when working inside a
+subject repo rather than from the platform seat?</p>
+<hr />
+<h2 id="decision">Decision</h2>
+<h3 id="josyn-platform-keeps-full-documentation-authority">1. josyn-platform keeps full documentation authority</h3>
+<p><code>josyn-platform</code> remains the single source of truth for all architecture documentation —
+both platform-wide and repo-specific. No documentation authority is distributed to subject
+repos. Subject repos do not define architecture, do not host ADRs, and do not override
+platform rules.</p>
+<p>The concern that motivated this discussion was not about authority — it was about the
+platform repo becoming a confusing mess as it grows. That concern is addressed by structure,
+not by distributing authority.</p>
+<h3 id="the-platform-repo-scales-via-transparent-folder-structure">2. The platform repo scales via transparent folder structure</h3>
+<p>When a subject repo's documentation grows beyond a single file, it graduates from a flat
+file to a dedicated subfolder under <code>repos/</code>:</p>
+<pre><code>repos/
+├── josyn-backend/
+│   ├── overview.md          ← current content of josyn-backend.md
+│   ├── architecture.md      ← backend-internal sub-architecture (when needed)
+│   └── decisions/           ← backend-specific ADRs (when needed)
+├── josyn-foundation.md      ← single file while small
+├── josyn-jap.md
+└── ...
+</code></pre>
+<p>The <code>architecture/</code> tree at the repo root remains <strong>platform-wide only</strong> — it never
+contains content scoped to a single subject repo. The <code>repos/&lt;name&gt;/</code> subtree is clearly
+scoped: documentation about that repo's internals, not the platform at large.</p>
+<p>This keeps the platform repo clean and navigable as it grows, without weakening its authority.</p>
+<h3 id="each-subject-repo-gets-its-own-agents.md">3. Each subject repo gets its own AGENTS.md</h3>
+<p>Each subject repo maintains its own <code>AGENTS.md</code> for <strong>operational context</strong>: how to build,
+what solutions exist, current state, repo-local sanity notes. This file makes an agent
+session inside that repo self-sufficient for day-to-day work.</p>
+<p>The local <code>AGENTS.md</code> is explicitly <strong>subordinate</strong> to <code>josyn-platform</code>. It provides
+convenience, not authority. It must:</p>
+<ul>
+<li>Direct the agent to <code>josyn-platform</code> for all architectural rules, coding standards, and
+sanity check criteria.</li>
+<li>Not duplicate or override any rule defined in <code>josyn-platform</code>.</li>
+<li>State its subordinate status clearly at the top.</li>
+</ul>
+<hr />
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>Agent sessions inside a subject repo are operationally self-sufficient without reading
+all of <code>josyn-platform</code> — the local <code>AGENTS.md</code> covers what is needed for that repo.</li>
+<li>Architecture authority is never ambiguous: it always lives in <code>josyn-platform</code>.</li>
+<li>The <code>repos/</code> folder in <code>josyn-platform</code> grows organically — no restructuring is needed
+until a subject repo's documentation justifies a subfolder.</li>
+<li><code>josyn-platform</code> remains the natural starting point (the &quot;agentic pilot seat&quot;) for any
+cross-cutting or architectural work.</li>
+</ul>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Deployment &amp; Operations — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details open>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../../index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../../../components/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../platform/index.html" class="nav-link">Overview</a>
+</details>
+<details open>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../../decisions/platform/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-platform]/solution-architecture/05-deployment-and-operations/README.md</div><h1 id="deployment-operations">Deployment &amp; Operations</h1>
+<p>Describes how JOSYN gets onto a machine and stays running. This chapter answers: how is
+the system installed, how is it bootstrapped, how is it upgraded, and what must an operator
+know to run it day-to-day.</p>
+<h2 id="in-scope">In Scope</h2>
+<ul>
+<li>Installer — what it does, what it assumes</li>
+<li>Bootstrapping sequence</li>
+<li>Upgrade and rollback procedures</li>
+<li>Operator conventions and responsibilities</li>
+<li>Database backup and migration</li>
+</ul>
+<h2 id="out-of-scope">Out of Scope</h2>
+<ul>
+<li>Physical folder structure and service topology → see <a href="../03-physical-architecture/index.html">03-physical-architecture/</a></li>
+<li>Certificate and identity setup → see <a href="../04-identity-and-security/index.html">04-identity-and-security/</a></li>
+<li>Compliance and audit logging → see <a href="../06-company-fit/index.html">06-company-fit/</a></li>
+</ul>
+<h2 id="gray-areas-dependencies">Gray Areas &amp; Dependencies</h2>
+<table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Here</th>
+<th>Elsewhere</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Certificate installation</td>
+<td>Operational procedure: how certs are deployed</td>
+<td>What certs are and why → <a href="../04-identity-and-security/index.html">04-identity-and-security/</a></td>
+</tr>
+<tr>
+<td>Database migration</td>
+<td>Operational: when and how to run migrations</td>
+<td>Schema and purpose → <a href="../03-physical-architecture/index.html">03-physical-architecture/</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="job-deployment.html">job-deployment.md</a> — Job repository layout, self-contained vs framework-dependent, installer (TBD), bootstrapping (TBD)</li>
+</ul>
+<h2 id="related-decisions">Related Decisions</h2>
+<p><em>(none yet)</em></p>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

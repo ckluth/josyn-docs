@@ -1,0 +1,238 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ADR-011 — JIP Wire-Type Extension: Enum Support in JipDispatcher — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../../architecture/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../../../architecture/components/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../architecture/platform/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details open>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../index.html" class="nav-link">Overview</a>
+<details open>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-platform]/decisions/ADR-011-jip-enum-support.md</div><h1 id="adr-011-jip-wire-type-extension-enum-support-in-jipdispatcher">ADR-011 — JIP Wire-Type Extension: Enum Support in JipDispatcher</h1>
+<p><strong>Date:</strong> 2026-06-05
+<strong>Status:</strong> Accepted</p>
+<hr />
+<h2 id="context">Context</h2>
+<p><code>JipDispatcher.RegisterAll</code> auto-discovers handler methods on a protocol interface (e.g.
+<code>IJosynApplicationProtocol</code>) via reflection and registers them as JIP request handlers.</p>
+<p>At the time of writing, it enforces exactly two supported method signatures:</p>
+<table>
+<thead>
+<tr>
+<th>Signature</th>
+<th>Semantics</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Task&lt;Result&lt;string&gt;&gt; Method()</code></td>
+<td>No input; returns a string payload</td>
+</tr>
+<tr>
+<td><code>Task&lt;Result&gt; Method(string)</code></td>
+<td>Takes a string payload; returns nothing</td>
+</tr>
+</tbody>
+</table>
+<p>These shapes match JIP's wire format: a request carries an optional <code>string</code> data field,
+and a response carries an optional <code>string</code> data field. JIP is — and remains — a
+<strong>string-only transport</strong>.</p>
+<p>The problem surfaced when <code>IJosynApplicationProtocol.GetEnvironment()</code> was added with the
+return type <code>Task&lt;Result&lt;RuntimeEnvironment&gt;&gt;</code>. <code>RuntimeEnvironment</code> is an enum, not a
+<code>string</code>. <code>RegisterAll</code> hit the <code>else</code> branch and failed at startup with a runtime error.</p>
+<p>Two repair strategies were considered.</p>
+<hr />
+<h2 id="options-considered">Options considered</h2>
+<h3 id="option-a-keep-jip-string-only-handle-serialization-at-jap-endpoints">Option A — Keep JIP string-only; handle serialization at JAP endpoints</h3>
+<p><code>IJosynApplicationProtocol.GetEnvironment()</code> is changed to return <code>Task&lt;Result&lt;string&gt;&gt;</code>.
+Each endpoint (server returns <code>env.ToString()</code>, client parses with <code>Enum.Parse&lt;T&gt;</code>) handles
+the conversion manually.</p>
+<p><strong>Rejected because:</strong> it leaks JIP's transport constraint into the JAP contract and into
+every future implementation. The interface no longer expresses intent — it expresses wire
+mechanics. Every consumer must know and replicate the <code>ToString</code>/<code>Parse</code> contract manually,
+with no compiler enforcement and no single point of failure.</p>
+<h3 id="option-b-extend-jipdispatcher-to-support-enums-transparently">Option B — Extend JipDispatcher to support enums transparently</h3>
+<p><code>RegisterAll</code> gains a third supported shape:</p>
+<table>
+<thead>
+<tr>
+<th>Signature</th>
+<th>Semantics</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Task&lt;Result&lt;TEnum&gt;&gt; Method()</code> where <code>typeof(TEnum).IsEnum</code></td>
+<td>No input; returns an enum value serialized as its name string</td>
+</tr>
+</tbody>
+</table>
+<p>The dispatcher serializes outbound enum values via <code>Enum.ToString()</code> and deserializes
+inbound responses via <code>Enum.Parse&lt;TEnum&gt;()</code>. The wire is still a string — this is purely
+a convention layer concern. The JAP interface retains its typed signature.</p>
+<p><strong>Chosen.</strong></p>
+<hr />
+<h2 id="decision">Decision</h2>
+<p><code>JipDispatcher.RegisterAll</code> is extended with a third supported method shape:
+<code>Task&lt;Result&lt;TEnum&gt;&gt; Method()</code> where <code>TEnum</code> is an <code>enum</code> type.</p>
+<p>The supported method shapes for <code>RegisterAll</code> are now:</p>
+<table>
+<thead>
+<tr>
+<th>Signature</th>
+<th>Wire encoding</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Task&lt;Result&lt;string&gt;&gt; Method()</code></td>
+<td>String payload as-is</td>
+</tr>
+<tr>
+<td><code>Task&lt;Result&lt;TEnum&gt;&gt; Method()</code> where <code>typeof(TEnum).IsEnum</code></td>
+<td><code>Enum.ToString()</code> / <code>Enum.Parse&lt;TEnum&gt;()</code></td>
+</tr>
+<tr>
+<td><code>Task&lt;Result&gt; Method(string)</code></td>
+<td>String payload as-is</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The rule is explicit and closed:</strong> JIP supports exactly <code>string</code> and <code>enum</code> at the
+convention layer. Records, primitives, value types, and complex objects are not supported
+and will continue to fail with a clear error at startup.</p>
+<hr />
+<h2 id="rationale">Rationale</h2>
+<p>Enums are a safe, bounded extension:</p>
+<ol>
+<li><strong>Lossless wire representation.</strong> <code>Enum.ToString()</code> and <code>Enum.Parse()</code> are deterministic
+and reversible. No serializer dependency; no ambiguity.</li>
+<li><strong>Foundation learns nothing about domain types.</strong> The extension uses only
+<code>typeof(T).IsEnum</code> — pure reflection. <code>JipDispatcher</code> remains domain-agnostic.</li>
+<li><strong>Eliminates a class of boilerplate.</strong> Without this, every typed enum endpoint on every
+protocol implementation must manually implement <code>ToString</code>/<code>Parse</code> with no enforcement.</li>
+<li><strong>Closed set.</strong> Unlike opening for <code>int</code> or <code>record</code>, the enum case is bounded: the
+serialization contract is universal across all .NET enums, requires no configuration,
+and cannot silently diverge between endpoints.</li>
+</ol>
+<p><strong>The slippery slope is closed by the explicit rule.</strong> Enums are permitted because their
+wire representation is a platform primitive. Any request to extend <code>RegisterAll</code> further
+requires a new ADR.</p>
+<hr />
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li><code>IJosynApplicationProtocol.GetEnvironment()</code> returns <code>Task&lt;Result&lt;RuntimeEnvironment&gt;&gt;</code> —
+the interface stays type-safe and expressive.</li>
+<li><code>JAPServer.GetEnvironment()</code> returns <code>RuntimeEnvironment.DEV</code> (or the configured value);
+<code>RegisterAll</code> serializes it transparently.</li>
+<li><code>JAPClient.GetEnvironment()</code> receives the string from the wire; <code>RegisterAll</code>'s reflection
+wrapper deserializes it to <code>RuntimeEnvironment</code> before the return value reaches the caller.</li>
+<li><code>architecture/overview.md</code> is updated to document all three supported <code>RegisterAll</code> shapes.</li>
+<li>The startup error message in <code>RegisterAll</code>'s <code>else</code> branch is updated to list all three
+supported signatures.</li>
+</ul>
+<hr />
+<h2 id="relation-to-other-adrs">Relation to other ADRs</h2>
+<ul>
+<li>No existing ADR is superseded.</li>
+<li>This ADR is purely additive to the JIP convention layer described in
+<code>architecture/overview.md</code> under <em>IPC Protocol</em>.</li>
+</ul>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

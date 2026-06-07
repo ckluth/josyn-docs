@@ -1,0 +1,198 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ADR-005 — JobRegistry — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../../../../architecture/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../../../../../architecture/components/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../../../architecture/platform/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../../../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details open>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../../../index.html" class="nav-link">Overview</a>
+<details open>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-platform]/repos/josyn-backend/decisions/ADR-005-job-registry.md</div><h1 id="adr-005-jobregistry">ADR-005 — JobRegistry</h1>
+<p><strong>Date:</strong> 2026-06-04
+<strong>Status:</strong> Accepted</p>
+<hr />
+<h2 id="context">Context</h2>
+<p>The legacy job system has no explicit job registry. Knowledge of which jobs exist
+and under what identity they run is stored implicitly in the company's proprietary
+global configuration database. This creates several problems:</p>
+<ul>
+<li>There is no single, queryable source of truth for registered jobs within JOSYN</li>
+<li>Adding or modifying a job registration requires access to a proprietary external system</li>
+<li><code>SessionStarter</code> has no place to look up job metadata (e.g. which technical user
+to impersonate when spawning a JAPServer instance)</li>
+<li>The planned <code>Ticker</code> (ADR-004) has no place to enumerate which jobs are schedulable</li>
+</ul>
+<p>Making the job registry an explicit JOSYN concept — with a dedicated SQL table and a
+stable interface — closes this gap.</p>
+<hr />
+<h2 id="decision">Decision</h2>
+<h3 id="new-category-a-nuget-josyn.backend.jobregistry">1. New Category A NuGet: <code>JOSYN.Backend.JobRegistry</code></h3>
+<p><code>JOSYN.Backend.JobRegistry</code> is introduced as a Category A NuGet in <code>josyn-backend</code>,
+following the building block model established in ADR-001. It owns the
+<code>IJobRegistration</code> record contract, the <code>IJobRegistry</code> interface, and the
+<code>SqlJobRegistry</code> production implementation.</p>
+<p>Layout:</p>
+<pre><code>josyn-backend-job-registry/
+├── nuget.config
+├── JOSYN.Backend.JobRegistry.slnx
+├── .local-build/
+│   ├── build.cmd
+│   ├── clean.cmd
+│   └── pack.cmd
+└── JOSYN.Backend.JobRegistry/
+    ├── IJobRegistration.cs
+    ├── IJobRegistry.cs
+    └── SqlJobRegistry.cs
+</code></pre>
+<h3 id="ijobregistrationrecord-the-registration-record">2. <code>IJobRegistrationRecord</code> — the registration record</h3>
+<pre><code class="language-csharp">public interface IJobRegistrationRecord
+{
+    string Name { get; }
+    string TechnicalUserName { get; }
+}
+</code></pre>
+<p><code>Name</code> is the platform-wide unique identifier for the job — the key by which all
+backend components refer to a job: in session records, in scheduling configuration,
+and in the registry itself.</p>
+<p><code>TechnicalUserName</code> is the OS-level user identity under which the job's JAPServer
+instance will be spawned (e.g. <code>&quot;tu.demojob&quot;</code>). This enables per-job process
+isolation and auditing.</p>
+<p>The <code>IxxxRecord</code> naming follows the platform-wide stored data contract convention
+established in ADR-007.</p>
+<h3 id="ijobregistry-interface">3. <code>IJobRegistry</code> interface</h3>
+<pre><code class="language-csharp">public interface IJobRegistry
+{
+    Result&lt;IJobRegistrationRecord&gt;               GetByName(string name);
+    Result&lt;IReadOnlyList&lt;IJobRegistrationRecord&gt;&gt; GetAll();
+}
+</code></pre>
+<p>Both methods return <code>Result&lt;T&gt;</code> — no thrown exceptions, consistent with the
+platform-wide Result pattern.</p>
+<h3 id="sqljobregistry-ef-core-implementation">4. <code>SqlJobRegistry</code> — EF Core implementation</h3>
+<p>Registrations are stored in a new table <code>josyn.JobRegistrations</code> in the existing
+SQL Server database — the same database and schema already used by <code>SessionStore</code>.</p>
+<p>Constructor injection for the connection string follows the <code>SessionStore</code> precedent
+(ADR-002, Decision 2):</p>
+<pre><code class="language-csharp">public sealed class SqlJobRegistry(string connectionString) : IJobRegistry
+</code></pre>
+<p>EF Core internals (<code>JobRegistryDbContext</code>, <code>JobRegistrationEntity</code>) are <code>internal sealed</code> — no implementation detail leaks through the public API.</p>
+<p>Per-method <code>DbContext</code> instantiation follows the <code>SessionStore</code> pattern (ADR-006).</p>
+<p>The <code>IxxxRecord</code> naming convention (ADR-007) applies: the public data type is
+<code>IJobRegistrationRecord</code> / <code>JobRegistrationRecord</code>.</p>
+<h3 id="future-legacy-adapter-path-noted-not-designed">5. Future legacy adapter path — noted, not designed</h3>
+<p>The company's proprietary configuration database is the current implicit registry in
+the legacy system. An <code>IJobRegistry</code> implementation backed by that database is a
+valid migration path during a parallel-existence phase. This is acknowledged here;
+the adapter is not designed or implemented until the migration need is concrete. No
+inner source abstraction or composite pattern is introduced at this time.</p>
+<hr />
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li><code>Ticker</code> and <code>SessionStarter</code> have a stable <code>IJobRegistry</code> contract to consume when
+scheduling and session-start logic is implemented</li>
+<li><code>IJobRegistration.Name</code> becomes the shared key across <code>JobRegistry</code>, <code>SessionStore</code>
+(job name field in session records), and the future <code>JobRepository</code></li>
+<li>Adding a legacy adapter requires only a new <code>IJobRegistry</code> implementation — no
+changes to consumers</li>
+<li>The EF Core migration for <code>josyn.JobRegistrations</code> must be applied to the shared
+SQL Server database before the package can be used in production</li>
+</ul>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

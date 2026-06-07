@@ -1,0 +1,217 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Coexistence with JobSystem — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details open>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../../index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../../../components/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../platform/index.html" class="nav-link">Overview</a>
+</details>
+<details open>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../../decisions/platform/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-platform]/solution-architecture/06-company-fit/coexistence-with-jobsystem.md</div><h1 id="coexistence-with-jobsystem">Coexistence with JobSystem</h1>
+<h2 id="the-migration-challenge">The Migration Challenge</h2>
+<p>JOSYN does not replace JobSystem on a single cutover date. The two systems run in parallel
+during the migration period. Jobs are migrated incrementally — some run on JOSYN, others
+still run on JobSystem, on the same machine.</p>
+<h2 id="how-coexistence-works">How Coexistence Works</h2>
+<p>The clean seam is <code>SessionStarter</code>. Each system has its own implementation:</p>
+<table>
+<thead>
+<tr>
+<th>System</th>
+<th>SessionStarter behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>JobSystem</strong></td>
+<td>Spawns <code>JobHost.exe &lt;sessionUID&gt;</code></td>
+</tr>
+<tr>
+<td><strong>JOSYN</strong></td>
+<td>Spawns <code>JAPServer.exe JOSYN-IPC &lt;guid&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Both can run in parallel without interfering. The <code>TriggerAgent</code> (or workflow adapter) routes
+each job to the correct starter based on whether it has been migrated.</p>
+<h2 id="what-to-keep-what-to-overcome">What to Keep, What to Overcome</h2>
+<p>Not everything in <code>JobSystem</code> is a problem. Some things are settled and sensible.
+The migration is not a rewrite-everything exercise — it is a targeted cure for real pain.</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Keep</th>
+<th>Overcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Single machine per installation</td>
+<td>✅ Settled constraint</td>
+<td>—</td>
+</tr>
+<tr>
+<td>SQL Server session store</td>
+<td>✅ Carry forward</td>
+<td>Extend schema: status column, timestamps, job identity</td>
+</tr>
+<tr>
+<td>Job repository as a folder tree</td>
+<td>✅ Carry forward</td>
+<td>Jobs become executables, not class-library DLLs</td>
+</tr>
+<tr>
+<td>Per-session GUID</td>
+<td>✅ Carry forward</td>
+<td>Now also names the IPC pipes</td>
+</tr>
+<tr>
+<td><code>TriggerAgent</code> / scheduling concept</td>
+<td>✅ Carry forward</td>
+<td>Rewrite in JOSYN, clean of legacy coupling</td>
+</tr>
+<tr>
+<td><code>WorkflowAdapter</code> concept</td>
+<td>✅ Carry forward</td>
+<td>Rewrite as a proper extension point</td>
+</tr>
+<tr>
+<td><code>JobHost.exe</code> shared process model</td>
+<td>—</td>
+<td>❌ Eliminated — replaced by process-isolated <code>job.exe</code></td>
+</tr>
+<tr>
+<td>WCF server</td>
+<td>—</td>
+<td>❌ Eliminated — replaced by named-pipe IPC</td>
+</tr>
+<tr>
+<td>Assembly-reflection-based job loading</td>
+<td>—</td>
+<td>❌ Eliminated — jobs are independent executables</td>
+</tr>
+<tr>
+<td>Config-manager as job registry</td>
+<td>❓ Open question</td>
+<td>May stay or migrate to JOSYN-owned table — see <a href="../03-physical-architecture/job-registry.html">job-registry.md</a></td>
+</tr>
+</tbody>
+</table>
+<p>A single job is the migration unit. Migrating a job means:</p>
+<ol>
+<li>Rewriting it as a <code>net10.0</code> Console EXE using <code>JOSYN.JobHost</code></li>
+<li>Deploying it to the JOSYN <code>JobRepository</code></li>
+<li>Switching its <code>SessionStarter</code> routing from old to new</li>
+</ol>
+<p>The old job assembly remains deployed until the switch is complete and verified.</p>
+<h2 id="political-context">Political Context</h2>
+<p>JOSYN is a ground-up rewrite of a settled, production-critical system. This has
+organisational implications:</p>
+<ul>
+<li>Stakeholders who depend on JobSystem need confidence in the migration approach</li>
+<li>The incremental coexistence model is partly a technical choice, partly a political one —
+it allows risk to be managed one job at a time</li>
+<li>Governance around when a job is &quot;ready to migrate&quot; needs to be defined with the teams
+who own those jobs</li>
+</ul>
+<p><em>(Further governance detail: see <a href="governance.html">governance.md</a> when created.)</em></p>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

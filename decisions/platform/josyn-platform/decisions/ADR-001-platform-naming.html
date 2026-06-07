@@ -1,0 +1,232 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ADR-001 — Platform Naming Vocabulary — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../../architecture/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../../../architecture/components/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../architecture/platform/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details open>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../index.html" class="nav-link">Overview</a>
+<details open>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-platform]/decisions/ADR-001-platform-naming.md</div><h1 id="adr-001-platform-naming-vocabulary">ADR-001 — Platform Naming Vocabulary</h1>
+<p><strong>Date:</strong> 2026-05-29
+<strong>Status:</strong> Accepted</p>
+<hr />
+<h2 id="context">Context</h2>
+<p>The JOSYN ecosystem consists of multiple repos. As the repo count grew, the word &quot;system&quot;
+was doing double duty:</p>
+<ol>
+<li><strong><code>josyn-system</code></strong> (a specific repo) — the orchestration backend (JAPServer, shared contracts, logging)</li>
+<li><strong>&quot;the JOSYN system&quot;</strong> (colloquial) — the entire platform including all repos</li>
+</ol>
+<p>A fourth repo for cross-cutting architecture documentation (<code>josyn-system-docs</code>) was proposed.
+This surfaced the collision: would <code>josyn-system-docs</code> document the <code>josyn-system</code> <em>repo</em>,
+or the <em>whole platform</em>?</p>
+<p>Additionally, <code>josyn-job-host</code> was deliberately kept outside the &quot;system&quot; naming to signal
+its architectural decoupling. This made &quot;system&quot; carry a specific, narrow meaning — which
+made the wide-scope collision worse.</p>
+<hr />
+<h2 id="decision">Decision</h2>
+<p>Introduce <strong>&quot;platform&quot;</strong> as the umbrella concept word for the entire JOSYN ecosystem.</p>
+<p>The vocabulary map:</p>
+<table>
+<thead>
+<tr>
+<th>Word</th>
+<th>Scope</th>
+<th>Repo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Platform</strong></td>
+<td>The entire JOSYN ecosystem</td>
+<td><code>josyn-platform</code> (this repo)</td>
+</tr>
+<tr>
+<td><strong>JAP</strong></td>
+<td>The per-session JAP protocol server and shared packages</td>
+<td><code>josyn-jap</code></td>
+</tr>
+<tr>
+<td><strong>Foundation</strong></td>
+<td>Cross-cutting infrastructure primitives</td>
+<td><code>josyn-foundation</code></td>
+</tr>
+<tr>
+<td><strong>Job Host</strong></td>
+<td>The job execution runtime</td>
+<td><code>josyn-job-host</code></td>
+</tr>
+</tbody>
+</table>
+<p>The documentation/architecture repo is named <strong><code>josyn-platform</code></strong> (not <code>josyn-platform-docs</code>)
+to leave room for it to grow beyond pure documentation — ADRs, diagrams, tooling, a future
+platform CLI, etc.</p>
+<hr />
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>No existing repos were renamed (at ADR-001 time) — zero blast radius</li>
+<li>&quot;Platform&quot; is now the correct word when referring to all repos together</li>
+<li><code>josyn-jap</code> (formerly <code>josyn-system</code>) carries the JAP protocol server; &quot;JAP&quot; is its vocabulary word</li>
+<li>Future cross-cutting packages or tools should live in <code>josyn-platform</code> or use <code>JOSYN.Platform.*</code> as their namespace root</li>
+<li>Documentation of the whole platform lives in <code>josyn-platform</code></li>
+</ul>
+<hr />
+<h2 id="amendment-2026-05-30-supersedes-earlier-2026-05-30-amendment">Amendment — 2026-05-30 (supersedes earlier 2026-05-30 amendment)</h2>
+<p>The <code>JOSYN.System</code> → <code>JOSYN.Jap</code> rename raised a follow-on question: should <code>josyn-job-host</code>
+receive a namespace that reflects its architectural decoupling — i.e., one that does <em>not</em>
+contain &quot;Jap&quot;?</p>
+<p>Three options were considered:</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Namespace</th>
+<th>Rejected because</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td><code>JOSYN.Jap.JobHost</code></td>
+<td>See below — <strong>superseded</strong></td>
+</tr>
+<tr>
+<td>B</td>
+<td><code>JOSYN.Frontend.JobHost</code></td>
+<td>Introduces &quot;Frontend&quot; as a 6th vocabulary word with weak semantic entitlement; the existing five-word vocabulary is deliberately tight</td>
+</tr>
+<tr>
+<td>C</td>
+<td><code>JOSYN.JobHost</code></td>
+<td>— <strong>chosen</strong></td>
+</tr>
+</tbody>
+</table>
+<p>An earlier revision of this ADR chose Option A and rejected Option C on the grounds that
+it breaks the universal three-segment <code>JOSYN.&lt;Layer&gt;.&lt;Component&gt;</code> pattern. That reasoning
+was correct for platform-internal packages — but missed a critical distinction:</p>
+<blockquote>
+<p><strong><code>JOSYN.JobHost</code> is a consumer-facing API, not a platform-internal package.</strong></p>
+</blockquote>
+<p>Its primary audience is <em>job authors</em> who have no knowledge of and no interest in the
+&quot;Jap&quot; protocol layer. They link the package, add <code>[JobEntryPoint]</code>, call <code>Core.Run(args)</code>,
+and exit. Exposing &quot;Jap&quot; in every <code>using</code> statement, every namespace declaration, and
+every attribute reference leaks an internal architectural concept into a public-facing
+developer experience.</p>
+<p>The repo name <code>josyn-job-host</code> (not <code>josyn-jap-job-host</code>) already makes this distinction
+at the repo boundary. The namespace and package ID follow the same logic.</p>
+<p><strong>Decision: <code>JOSYN.JobHost</code> is the package ID and namespace root.</strong></p>
+<p>This establishes a documented rule: packages whose primary audience is <em>external consumers
+outside the JOSYN platform</em> <strong>omit the <code>&lt;Layer&gt;</code> segment</strong> and use the two-segment form
+<code>JOSYN.&lt;Component&gt;</code>. <code>JOSYN.JobHost</code> is the canonical and currently only example.
+All platform-internal packages continue to follow <code>JOSYN.&lt;Layer&gt;.&lt;Component&gt;</code> without exception.</p>
+<p>The rule is recorded in <code>architecture/naming-conventions.md</code> under <em>Repository Names</em>.</p>
+<hr />
+<h2 id="amendment-2026-05-29">Amendment — 2026-05-29</h2>
+<p>The word <strong>&quot;system&quot;</strong> (previously used for the JAP session server repo) has been retired.
+With &quot;platform&quot; established as the umbrella, &quot;system&quot; became ambiguous — it echoes the legacy
+<code>JobSystem.*</code> world and no longer names anything precisely.</p>
+<p><strong><code>josyn-system</code> has been renamed to <code>josyn-jap</code></strong> and all <code>JOSYN.System.*</code> namespaces to
+<code>JOSYN.Jap.*</code>. The vocabulary entry <strong>System</strong> → <strong>JAP</strong> reflects this.</p>
+<p>GitHub remote: <code>ckluth/josyn-system</code> → <code>ckluth/josyn-jap</code><br />
+Local folder: <code>josyn-system</code> → <code>josyn-jap</code></p>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

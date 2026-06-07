@@ -1,0 +1,323 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JOSYN.JobHost — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details open>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../index.html" class="nav-link">Overview</a>
+<details open>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../platform/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../decisions/platform/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-job-host]/JOSYN.JobHost/README.md</div><h1 id="josyn.jobhost">JOSYN.JobHost</h1>
+<p>Part of the <strong>JOSYN</strong> (JobSystem Next) ecosystem — die Job-Entwickler-Bibliothek.</p>
+<p><code>JOSYN.JobHost</code> ist die <strong>Job-Entwickler-Bibliothek</strong>. Jede Job-Exe
+verweist auf dieses Paket. Es übernimmt die IPC-Verbindung zum JAPServer, holt Job-Argumente
+ab, dispatcht die Job-Methode per Reflection und sendet das Ergebnis zurück — alles über
+das JOSYN-Result-Pattern.</p>
+<blockquote>
+<p><strong>Hinweis zum Paket-Namen:</strong> Der Name <code>JOSYN.JobHost</code> weicht bewusst vom plattformweiten
+<code>JOSYN.&lt;Schicht&gt;.&lt;Komponente&gt;</code>-Muster ab. Dieses Paket ist eine <strong>nach außen gerichtete
+Entwickler-API</strong> — Job-Autoren haben keinen Bezug zur internen JAP-Protokollschicht.
+Das Präfix <code>Jap</code> wird daher an der API-Oberfläche verborgen.
+Die vollständige Entscheidung ist dokumentiert in
+<a href="../../josyn-platform/decisions/ADR-001-platform-naming.html"><code>josyn-platform/decisions/ADR-001-platform-naming.md</code></a>
+und <a href="../../josyn-platform/architecture/naming-conventions.html"><code>josyn-platform/architecture/naming-conventions.md</code></a>.</p>
+</blockquote>
+<hr />
+<h2 id="motivation">Motivation</h2>
+<p>Job-Executables sollen ausschließlich Business-Logik enthalten. Alles andere —
+Verbindungsaufbau, Argument-Deserialisierung, Ergebnis-Serialisierung — erledigt diese
+Bibliothek. Eine minimale Job-Exe reduziert sich auf eine Zeile <code>Program.cs</code>:</p>
+<pre><code class="language-csharp">return await JOSYN.JobHost.Core.Run(args);
+</code></pre>
+<p>Der Job-Autor markiert genau eine <code>public static</code>-Methode mit <code>[JobEntryPoint]</code> —
+den Rest übernimmt die Laufzeit.</p>
+<hr />
+<h2 id="schnellstart">Schnellstart</h2>
+<h3 id="job-exe-program.cs">1 — Job-Exe (<code>Program.cs</code>)</h3>
+<pre><code class="language-csharp">return await JOSYN.JobHost.Core.Run(args);
+</code></pre>
+<h3 id="job-implementierung">2 — Job-Implementierung</h3>
+<pre><code class="language-csharp">using JOSYN.JobHost.Attributes;
+
+public static class MeinJob
+{
+    [JobEntryPoint]
+    public static MeinErgebnis Ausführen(MeinArgument args)
+    {
+        return new MeinErgebnis { Nachricht = &quot;Echo: &quot; + args.Text };
+    }
+}
+</code></pre>
+<p>Argument- und Ergebnistypen müssen <code>record</code>-Typen sein, die von
+<code>JOSYN.Foundation.PropertyBag</code> unterstützt werden.</p>
+<hr />
+<h2 id="currentjob-laufzeit-api">CurrentJob — Laufzeit-API</h2>
+<p>Während der <code>[JobEntryPoint]</code> läuft, stellt <code>CurrentJob</code> statische Lese-Eigenschaften bereit,
+die den aktuellen Ausführungskontext beschreiben. Kein Konstruktor, keine Injektion —
+direkt zugreifen:</p>
+<pre><code class="language-csharp">string name              = CurrentJob.Name;         // z. B. &quot;Contoso.DemoProduct.DemoJob&quot;
+RuntimeEnvironment env   = CurrentJob.Environment;  // z. B. INT
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Eigenschaft</th>
+<th>Typ</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Name</code></td>
+<td><code>string</code></td>
+<td>Assembly-Name des laufenden Job-Prozesses</td>
+</tr>
+<tr>
+<td><code>Environment</code></td>
+<td><code>RuntimeEnvironment</code></td>
+<td>Laufzeit-Umgebung, geliefert vom JAPServer beim Session-Start</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><code>CurrentJob</code> ist nur nach Verbindungsaufbau durch <code>Core.Run</code> gültig —</p>
+<ol type="a" start="4">
+<li>
+<ol type="a" start="8">
+<li>ausschließlich innerhalb eines aktiven <code>[JobEntryPoint]</code>-Aufrufs.</li>
+</ol>
+</li>
+</ol>
+</blockquote>
+<hr />
+<h2 id="architektur">Architektur</h2>
+<div class="mermaid">
+flowchart TD
+    A[&quot;Core.Run(args)&quot;] --&gt; B[&quot;JAPClient\nCreateConnectedClient(args)\nsessionKey parsen + JIP verbinden&quot;]
+    A --&gt; C[&quot;JobInvoker\nInvokeJob(japClient)&quot;]
+    C --&gt; D[&quot;FindJobFunction\n[JobEntryPoint] per Reflection suchen&quot;]
+    D --&gt; E[&quot;CreateInvocationArguments\nGetRawArguments → PropertyBag.Deserialize&quot;]
+    E --&gt; F[&quot;[JobEntryPoint-Methode]\nBusiness-Logik&quot;]
+    F --&gt; G[&quot;ProcessJobResult\nPropertyBag.Serialize → PutRawResult&quot;]
+</div>
+<p><strong>Transport:</strong> <code>JOSYN.Foundation.JIP</code> Named Pipes (session-isoliert per GUID-Key).
+<strong>Anwendungsprotokoll:</strong> <code>JOSYN.Jap.Shared.Contract.IJosynApplicationProtocol</code>.
+<strong>Serialisierung:</strong> <code>JOSYN.Foundation.PropertyBag</code> (INI oder JSON, auto-erkannt).</p>
+<hr />
+<h2 id="attribute-referenz">Attribute-Referenz</h2>
+<table>
+<thead>
+<tr>
+<th>Attribut</th>
+<th>Ziel</th>
+<th>Zweck</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[JobEntryPoint]</code></td>
+<td>Methode</td>
+<td>Markiert die einzige Job-Entry-Methode. Genau eine pro Assembly.</td>
+</tr>
+<tr>
+<td><code>[BeforeJobEntryPoint]</code></td>
+<td>Methode</td>
+<td>Läuft vor dem Job; für Setup / Parallel-Execution-Prüfungen.</td>
+</tr>
+<tr>
+<td><code>[JobArguments]</code></td>
+<td>Klasse</td>
+<td>Markiert einen Typ als Job-Argument-Typ.</td>
+</tr>
+<tr>
+<td><code>[JobResult]</code></td>
+<td>Klasse</td>
+<td>Markiert einen Typ als Job-Ergebnis-Typ.</td>
+</tr>
+<tr>
+<td><code>[ParallelExecutionAllowed(bool)]</code></td>
+<td>Methode</td>
+<td>Deklariert, ob der Job parallel ausgeführt werden darf.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="exit-codes">Exit-Codes</h2>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code></td>
+<td>Job erfolgreich abgeschlossen</td>
+</tr>
+<tr>
+<td><code>-1</code></td>
+<td>IPC-Verbindung fehlgeschlagen (Server nicht erreichbar)</td>
+</tr>
+<tr>
+<td><code>-2</code></td>
+<td>Job-Aufruf fehlgeschlagen (Laufzeit- oder Business-Fehler)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fehler-routing">Fehler-Routing</h3>
+<pre><code>Pipe-Verbindungsfehler          →  LocalLog.Error(...)              (nur lokal)       Exit -1
+Job-Fehler, Pipe noch aktiv     →  LocalLog.Error(...) + PutError   (lokal + remote)  Exit -2
+PutError selbst fehlgeschlagen  →  LocalLog.Error(...)              (Fallback lokal)  Exit -2
+</code></pre>
+<hr />
+<h2 id="abhangigkeiten">Abhängigkeiten</h2>
+<table>
+<thead>
+<tr>
+<th>Paket</th>
+<th>Rolle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JOSYN.Foundation.ResultPattern</code></td>
+<td>Fehler-als-Wert-Pattern durchgängig</td>
+</tr>
+<tr>
+<td><code>JOSYN.Foundation.JIP</code></td>
+<td>Named-Pipe-IPC-Transport</td>
+</tr>
+<tr>
+<td><code>JOSYN.Foundation.PropertyBag</code></td>
+<td>Argument- / Ergebnis-Serialisierung</td>
+</tr>
+<tr>
+<td><code>JOSYN.Jap.Shared.Contract</code></td>
+<td><code>IJosynApplicationProtocol</code>-Anwendungsprotokoll</td>
+</tr>
+<tr>
+<td><code>JOSYN.Jap.Shared.Log</code></td>
+<td><code>LocalLog</code> für Fehlerprotokollierung</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="fur-maintainer">Für Maintainer</h2>
+<h3 id="bauen-testen-packen">Bauen, Testen, Packen</h3>
+<pre><code>.local-build\build.cmd          # Release-Build
+.local-build\build.cmd Debug    # Debug-Build
+.local-build\test.cmd           # Alle Tests ausführen
+.local-build\pack.cmd           # NuGet-Paket → ..\..\Local Packages\
+</code></pre>
+<h3 id="hinweise">Hinweise</h3>
+<ul>
+<li><strong>Genau ein <code>[JobEntryPoint]</code> pro Assembly</strong> — die Laufzeit meldet einen Fehler, wenn
+null oder mehr als einer gefunden werden.</li>
+<li><strong>Reflection ist bewusst eingesetzt</strong> — <code>JobInvoker</code> nutzt <code>Assembly.GetEntryAssembly()</code>
+um die Job-Methode zu lokalisieren. Das ist der definierte Erweiterungs-Punkt; kein DI-Wiring.</li>
+<li><strong><code>JAPClient</code> ist <code>internal</code></strong> — implementiert <code>IJosynApplicationProtocol</code> via JIP-Transport.</li>
+<li><strong><code>ArgumentsComparer&lt;T&gt;</code></strong> — internes Delegate, bewusster Platzhalter für zukünftigen
+bedingten Parallel-Execution-Feature. Nicht entfernen.</li>
+<li><strong>Fehlermeldungen sind auf Deutsch</strong> — projekt-weite Konvention.</li>
+<li><strong><code>de-DE</code> Default-Kultur</strong> — betrifft Zahlen- und Datumsformatierung in PropertyBag.</li>
+</ul>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

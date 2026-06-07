@@ -1,0 +1,263 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ADR-008 — LocalLog Relocation to josyn-commons — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../../architecture/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../../../architecture/components/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../architecture/platform/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details open>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../index.html" class="nav-link">Overview</a>
+<details open>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-platform]/decisions/ADR-008-locallog-relocation.md</div><h1 id="adr-008-locallog-relocation-to-josyn-commons">ADR-008 — LocalLog Relocation to josyn-commons</h1>
+<p><strong>Date:</strong> 2026-06-05
+<strong>Status:</strong> Proposed</p>
+<hr />
+<h2 id="context">Context</h2>
+<p><code>LocalLog</code> (from <code>JOSYN.Jap.Shared.Log</code>) is the platform's process-local file logger.
+It is a static utility: writes timestamped entries to a structured log directory, supports
+per-causer subdirectories, swallows I/O errors silently, and optionally mirrors output to
+the console in debug builds.</p>
+<p>It is already consumed by three distinct repos:</p>
+<table>
+<thead>
+<tr>
+<th>Consumer</th>
+<th>Repo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JOSYN.Jap.JAPServer</code></td>
+<td><code>josyn-backend</code></td>
+</tr>
+<tr>
+<td><code>JOSYN.JobHost</code></td>
+<td><code>josyn-job-host</code></td>
+</tr>
+<tr>
+<td><code>JOSYN.Jap.Shared.Log.Test</code></td>
+<td><code>josyn-jap</code></td>
+</tr>
+</tbody>
+</table>
+<p>A fourth consumer is imminent: <code>JOSYN.Backend.ErrorHandler</code> (ADR-006) requires <code>LocalLog</code>
+as its last-resort fallback when SQL storage is unavailable.</p>
+<p><code>LocalLog</code> currently lives in <code>JOSYN.Jap.Shared.Log</code> — a package whose identity is the
+JAP protocol layer. This is a misplacement: <code>LocalLog</code> carries no JAP protocol knowledge,
+no session context, no IPC concern. It is a general-purpose file logger that happens to
+have been written alongside the JAP shared packages.</p>
+<p>Leaving it there creates two concrete problems:</p>
+<ol>
+<li><p><strong>Wrong dependency signal.</strong> Any repo that needs <code>LocalLog</code> must take a NuGet dependency
+on a package named <code>JOSYN.Jap.Shared.Log</code>. This implies a JAP protocol relationship
+where none exists.</p>
+</li>
+<li><p><strong>DRY violation risk.</strong> <code>JOSYN.Backend.ErrorHandler</code> cannot use a JAP-named package
+for its fallback without the wrong dependency signal. The alternative — a self-contained
+fallback implementation — creates two diverging implementations of the same behaviour.</p>
+</li>
+</ol>
+<hr />
+<h2 id="decision">Decision</h2>
+<h3 id="locallog-moves-to-josyn-commons-as-josyn.commons.log">1. LocalLog moves to josyn-commons as <code>JOSYN.Commons.Log</code></h3>
+<p><code>LocalLog</code> and its companion interface <code>ILocalLog</code> are extracted from <code>JOSYN.Jap.Shared.Log</code>
+and re-homed in a new <code>josyn-commons</code> package: <code>JOSYN.Commons.Log</code>.</p>
+<p>The public API, behaviour, and dependency (ResultPattern only) are unchanged.</p>
+<pre><code>josyn-commons/
+└── josyn-commons-log/
+    ├── nuget.config
+    ├── JOSYN.Commons.Log.slnx
+    ├── .local-build/
+    └── JOSYN.Commons.Log/
+        ├── Contracts/
+        │   └── ILocalLog.cs
+        └── LocalLog.cs
+</code></pre>
+<h3 id="josyn-commons-identity-is-reframed">2. josyn-commons identity is reframed</h3>
+<p><code>josyn-commons</code> is not an &quot;optional&quot; satellite — it is the <strong>domain-agnostic platform utilities</strong>
+layer. The distinction from <code>josyn-foundation</code> is not importance but scope: foundation packages
+are intrinsic to the JOSYN communication model (result propagation, serialization, IPC transport);
+commons packages are general-purpose helpers reusable across the platform.</p>
+<p>The admission criteria are unchanged:</p>
+<ol>
+<li>Reusable across ≥ 2 josyn repos.</li>
+<li>Carries no JOSYN domain knowledge — no sessions, no jobs, no IPC, no scheduling.</li>
+<li>Could theoretically live in any C# project, not just JOSYN.</li>
+</ol>
+<p>The dependency constraint is unchanged: commons packages may only reference nothing or
+<code>JOSYN.Foundation.ResultPattern</code>. Foundation never references commons.</p>
+<h3 id="josyn.jap.shared.log-is-retired">3. JOSYN.Jap.Shared.Log is retired</h3>
+<p><code>JOSYN.Jap.Shared.Log</code> contained only <code>LocalLog</code> and <code>ILocalLog</code>. Once these are moved,
+the package has no remaining content. It is retired: the project is removed from
+<code>josyn-jap</code>, the NuGet package is withdrawn from the local feed.</p>
+<p>All consumers are updated in the same migration:</p>
+<table>
+<thead>
+<tr>
+<th>Consumer</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JOSYN.Jap.JAPServer</code></td>
+<td><code>PackageReference</code> updated from <code>JOSYN.Jap.Shared.Log</code> → <code>JOSYN.Commons.Log</code></td>
+</tr>
+<tr>
+<td><code>JOSYN.JobHost</code></td>
+<td>same</td>
+</tr>
+<tr>
+<td><code>JOSYN.Backend.ErrorHandler</code></td>
+<td>references <code>JOSYN.Commons.Log</code> from first version</td>
+</tr>
+</tbody>
+</table>
+<h3 id="josyn-jap-documentation-is-updated">4. josyn-jap documentation is updated</h3>
+<p><code>repos/josyn-jap.md</code> is updated to remove the <code>JOSYN.Jap.Shared.Log</code> section and reflect
+the retirement. The repo description is updated: &quot;JAP protocol contracts — shared contract
+package (<code>JOSYN.Jap.Shared.Contract</code>) only.&quot;</p>
+<hr />
+<h2 id="decision-challenge-objections-and-rebuttals">Decision challenge — objections and rebuttals</h2>
+<p><strong>Attacker:</strong> <code>josyn-commons</code> is described as an optional utility satellite. Making <code>LocalLog</code>
+live there gives it a load-bearing role in the error handler fallback path. That weakens the
+&quot;optional&quot; character of commons — once a critical component depends on it, it is no longer
+truly optional.</p>
+<p><strong>Defender:</strong> The &quot;optional&quot; label was always a perception, not a hard rule. The only hard rule
+is that <code>josyn-foundation</code> never references <code>josyn-commons</code>. Everything else may reference it.
+<code>josyn-commons</code> is optional in the sense that no project is <em>forced</em> to use it — not in the
+sense that it is unimportant. Reframing it as &quot;domain-agnostic platform utilities&quot; removes the
+false impression without changing any architectural constraint.</p>
+<hr />
+<p><strong>Attacker:</strong> The simpler fix is to keep <code>LocalLog</code> in <code>josyn-jap</code> and just have
+<code>JOSYN.Backend.ErrorHandler</code> take a dependency on <code>JOSYN.Jap.Shared.Log</code>. That dependency
+direction is already established — <code>JAPServer</code> does it. No migration, no new package.</p>
+<p><strong>Defender:</strong> <code>JAPServer</code> takes that dependency because it is a JAP protocol server — the
+dependency is semantically correct for it. <code>JOSYN.Backend.ErrorHandler</code> is a pure backend
+component with no JAP protocol concern. Forcing it to depend on a JAP-named package to get
+a file logger sends the wrong signal to every future reader of the dependency graph. The
+naming matters: a developer seeing <code>JOSYN.Jap.Shared.Log</code> as a dependency of the error
+handler will correctly ask &quot;why?&quot;, and the honest answer is &quot;misplacement&quot;. Moving the package
+fixes the root cause rather than papering over it.</p>
+<hr />
+<p><strong>Attacker:</strong> The alternative is a self-contained fallback write inside <code>ErrorHandler</code> — a
+private five-line method that writes a timestamped line to a file. No migration, no new
+package, no dependency at all. The existing <code>FileSystemErrorHandler</code> stub already shows this
+pattern.</p>
+<p><strong>Defender:</strong> That creates two independent implementations of process-local file logging in
+the same platform — one in <code>JOSYN.Jap.Shared.Log</code> (or its successor) and one embedded in
+<code>ErrorHandler</code>. They will diverge: different formats, different path strategies, different
+silent-failure handling. A new developer will not know which to trust or extend. A documented
+DRY violation is still a DRY violation — the documentation does not eliminate the maintenance
+cost, it only makes it visible. The one-time migration cost of moving <code>LocalLog</code> is smaller
+than the permanent maintenance burden of two diverging implementations.</p>
+<hr />
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>All consumers of <code>LocalLog</code> use the same implementation with no naming confusion</li>
+<li><code>JOSYN.Jap.Shared.Log</code> is retired cleanly — no dormant package left in the feed</li>
+<li><code>josyn-commons</code> receives its first real package, validating the layer's existence</li>
+<li>The dependency signal is correct: consumers of <code>LocalLog</code> depend on <code>JOSYN.Commons.Log</code>,
+not on a JAP protocol package</li>
+<li><code>JOSYN.Backend.ErrorHandler</code> can reference <code>JOSYN.Commons.Log</code> without architectural compromise</li>
+<li>The &quot;domain-agnostic platform utilities&quot; reframing of commons removes the false impression
+that commons packages are unimportant or skippable</li>
+</ul>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

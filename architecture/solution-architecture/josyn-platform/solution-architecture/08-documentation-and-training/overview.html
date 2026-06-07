@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Documentation and Training — Overview — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details open>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../../index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../../../components/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../platform/index.html" class="nav-link">Overview</a>
+</details>
+<details open>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../../decisions/platform/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-platform]/solution-architecture/08-documentation-and-training/overview.md</div><h1 id="documentation-and-training-overview">Documentation and Training — Overview</h1>
+<h2 id="current-state">Current State</h2>
+<p>No formal end-user or operator documentation exists yet. JOSYN is in PoC phase.
+The <code>josyn-platform</code> repository serves as the primary knowledge base for developers
+working on the platform itself.</p>
+<h2 id="planned-documentation">Planned Documentation</h2>
+<table>
+<thead>
+<tr>
+<th>Document</th>
+<th>Audience</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Operator Guide</td>
+<td>System operators</td>
+<td>Not started</td>
+</tr>
+<tr>
+<td>Job Developer Guide</td>
+<td>Job authors</td>
+<td>Not started</td>
+</tr>
+<tr>
+<td>Migration Guide</td>
+<td>Teams migrating jobs from JobSystem</td>
+<td>Not started</td>
+</tr>
+<tr>
+<td>API Reference</td>
+<td>Job developers</td>
+<td>Seed exists: XML docs in <code>JOSYN.JobHost</code> and architecture docs in <code>josyn-platform</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="training-needs">Training Needs</h2>
+<p><strong>Job developers:</strong></p>
+<ul>
+<li>How to author a JOSYN job — the <code>[JobEntryPoint]</code> pattern</li>
+<li>Argument and result records — <code>PropertyBag</code> serialization, supported types</li>
+<li>Error handling — the <code>Result</code> pattern, what to return on failure</li>
+<li>How to test a job executable</li>
+</ul>
+<p><strong>Operators:</strong></p>
+<ul>
+<li>Installation and bootstrapping of the backend</li>
+<li>Job deployment to the <code>JobRepository</code></li>
+<li>Monitoring and log file locations</li>
+<li>Troubleshooting common failures (IPC errors, failed sessions)</li>
+</ul>
+<p><strong>Migration teams:</strong></p>
+<ul>
+<li>What changes when moving a job from JobSystem to JOSYN</li>
+<li>The coexistence model — how old and new jobs run in parallel</li>
+<li>Migration checklist per job</li>
+</ul>
+<h2 id="notes">Notes</h2>
+<p>The <code>josyn-job-host</code> package is the primary developer-facing API. Its XML documentation
+and the <code>josyn-platform</code> architecture docs form the natural seed of the Job Developer Guide.
+Writing that guide is the highest-leverage documentation investment for JOSYN right now.</p>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

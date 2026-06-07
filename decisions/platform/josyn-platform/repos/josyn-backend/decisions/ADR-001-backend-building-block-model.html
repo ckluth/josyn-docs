@@ -1,0 +1,188 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ADR-001 — Backend Building Block Model — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../../../../architecture/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../../../../../architecture/components/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../../../architecture/platform/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../../../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details open>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../../../index.html" class="nav-link">Overview</a>
+<details open>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-platform]/repos/josyn-backend/decisions/ADR-001-backend-building-block-model.md</div><h1 id="adr-001-backend-building-block-model">ADR-001 — Backend Building Block Model</h1>
+<p><strong>Date:</strong> 2026-06-02
+<strong>Status:</strong> Accepted</p>
+<hr />
+<h2 id="context">Context</h2>
+<p><code>josyn-backend</code> is the outermost layer of the JOSYN platform. It is growing beyond a single
+stub. Before real components are added, the architectural model governing what kinds of
+building blocks live here — and how they are structured — must be explicit and recorded.</p>
+<p>The backend will accumulate two fundamentally different types of components:</p>
+<ul>
+<li><strong>Reusable logic</strong> that other backend components share (candidates: <code>SessionStore</code>,
+<code>SessionStarter</code>, <code>GlobalConfig</code>)</li>
+<li><strong>Independent processes</strong> that are spawned at runtime (<code>JAPServer</code> already exists;
+<code>TriggerAgent</code>, <code>Service</code> are planned)</li>
+</ul>
+<p>Without a clear model, the boundary between these two categories risks becoming blurry,
+and the NuGet/solution/dependency discipline that the platform relies on could erode.</p>
+<hr />
+<h2 id="decision">Decision</h2>
+<h3 id="two-categories-of-building-blocks">1. Two categories of building blocks</h3>
+<p>All backend building blocks belong to exactly one of two categories:</p>
+<p><strong>Category A — Shared libraries (NuGet artifacts)</strong></p>
+<ul>
+<li>Packaged as NuGet and consumed by other backend components via <code>PackageReference</code></li>
+<li>Define stable contracts (interfaces) that decouple consumers from implementations</li>
+<li>May have multiple implementations (production + mock)</li>
+<li>Examples: <code>JOSYN.Backend.SessionStore</code>, <code>JOSYN.Backend.GlobalConfig</code></li>
+</ul>
+<p><strong>Category B — Executables</strong></p>
+<ul>
+<li>Standalone OS processes; never packaged as NuGet</li>
+<li>Spawned at runtime by other components; not referenced via <code>PackageReference</code></li>
+<li>Consume shared libraries (Category A) as NuGet dependencies</li>
+<li>Examples: <code>JOSYN.Jap.JAPServer</code>, <code>JOSYN.Backend.TriggerAgent</code>, <code>JOSYN.Backend.Service</code></li>
+</ul>
+<h3 id="japservers-special-role">2. JAPServer's special role</h3>
+<p><code>JOSYN.Jap.JAPServer</code> is a Category B executable with a unique position: it is the only
+executable in this repo that is also a JAP protocol implementation. It:</p>
+<ul>
+<li>Lives in <code>josyn-backend</code> (not <code>josyn-jap</code>) because it requires direct access to backend
+resources (<code>SessionStore</code>, <code>CompanyConfig</code>) — per ADR-004</li>
+<li>Is spawned by <code>SessionStarter</code>; not by any other executable in this repo</li>
+<li>Is the single point where the JAP protocol meets backend state</li>
+</ul>
+<p>No other executable in this repo shares this dual role.</p>
+<h3 id="contractimplementation-split-for-shared-libraries">3. Contract/implementation split for shared libraries</h3>
+<p>Every Category A component exposes its functionality through a stable interface. The
+canonical layout within its project:</p>
+<pre><code>JOSYN.Backend.&lt;Component&gt;/
+├── I&lt;Component&gt;.cs       ← the contract
+└── &lt;Component&gt;.cs        ← production implementation
+</code></pre>
+<p>Mock implementations live in a dedicated companion library:</p>
+<pre><code>JOSYN.Backend.&lt;Component&gt;.Mock/
+└── Mock&lt;Component&gt;.cs    ← mock implementation (for development and demo)
+</code></pre>
+<p>The mock is a separate NuGet artifact so production assemblies never carry test or demo
+dependencies.</p>
+<p><strong><code>SessionStore</code> is the first real component and the reference implementation of this pattern:</strong></p>
+<ul>
+<li><code>JOSYN.Backend.SessionStore</code> — contract (<code>ISessionStore</code>) + production implementation
+(EF Core, reading from the SQL session-store table of the legacy job system)</li>
+<li><code>JOSYN.Backend.SessionStore.Mock</code> — mock implementation for development and demo use</li>
+</ul>
+<h3 id="one-solution-per-building-block">4. One solution per building block</h3>
+<p>Each building block gets its own <code>.slnx</code> solution file. Cross-solution dependencies always
+go through NuGet — never via project references across solution boundaries.
+<code>.local-build/build.cmd</code> builds all solutions in the repo.</p>
+<hr />
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>The boundary between shared state (NuGet library) and process behaviour (executable) is
+always unambiguous when a new component is introduced</li>
+<li>Mock implementations are always available without polluting production packages</li>
+<li><code>ISessionStore</code> (and future <code>IGlobalConfig</code>, etc.) are stable contracts that <code>JAPServer</code>
+and <code>SessionStarter</code> can depend on without knowing which implementation is active at runtime</li>
+<li>The solution-per-building-block rule keeps solutions small and independently buildable</li>
+<li><code>josyn-backend</code> can grow without architectural drift: every new component is classified
+on arrival as Category A or Category B</li>
+</ul>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

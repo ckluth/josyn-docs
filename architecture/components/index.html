@@ -1,0 +1,181 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Architecture — Components — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../index.html" class="nav-home">JOSYN Documentation</a>
+<details open>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../index.html" class="nav-link">Overview</a>
+<details open>
+    <summary class="nav-subsection">Components</summary>
+    <a href="index.html" class="nav-link active">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../platform/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../decisions/platform/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="architecture-components">Architecture — Components</h1>
+<h2 id="documents">Documents</h2>
+<table>
+<thead>
+<tr>
+<th>Document</th>
+<th>Repo</th>
+<th>Summary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="josyn-backend/josyn-backend-error-handler/JOSYN.Backend.ErrorHandler/index.html">JOSYN.Backend.ErrorHandler</a></td>
+<td>josyn-backend</td>
+<td>Explains the backend-wide error reporting endpoint and contract.</td>
+</tr>
+<tr>
+<td><a href="josyn-backend/josyn-backend-bootstrap-config/JOSYN.Backend.BootstrapConfig/index.html">JOSYN.Backend.GlobalConfig</a></td>
+<td>josyn-backend</td>
+<td>Explains the runtime configuration contract used by backend components.</td>
+</tr>
+<tr>
+<td><a href="josyn-backend/josyn-backend-job-registry/JOSYN.Backend.JobRegistry/index.html">JOSYN.Backend.JobRegistry</a></td>
+<td>josyn-backend</td>
+<td>Explains the storage-backed registry of runnable jobs.</td>
+</tr>
+<tr>
+<td><a href="josyn-backend/josyn-backend-session-starter/JOSYN.Backend.SessionStarter/index.html">JOSYN.Backend.SessionStarter</a></td>
+<td>josyn-backend</td>
+<td>Explains the component that allocates sessions and spawns JAPServer.</td>
+</tr>
+<tr>
+<td><a href="josyn-backend/josyn-backend-session-store/JOSYN.Backend.SessionStore/index.html">JOSYN.Backend.SessionStore</a></td>
+<td>josyn-backend</td>
+<td>Explains the persistence component for JOSYN job sessions.</td>
+</tr>
+<tr>
+<td><a href="josyn-commons/josyn-commons-log/JOSYN.Commons.Log/index.html">JOSYN.Commons.Log</a></td>
+<td>josyn-commons</td>
+<td>Explains the process-local file logging component in josyn-commons.</td>
+</tr>
+<tr>
+<td><a href="josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/index.html">JOSYN.Foundation.JIP</a></td>
+<td>josyn-foundation</td>
+<td>Explains the named-pipe transport component used for JOSYN IPC.</td>
+</tr>
+<tr>
+<td><a href="josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/index.html">JOSYN.Foundation.PropertyBag</a></td>
+<td>josyn-foundation</td>
+<td>Explains the flat record serialization component used in JOSYN IPC.</td>
+</tr>
+<tr>
+<td><a href="josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/index.html">JOSYN.Foundation.ResultPattern</a></td>
+<td>josyn-foundation</td>
+<td>Explains the result-based error handling component for JOSYN.</td>
+</tr>
+<tr>
+<td><a href="josyn-backend/josyn-backend-jap-server/JOSYN.Jap.JAPServer/index.html">JOSYN.Jap.JAPServer</a></td>
+<td>josyn-backend</td>
+<td>Explains the backend server executable for JAP sessions.</td>
+</tr>
+<tr>
+<td><a href="josyn-jap/josyn-jap-shared/JOSYN.Jap.Shared.Contract/index.html">JOSYN.Jap.Shared.Contract</a></td>
+<td>josyn-jap</td>
+<td>Explains the shared application contract between JobHost and JAPServer.</td>
+</tr>
+<tr>
+<td><a href="josyn-job-host/JOSYN.JobHost/index.html">JOSYN.JobHost</a></td>
+<td>josyn-job-host</td>
+<td>Explains the job runtime library used by JOSYN job executables.</td>
+</tr>
+</tbody>
+</table>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Decisions — Platform — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../index.html" class="nav-home">JOSYN Documentation</a>
+<details>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../architecture/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../architecture/components/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../architecture/platform/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details open>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../index.html" class="nav-link">Overview</a>
+<details open>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="index.html" class="nav-link active">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="decisions-platform">Decisions — Platform</h1>
+<h2 id="documents">Documents</h2>
+<table>
+<thead>
+<tr>
+<th>Document</th>
+<th>Repo</th>
+<th>Summary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="josyn-platform/repos/josyn-backend/decisions/ADR-001-backend-building-block-model.html">ADR-001 — Backend Building Block Model</a></td>
+<td>josyn-platform</td>
+<td>Defines the building block model used inside josyn-backend.</td>
+</tr>
+<tr>
+<td><a href="josyn-platform/decisions/ADR-001-platform-naming.html">ADR-001 — Platform Naming Vocabulary</a></td>
+<td>josyn-platform</td>
+<td>Establishes the platform naming vocabulary and repo naming boundaries.</td>
+</tr>
+<tr>
+<td><a href="josyn-platform/decisions/ADR-002-josyn-backend.html">ADR-002 — Introducing <code>josyn-backend</code> as a Separate Layer</a></td>
+<td>josyn-platform</td>
+<td>Introduces josyn-backend as a separate platform layer.</td>
+</tr>
+<tr>
+<td><a href="josyn-platform/repos/josyn-backend/decisions/ADR-002-session-store.html">ADR-002 — SessionStore</a></td>
+<td>josyn-platform</td>
+<td>Introduces SessionStore as a Category A backend component.</td>
+</tr>
+<tr>
+<td><a href="josyn-platform/repos/josyn-backend/decisions/ADR-003-global-config.html">ADR-003 — GlobalConfig</a></td>
+<td>josyn-platform</td>
+<td>Introduces GlobalConfig as a separate backend building block.</td>
+</tr>
+<tr>
+<td><a href="josyn-platform/decisions/ADR-003-josyn-commons.html">ADR-003 — josyn-commons: A Generic Utility Layer</a></td>
+<td>josyn-platform</td>
+<td>Creates josyn-commons as the generic utility layer outside foundation.</td>
+</tr>
+<tr>
+<td><a href="josyn-platform/repos/josyn-backend/decisions/ADR-004-backend-restructuring.html">ADR-004 — Backend Restructuring: Trigger Executables, ErrorHandler, and SessionStarter Fire-and-Forget Correction</a></td>
+<td>josyn-platform</td>
+<td>Proposes backend restructuring and corrected fire-and-forget session startup.</td>
+</tr>
+<tr>
+<td><a href="josyn-platform/decisions/ADR-004-japserver-relocation.html">ADR-004 — JAPServer Relocation into josyn-backend</a></td>
+<td>josyn-platform</td>
+<td>Moves JAPServer implementation from josyn-jap into josyn-backend.</td>
+</tr>
+<tr>
+<td><a href="josyn-platform/decisions/ADR-005-documentation-governance.html">ADR-005 — Documentation Governance and Agentic Way of Work</a></td>
+<td>josyn-platform</td>
+<td>Makes josyn-platform the authoritative home for documentation and agent guidance.</td>
+</tr>
+<tr>
+<td><a href="josyn-platform/repos/josyn-backend/decisions/ADR-005-job-registry.html">ADR-005 — JobRegistry</a></td>
+<td>josyn-platform</td>
+<td>Introduces JobRegistry as the authoritative record of runnable jobs.</td>
+</tr>
+<tr>
+<td><a href="josyn-platform/repos/josyn-backend/decisions/ADR-006-error-handler.html">ADR-006 — ErrorHandler</a></td>
+<td>josyn-platform</td>
+<td>Proposes a backend-wide error reporting component and contract.</td>
+</tr>
+<tr>
+<td><a href="josyn-platform/decisions/ADR-006-instance-types-for-dependency-holding-services.html">ADR-006 — Instance Types for Dependency-Holding Services</a></td>
+<td>josyn-platform</td>
+<td>Defines instance-type rules for services that hold runtime dependencies.</td>
+</tr>
+<tr>
+<td><a href="josyn-platform/decisions/ADR-007-storage-realm.html">ADR-007 — The JOSYN Storage Realm</a></td>
+<td>josyn-platform</td>
+<td>Establishes the governed storage realm for durable platform state.</td>
+</tr>
+<tr>
+<td><a href="josyn-platform/decisions/ADR-008-locallog-relocation.html">ADR-008 — LocalLog Relocation to josyn-commons</a></td>
+<td>josyn-platform</td>
+<td>Proposes moving LocalLog into josyn-commons as shared logging infrastructure.</td>
+</tr>
+<tr>
+<td><a href="josyn-platform/decisions/ADR-009-runtime-context-provider-pattern.html">ADR-009 — Runtime Context Provider Pattern for External Integrations</a></td>
+<td>josyn-platform</td>
+<td>Defines runtime context providers for external integration and environment-specific data.</td>
+</tr>
+<tr>
+<td><a href="josyn-platform/decisions/ADR-010-environment-separation.html">ADR-010 — Environment Separation and Installation Model</a></td>
+<td>josyn-platform</td>
+<td>Explores the installation and separation model for DEV, INT, and PROD environments.</td>
+</tr>
+<tr>
+<td><a href="josyn-platform/decisions/ADR-011-jip-enum-support.html">ADR-011 — JIP Wire-Type Extension: Enum Support in JipDispatcher</a></td>
+<td>josyn-platform</td>
+<td>Adds enum wire-type support to JIP dispatcher registration.</td>
+</tr>
+<tr>
+<td><a href="josyn-platform/decisions/ADR-012-maintainer-deployment.html">ADR-012 — Maintainer Deployment (First Iteration)</a></td>
+<td>josyn-platform</td>
+<td>Outlines the first deployment model for maintainers during the PoC phase.</td>
+</tr>
+<tr>
+<td><a href="josyn-platform/decisions/ADR-013-job-dev-mode.html">ADR-013 — Job Dev Mode: Running a Job Locally from the IDE</a></td>
+<td>josyn-platform</td>
+<td>Defines a local IDE workflow for running jobs during development.</td>
+</tr>
+<tr>
+<td><a href="josyn-platform/decisions/ADR-014-cli-run-job-local-args.html">ADR-014 — CLI <code>run-job</code> Command and Local Arguments Convention</a></td>
+<td>josyn-platform</td>
+<td>Defines the run-job CLI command and local argument conventions.</td>
+</tr>
+</tbody>
+</table>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

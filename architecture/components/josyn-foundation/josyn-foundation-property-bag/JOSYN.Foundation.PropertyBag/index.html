@@ -1,0 +1,375 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JOSYN.Foundation.PropertyBag — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details open>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../../index.html" class="nav-link">Overview</a>
+<details open>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../../index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../platform/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../../solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../../decisions/platform/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-foundation]/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/README.md</div><h1 id="josyn.foundation.propertybag">JOSYN.Foundation.PropertyBag</h1>
+<p>Serialisiert und deserialisiert flache C#-<code>record</code>-Typen zu und aus String-Formaten —
+sectionloses INI oder JSON — mit vollständiger Integration des JOSYN-Result-Patterns.
+Designed für den Einsatz in JOSYN-IPC-Protokollen, wo strukturierte Daten als inspektierbarer
+String über Named-Pipes transportiert werden.</p>
+<blockquote>
+<p><strong>Scope.</strong> Dies ist keine General-Purpose-Bibliothek. Ihre spezifische Rolle ist die
+Serialisierung flacher Records und Methodenparameter für JOSYN's Named-Pipe-IPC-Kanal.
+Für allgemeine JSON-Serialisierung: <code>System.Text.Json</code> direkt verwenden.</p>
+</blockquote>
+<hr />
+<h2 id="schnellstart">Schnellstart</h2>
+<pre><code class="language-csharp">// Record definieren — beide Schreibweisen funktionieren
+public record JobRequest
+{
+    public required string JobId   { get; init; }
+    public int             Retries { get; init; }
+    public bool            Urgent  { get; init; }
+}
+
+var req = new JobRequest { JobId = &quot;JOB-42&quot;, Retries = 3, Urgent = true };
+
+// Zu INI serialisieren
+var ini = PropertyBag.Serialize(req, IniDictionarySerializer.Serialize);
+// JobId=JOB-42
+// Retries=3
+// Urgent=True
+
+// Zu JSON serialisieren
+var json = PropertyBag.Serialize(req, JsonDictionarySerializer.Serialize);
+// {
+//   &quot;JobId&quot;: &quot;JOB-42&quot;,
+//   &quot;Retries&quot;: &quot;3&quot;,
+//   &quot;Urgent&quot;: &quot;True&quot;
+// }
+
+// Deserialisieren — Format wird automatisch erkannt
+var result = PropertyBag.Deserialize&lt;JobRequest&gt;(ini.Value);
+// result.Value.JobId   == &quot;JOB-42&quot;
+// result.Value.Retries == 3
+</code></pre>
+<hr />
+<h2 id="api-ubersicht">API-Übersicht</h2>
+<p>Alle Methoden geben <code>Result</code> oder <code>Result&lt;T&gt;</code> zurück. Keine Exceptions propagieren nach oben.</p>
+<h3 id="propertybag-haupt-einstiegspunkt"><code>PropertyBag</code> — Haupt-Einstiegspunkt</h3>
+<table>
+<thead>
+<tr>
+<th>Methode</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Serialize&lt;TRecord&gt;(record, serializer)</code></td>
+<td>Serialisiert eine Record-Instanz mit dem angegebenen Format-Serializer.</td>
+</tr>
+<tr>
+<td><code>Serialize(object, Type, serializer)</code></td>
+<td>Dasselbe, mit dem Typ zur Laufzeit (für Reflection-basierte Aufrufer).</td>
+</tr>
+<tr>
+<td><code>Deserialize&lt;TRecord&gt;(string)</code></td>
+<td>Erkennt Format automatisch, deserialisiert in einen stark typisierten Record.</td>
+</tr>
+<tr>
+<td><code>Deserialize(string, Type)</code></td>
+<td>Dasselbe, mit dem Zieltyp zur Laufzeit. Gibt <code>Result&lt;object&gt;</code> zurück.</td>
+</tr>
+<tr>
+<td><code>Deserialize(string, ParameterInfo[])</code></td>
+<td>Erkennt Format automatisch, deserialisiert in ein <code>object[]</code> ausgerichtet an den gegebenen Methodenparametern. Für Reflection-basierten Dispatch.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="format-serializer">Format-Serializer</h3>
+<p>Als <code>serializer</code>-Argument an <code>PropertyBag.Serialize</code> übergeben:</p>
+<table>
+<thead>
+<tr>
+<th>Serializer</th>
+<th>Format</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IniDictionarySerializer.Serialize</code></td>
+<td>Sectionloses INI (<code>Key=Value</code>-Zeilen)</td>
+</tr>
+<tr>
+<td><code>JsonDictionarySerializer.Serialize</code></td>
+<td>Eingerücktes JSON mit String-Werten</td>
+</tr>
+</tbody>
+</table>
+<p><code>IniDictionarySerializer</code> und <code>JsonDictionarySerializer</code> sind auch direkt nutzbar für
+Low-Level-Dictionary-Zugriff.</p>
+<h3 id="format-erkennung">Format-Erkennung</h3>
+<p><code>Deserialize</code> prüft das erste Nicht-Whitespace-Zeichen des Inputs: <code>{</code> → JSON, sonst INI.
+Der Aufrufer muss das Format nicht separat tracken — beide Serializer erzeugen round-trip-fähige Ausgaben.</p>
+<hr />
+<h2 id="unterstutzte-property-typen">Unterstützte Property-Typen</h2>
+<p>Alle Properties eines serialisierten Records müssen einem der folgenden Typen entsprechen.
+Nullable-Wrapper (<code>T?</code>) sind für jeden Eintrag erlaubt. Alle <code>enum</code>-Typen werden unterstützt.</p>
+<table>
+<thead>
+<tr>
+<th>Kategorie</th>
+<th>Typen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Text</td>
+<td><code>string</code></td>
+</tr>
+<tr>
+<td>Zeichen</td>
+<td><code>char</code></td>
+</tr>
+<tr>
+<td>Boolean</td>
+<td><code>bool</code></td>
+</tr>
+<tr>
+<td>Integer</td>
+<td><code>byte</code>, <code>sbyte</code>, <code>short</code>, <code>ushort</code>, <code>int</code>, <code>uint</code>, <code>long</code>, <code>ulong</code></td>
+</tr>
+<tr>
+<td>Fließkomma</td>
+<td><code>float</code>, <code>double</code>, <code>decimal</code></td>
+</tr>
+<tr>
+<td>Datum / Zeit</td>
+<td><code>DateTime</code>, <code>DateTimeOffset</code>, <code>DateOnly</code>, <code>TimeOnly</code>, <code>TimeSpan</code></td>
+</tr>
+<tr>
+<td>Identität</td>
+<td><code>Guid</code></td>
+</tr>
+<tr>
+<td>Enum</td>
+<td>beliebiger <code>enum</code>-Typ</td>
+</tr>
+</tbody>
+</table>
+<p>Records mit anderen Property-Typen (verschachtelte Records, Collections, Arrays usw.)
+schlagen bei der Serialisierung mit einer informativen Fehlermeldung fehl.</p>
+<hr />
+<h2 id="nullable-properties">Nullable Properties</h2>
+<ul>
+<li>Eine nullable Property (<code>T?</code>), die im Input fehlt, wird stillschweigend auf <code>null</code> gesetzt.</li>
+<li>Eine nullable Property mit leerem Wert (<code>Key=</code>) wird ebenfalls auf <code>null</code> gesetzt.</li>
+<li>Eine nicht-nullable Property, die im Input fehlt, erzeugt einen Fehler.</li>
+</ul>
+<pre><code class="language-csharp">public record Config
+{
+    public required string Host    { get; init; }
+    public int?            Timeout { get; init; }   // optional — darf fehlen
+}
+</code></pre>
+<hr />
+<h2 id="enum-serialisierung">Enum-Serialisierung</h2>
+<p>Enums werden nach Name serialisiert (<code>Color.Green</code> → <code>&quot;Green&quot;</code>) und case-insensitiv
+deserialisiert (<code>&quot;green&quot;</code> → <code>Color.Green</code>).</p>
+<hr />
+<h2 id="ini-format-details">INI-Format — Details</h2>
+<ul>
+<li><strong>Nur sectionlos</strong> für Record-Serialisierung — kein <code>[Section]</code>-Header.</li>
+<li><strong>Whitespace wird getrimmt</strong> — Keys und Values werden beidseitig getrimmt. <code>Key = value</code>
+und <code>Key=value</code> sind äquivalent. Intentioneller Whitespace in Werten muss auf Applikationsebene
+gehandhabt werden (z. B. durch Quoting).</li>
+<li><strong>Kommentare</strong> — Zeilen mit <code>;</code> werden beim Deserialisieren ignoriert.</li>
+<li><strong>Doppelte Schlüssel</strong> erzeugen einen Deserialisierungsfehler.</li>
+</ul>
+<hr />
+<h2 id="json-format-details">JSON-Format — Details</h2>
+<ul>
+<li>Ausgabe ist <strong>eingerückt</strong>; Enum-Werte als Strings.</li>
+<li>Der JSON-Input muss ein <strong>flaches Objekt</strong> mit ausschließlich String-Werten sein.</li>
+<li>Culture-aware Konverter für <code>DateTime</code>, <code>DateOnly</code>, <code>TimeOnly</code> und <code>decimal</code>
+(aktuell: <code>de-DE</code>).</li>
+</ul>
+<hr />
+<h2 id="kultur">Kultur</h2>
+<p>Zahlen- und Datumsformatierung verwendet die <strong>aktuelle Thread-Kultur</strong> zum Zeitpunkt der
+Serialisierung. Die kanonische JOSYN-Kultur ist <code>de-DE</code> (deklariert in <code>JosynCulture.Default</code>).</p>
+<blockquote>
+<p><strong>Wichtig:</strong> <code>PropertyBag</code> setzt die Thread-Kultur <strong>nicht</strong> selbst. Jeder JOSYN-Host-Prozess
+setzt sie beim Start:</p>
+<pre><code class="language-csharp">CultureInfo.DefaultThreadCurrentCulture   = JosynCulture.Default;
+CultureInfo.DefaultThreadCurrentUICulture = JosynCulture.Default;
+</code></pre>
+<p>Serialisierte Daten und der lesende Prozess müssen dieselbe Kultur verwenden —
+sonst ist Round-Trip-Treue für Zahlen und Daten nicht garantiert.</p>
+</blockquote>
+<hr />
+<h2 id="einschrankungen">Einschränkungen</h2>
+<p><strong>Nur flache Records.</strong> Verschachtelte Records und Collections (<code>List&lt;T&gt;</code>, Arrays usw.)
+werden nicht unterstützt.</p>
+<p><strong>Schlüssel-Matching ist case-sensitiv</strong> bei der Record-Deserialisierung. Property-Namen
+im Record (PascalCase) müssen exakt mit den Schlüsseln im serialisierten String übereinstimmen.
+Die <code>ParameterInfo[]</code>-Überladung wendet ein Erster-Buchstabe-Toggle als Komfort an.</p>
+<p><strong>Beide Record-Schreibweisen funktionieren</strong> — Init-Property- und Primary-Constructor-Stil:</p>
+<pre><code class="language-csharp">// ✅ Init-Property-Stil
+public record JobRequest
+{
+    public required string JobId  { get; init; }
+    public int             Retries { get; init; }
+}
+
+// ✅ Primary-Constructor (positional) Stil
+public record JobRequest(string JobId, int Retries);
+</code></pre>
+<hr />
+<h2 id="delegate-typen">Delegate-Typen</h2>
+<p>Die Format-Plug-in-Punkte sind zwei Delegates, die <code>PropertyBag</code> von einem spezifischen
+Format entkoppeln:</p>
+<pre><code class="language-csharp">// Dictionary&lt;string, string&gt; → string  (von Serialize genutzt)
+public delegate Result&lt;string&gt; DictionaryToStringSerializer(Dictionary&lt;string, string&gt; data);
+
+// string → Dictionary&lt;string, string&gt;  (intern von Deserialize genutzt)
+public delegate Result&lt;Dictionary&lt;string, string&gt;&gt; StringToDictionarySerializer(string str);
+</code></pre>
+<p>Eigene Serializer können durch Implementierung dieser Delegate-Signaturen eingesteckt werden.</p>
+<hr />
+<h2 id="parameter-deserialisierung">Parameter-Deserialisierung</h2>
+<p><code>Deserialize(string raw, ParameterInfo[] parameters)</code> ist der Einstiegspunkt für Reflection-
+basierten Dispatch. Er parst den Input und konstruiert ein <code>object[]</code>, das positional zu den
+gegebenen Parametern ausgerichtet ist — bereit für <code>MethodBase.Invoke</code>.</p>
+<ul>
+<li>Schlüssel werden mit einem Erster-Buchstabe-Toggle gegen Parameter-Namen abgeglichen
+(z. B. <code>jobId</code> passt zu einem Parameter <code>JobId</code>).</li>
+<li>Nullable Parameter, die im Input fehlen, werden auf <code>null</code> gesetzt.</li>
+<li>Nicht-nullable Parameter, die im Input fehlen, erzeugen einen Fehler.</li>
+</ul>
+<hr />
+<h2 id="abhangigkeiten">Abhängigkeiten</h2>
+<ul>
+<li><code>JOSYN.Foundation.ResultPattern</code> — das Result-Pattern durchgängig eingesetzt.</li>
+<li><code>.NET 10</code> / C# <code>latest</code>.</li>
+</ul>
+<hr />
+<h2 id="projektstruktur">Projektstruktur</h2>
+<pre><code>JOSYN.Foundation.PropertyBag\
+├── PropertyBag.cs
+├── JosynCulture.cs
+├── SupportedPropertyTypes.cs
+├── Contracts\
+│   ├── IPropertyBag.cs
+│   ├── IIniDictionarySerializer.cs
+│   ├── IJsonDictionarySerializer.cs
+│   └── IJosynCulture.cs
+├── DictionarySerializers\
+│   ├── IniDictionarySerializer.cs
+│   └── JsonDictionarySerializer.cs
+├── CultureAwareConverters\
+│   ├── CultureAwareDateOnlyConverter.cs
+│   ├── CultureAwareDateTimeConverter.cs
+│   ├── CultureAwareDecimalConverter.cs
+│   └── CultureAwareTimeOnlyConverter.cs
+└── DelegateTypes\
+    ├── DictionaryToStringSerializer.cs
+    └── StringToDictionarySerializer.cs
+</code></pre>
+<hr />
+<p><em>JOSYN.Foundation.PropertyBag — © 2026 HAEVG AG — MIT License</em></p>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

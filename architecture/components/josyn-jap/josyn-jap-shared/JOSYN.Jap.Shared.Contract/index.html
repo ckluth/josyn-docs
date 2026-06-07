@@ -1,0 +1,209 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JOSYN.Jap.Shared.Contract — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details open>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../../index.html" class="nav-link">Overview</a>
+<details open>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../../index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../platform/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../../solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../../decisions/platform/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-jap]/josyn-jap-shared/JOSYN.Jap.Shared.Contract/README.md</div><h1 id="josyn.jap.shared.contract">JOSYN.Jap.Shared.Contract</h1>
+<p>Part of the <strong>JOSYN</strong> (JobSystem Next) ecosystem — member of the <code>JOSYN.Jap.Shared</code> layer.</p>
+<p><code>JOSYN.Jap.Shared.Contract</code> definiert den Applikations-Vertrag zwischen den beiden
+JOSYN-Systemkomponenten: dem <strong>JobHost</strong> (Frontend) und dem <strong>JAPServer</strong> (Backend).</p>
+<p>Dieser Vertrag ist transportunabhängig — er beschreibt ausschließlich, <em>was</em> ausgetauscht
+wird, nicht <em>wie</em> (das ist Aufgabe von <code>JOSYN.Foundation.JIP</code>).</p>
+<hr />
+<h2 id="uberblick">Überblick</h2>
+<p>Das JOSYN Application Protocol (JAP) definiert einen minimalen, rohen Datenaustausch:</p>
+<div class="mermaid">
+sequenceDiagram
+    participant Job as Job.exe (JobHost)
+    participant Server as JAPServer
+
+    Job-&gt;&gt;Server: GetRawArguments()
+    Server--&gt;&gt;Job: serialisierte Argumente (INI/JSON)
+    Note over Job: [JobEntryPoint] ausführen
+    Job-&gt;&gt;Server: PutRawResult(serialisiertes Ergebnis)
+
+    alt Fehlerfall
+        Job-&gt;&gt;Server: PutError(serialisierter ErrorReport als JSON)
+    end
+</div>
+<p>Der Vertrag ist bewusst auf drei Methoden reduziert. Serialisierung und Deserialisierung
+liegen im Verantwortungsbereich der jeweiligen Implementierung.</p>
+<hr />
+<h2 id="vertrag">Vertrag</h2>
+<h3 id="ijosynapplicationprotocol"><code>IJosynApplicationProtocol</code></h3>
+<table>
+<thead>
+<tr>
+<th>Methode</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GetRawArguments()</code></td>
+<td>Ruft serialisierte Job-Argumente als String ab</td>
+</tr>
+<tr>
+<td><code>PutRawResult(string)</code></td>
+<td>Übermittelt das serialisierte Job-Ergebnis</td>
+</tr>
+<tr>
+<td><code>PutError(string)</code></td>
+<td>Übermittelt einen serialisierten <code>ErrorReport</code>, falls der Transport noch aktiv ist</td>
+</tr>
+</tbody>
+</table>
+<h3 id="errorreport"><code>ErrorReport</code></h3>
+<pre><code class="language-csharp">record ErrorReport(
+    string  Message,
+    string? CallStack,
+    string? ExceptionDetails,
+    DateTimeOffset OccurredAt);
+</code></pre>
+<p>Wird via <code>PropertyBag</code> als <strong>JSON</strong> serialisiert, bevor er über <code>PutError</code> übertragen wird
+(INI ist für mehrzeilige Felder wie <code>CallStack</code> und <code>ExceptionDetails</code> ungeeignet).
+Der Server protokolliert ihn; eine weitergehende Verarbeitung ist für spätere Ausbaustufen
+vorgesehen.</p>
+<hr />
+<h2 id="fehlerrouting-im-jobhost">Fehlerrouting im JobHost</h2>
+<pre><code>Pipe-Verbindungsfehler          →  LocalLog.WriteError(...)              (nur lokal)
+Job-Fehler, Pipe noch aktiv     →  LocalLog.WriteError(...) + PutError   (lokal + remote)
+PutError selbst fehlgeschlagen  →  LocalLog.WriteError(...)              (Fallback lokal)
+</code></pre>
+<hr />
+<h2 id="fur-maintainer">Für Maintainer</h2>
+<h3 id="bauen-testen-packen">Bauen, Testen, Packen</h3>
+<pre><code>.local-build\build.cmd          # Release-Build (beide Shared-Projekte)
+.local-build\build.cmd Debug    # Debug-Build
+.local-build\pack.cmd           # NuGet-Pakete → ..\..\local-packages\
+</code></pre>
+<h3 id="abhangigkeiten">Abhängigkeiten</h3>
+<table>
+<thead>
+<tr>
+<th>Paket</th>
+<th>Rolle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JOSYN.Foundation.ResultPattern</code></td>
+<td>Fehler-als-Wert-Pattern</td>
+</tr>
+</tbody>
+</table>
+<h3 id="referenced-by">Referenced by</h3>
+<ul>
+<li><code>JOSYN.JobHost</code></li>
+<li><code>JOSYN.Jap.JAPServer</code></li>
+</ul>
+<h3 id="projektstruktur">Projektstruktur</h3>
+<pre><code>JOSYN.Jap.Shared.Contract\
+├── IJosynApplicationProtocol.cs    # JAP-Vertrag (3 Methoden)
+└── ErrorReport.cs                  # Fehler-Payload-Record
+</code></pre>
+<hr />
+<p><em>JOSYN.Jap.Shared.Contract — © 2026 HAEVG AG — MIT License</em></p>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

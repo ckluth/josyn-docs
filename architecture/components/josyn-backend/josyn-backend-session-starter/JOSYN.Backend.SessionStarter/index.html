@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JOSYN.Backend.SessionStarter — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details open>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../../index.html" class="nav-link">Overview</a>
+<details open>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../../index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../platform/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../../solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../../decisions/platform/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-backend]/josyn-backend-session-starter/JOSYN.Backend.SessionStarter/README.md</div><h1 id="josyn.backend.sessionstarter">JOSYN.Backend.SessionStarter</h1>
+<p><strong>Session lifecycle entry point for JOSYN backend components.</strong></p>
+<p>Provides <code>ISessionStarter</code> — the contract for starting a job session. <code>SessionStarter</code>
+allocates a GUID, persists the session in the store, and spawns <code>JAPServer.exe</code> to handle
+the session lifecycle.</p>
+<h2 id="responsibilities">Responsibilities</h2>
+<ol>
+<li>Validate that <code>JAPServer.exe</code> exists at the configured path</li>
+<li>Allocate a new session GUID</li>
+<li>Persist the session (with arguments) via <code>ISessionStore</code></li>
+<li>Spawn <code>JAPServer.exe JOSYN-IPC &lt;guid&gt;</code> — fire-and-forget; JAPServer runs independently</li>
+<li>Return the GUID to the caller</li>
+</ol>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-csharp">IGlobalConfig config = new HardcodedGlobalConfig();
+ISessionStore store  = new SessionStore(config.SessionStoreConnectionString);
+ISessionStarter starter = new SessionStarter(store, config);
+
+var result = starter.StartSession(&quot;MyJobType&quot;, iniArguments);
+if (result.Succeeded)
+    Console.WriteLine($&quot;Session started: {result.Value}&quot;);
+</code></pre>
+<h2 id="known-poc-limitations">Known PoC limitations</h2>
+<ul>
+<li>If <code>Process.Start</code> succeeds but JAPServer crashes after the 500 ms startup window,
+the session row in the store remains with an empty <code>Result</code> field. A session status
+column would be needed to distinguish &quot;running&quot; from &quot;failed-to-start&quot;.</li>
+<li><code>HardcodedGlobalConfig.JapServerExePath</code> is a developer-machine compile-time path.
+Replace with a real config source before production use.</li>
+</ul>
+<h2 id="dependencies">Dependencies</h2>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JOSYN.Backend.SessionStore</code></td>
+<td>Persists session records</td>
+</tr>
+<tr>
+<td><code>JOSYN.Backend.GlobalConfig</code></td>
+<td>Supplies <code>JapServerExePath</code></td>
+</tr>
+<tr>
+<td><code>JOSYN.Foundation.ResultPattern</code></td>
+<td>Error-as-value result type</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p>MIT License — Copyright © 2026 HAEVG AG</p>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

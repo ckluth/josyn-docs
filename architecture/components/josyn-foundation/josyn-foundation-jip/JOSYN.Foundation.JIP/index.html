@@ -1,0 +1,343 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JOSYN.Foundation.JIP — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details open>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../../index.html" class="nav-link">Overview</a>
+<details open>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../../index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../platform/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../../solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../../decisions/platform/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-foundation]/josyn-foundation-jip/JOSYN.Foundation.JIP/README.md</div><h1 id="josyn.foundation.jip">JOSYN.Foundation.JIP</h1>
+<p><strong>JIP</strong> (JOSYN Interprocess Protocol) ist der Transportschicht-Baustein von JOSYN.
+Er koppelt zwei Prozesse über Named Pipes vollständig voneinander entkoppelt: Der
+<strong>JobHost</strong> (Frontend) und der <strong>JAPServer</strong> (Backend) kommunizieren ausschließlich
+über dieses Protokoll — ohne gemeinsamen Speicher, ohne geteilte Abhängigkeiten.</p>
+<hr />
+<h2 id="warum-named-pipes">Warum Named Pipes?</h2>
+<p>Named Pipes sind ideal für session-isolierte, sequenzielle IPC innerhalb einer Maschine:</p>
+<ul>
+<li><strong>Prozessisolation.</strong> Frontend und Backend laufen in getrennten Prozessen —
+ein Absturz auf einer Seite betrifft die andere nicht.</li>
+<li><strong>Kein gemeinsamer Zustand.</strong> Die Kommunikation ist vollständig serialisiert;
+kein Shared-Memory, kein Locking, keine Race-Conditions.</li>
+<li><strong>Einfaches Protokoll.</strong> Length-Prefix (<code>int32</code> + Bytes, Little-Endian) ist
+ausreichend für JOSYN — kein HTTP-Overhead, keine Bibliotheksabhängigkeit.</li>
+</ul>
+<hr />
+<h2 id="schnellstart">Schnellstart</h2>
+<h3 id="server-starten">Server starten</h3>
+<pre><code class="language-csharp">var args = new ServerStartArguments
+{
+    HandleStringRequest = async request =&gt;
+    {
+        // Anfrage verarbeiten, Antwort zurückgeben
+        return await Task.FromResult($&quot;Echo: {request}&quot;);
+    },
+    HandleErrorNotification = async (req, ex) =&gt;
+    {
+        Console.Error.WriteLine($&quot;Fehler bei '{req}': {ex.Message}&quot;);
+        await Task.CompletedTask;
+    }
+};
+
+var result = await PipesServer.RunAsync(args);
+if (!result.Succeeded) Console.Error.WriteLine(result.ErrorMessage);
+</code></pre>
+<h3 id="client-verbinden-und-anfrage-senden">Client verbinden und Anfrage senden</h3>
+<pre><code class="language-csharp">var connect = await PipesClient.ConnectAsync(sessionKey);
+if (!connect.Succeeded) { /* Fehler behandeln */ return; }
+
+var pipes = connect.Value;
+
+var response = await PipesClient.SendRequestAsync(&quot;PING&quot;, pipes);
+if (!response.Succeeded) { /* Fehler behandeln */ return; }
+
+Console.WriteLine(response.Value); // &quot;Echo: PING&quot;
+
+await PipesClient.DisconnectAsync(pipes);
+</code></pre>
+<h3 id="jip-konventions-layer-empfohlene-api">JIP-Konventions-Layer (empfohlene API)</h3>
+<p>Für strukturierte Anfragen mit Dispatcher:</p>
+<pre><code class="language-csharp">// Server-Seite
+var handler = JipServer.WrapHandler(async (Request req) =&gt;
+{
+    return req.What switch
+    {
+        &quot;PING&quot; =&gt; Result&lt;string?&gt;.Success(&quot;PONG&quot;),
+        _      =&gt; Result&lt;string?&gt;.Fail($&quot;Unbekannte Anfrage: {req.What}&quot;)
+    };
+});
+
+var args = new ServerStartArguments
+{
+    HandleStringRequest = handler,
+    HandleErrorNotification = async (req, ex) =&gt; { /* ... */ }
+};
+
+// Client-Seite
+var result = await JipClient.SendAsync(pipes, &quot;PING&quot;);
+</code></pre>
+<hr />
+<h2 id="architektur">Architektur</h2>
+<p>JIP besteht aus zwei Schichten:</p>
+<h3 id="transportschicht-pipesserver-pipesclient-pipesprotocol">Transportschicht (<code>PipesServer</code>, <code>PipesClient</code>, <code>PipesProtocol</code>)</h3>
+<p>Die untere Schicht versteht ausschließlich Bytes:</p>
+<ul>
+<li><strong><code>PipesServer</code></strong> — Verwaltet den Server-Lifecycle; richtet Request- und Response-Pipe
+ein, wartet auf Verbindungen, verarbeitet Anfragen sequenziell (Single-in-Flight).</li>
+<li><strong><code>PipesClient</code></strong> — Verbindet sich mit dem laufenden Server; exponentieller Backoff
+beim Verbindungsaufbau; Busy-Guard verhindert parallele Anfragen.</li>
+<li><strong><code>PipesProtocol</code></strong> — Protokollkonstanten (Magic Tokens), CLI-Hilfsmethoden und
+Pipe-Namensableitung aus dem Session-Key.</li>
+</ul>
+<h3 id="konventions-layer-jipclient-jipserver-jipprotocol-jipdispatcher">Konventions-Layer (<code>JipClient</code>, <code>JipServer</code>, <code>JipProtocol</code>, <code>JipDispatcher</code>)</h3>
+<p>Die obere Schicht definiert das JSON-basierte Anfrage/Antwort-Format:</p>
+<ul>
+<li><strong><code>JipClient</code></strong> — Kapselt <code>PipesClient.SendRequestAsync</code> + JSON-Serialisierung.</li>
+<li><strong><code>JipServer</code></strong> — Kapselt Handler-Signatur in die <code>Func&lt;string, Task&lt;string&gt;&gt;</code> des Servers.</li>
+<li><strong><code>JipProtocol</code></strong> — Parst/serialisiert <code>Request</code> und <code>Response</code> (JSON); konvertiert
+in/aus <code>Result&lt;string?&gt;</code>.</li>
+<li><strong><code>JipDispatcher</code></strong> — Fluent-Registrierung von Handlern; <code>RegisterAll&lt;TProtocol&gt;</code>
+registriert alle Handler eines Protokoll-Typs.</li>
+</ul>
+<h3 id="zwei-pipe-design">Zwei-Pipe-Design</h3>
+<div class="mermaid">
+sequenceDiagram
+    participant C as Client (JobHost)
+    participant S as Server (JAPServer)
+
+    C-&gt;&gt;S: req-pipe-&amp;lt;sessionKey&amp;gt; (Request)
+    S--&gt;&gt;C: res-pipe-&amp;lt;sessionKey&amp;gt; (Response)
+</div>
+<p>Jede Session verwendet genau zwei Pipes — eine für Anfragen, eine für Antworten.
+Der Session-Key (Guid) wird beim Server-Start als CLI-Argument an den Client übergeben:
+<code>&quot;JOSYN-IPC &lt;sessionKey&gt;&quot;</code>.</p>
+<hr />
+<h2 id="designentscheidung-single-in-flight">Designentscheidung: Single-in-Flight</h2>
+<p>JIP ist bewusst auf <strong>strikte 1:1-Kommunikation</strong> ausgelegt. Jede Session wird durch eine
+on-the-fly erzeugte GUID (Session-Key) eindeutig identifiziert; Client und Server kommunizieren
+ausschließlich über dieses Pipe-Paar — sequenziell, ohne Multiplexing.</p>
+<p><strong>Parallele Requests aus mehreren Threads sind nicht vorgesehen.</strong> Das ist keine Einschränkung,
+sondern eine Systeminvariante: Der Client gehört zur JOSYN-Plattform, und dieses Verhalten wird
+auf Systemebene sichergestellt.</p>
+<p>Sollte dennoch ein zukünftiger Client parallele Requests absetzen und dabei Timing-Pech haben,
+erhält er im Worst Case ein definiertes <strong>Busy</strong> zurück — kein undefiniertes Verhalten, keine
+Seiteneffekte. Der Client ist für die Behandlung verantwortlich (Retry o. Ä.).
+Multiplexing wäre YAGNI und unverhältnismäßig aufwändig.</p>
+<hr />
+<h2 id="referenz">Referenz</h2>
+<h3 id="transportschicht">Transportschicht</h3>
+<table>
+<thead>
+<tr>
+<th>Typ</th>
+<th>Art</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PipesServer</code></td>
+<td><code>class</code></td>
+<td>Server-Lifecycle, Reconnect-Loop</td>
+</tr>
+<tr>
+<td><code>PipesClient</code></td>
+<td><code>class</code></td>
+<td>Verbindungsaufbau, Request/Response</td>
+</tr>
+<tr>
+<td><code>PipesProtocol</code></td>
+<td><code>class</code></td>
+<td>Magic Tokens, CLI-Helpers, Pipe-Namen</td>
+</tr>
+<tr>
+<td><code>ServerStartArguments</code></td>
+<td><code>record</code></td>
+<td>Startkonfiguration für <code>PipesServer</code></td>
+</tr>
+<tr>
+<td><code>ClientPipes</code></td>
+<td><code>record</code></td>
+<td>Pipe-Handles für den Client</td>
+</tr>
+<tr>
+<td><code>ServerPipes</code></td>
+<td><code>record</code></td>
+<td>Pipe-Handles für den Server</td>
+</tr>
+</tbody>
+</table>
+<h3 id="konventions-layer">Konventions-Layer</h3>
+<table>
+<thead>
+<tr>
+<th>Typ</th>
+<th>Art</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JipClient</code></td>
+<td><code>static class</code></td>
+<td>Sendet <code>Request</code>, empfängt <code>Result&lt;string?&gt;</code></td>
+</tr>
+<tr>
+<td><code>JipServer</code></td>
+<td><code>static class</code></td>
+<td>Kapselt Handler in Wire-Signatur</td>
+</tr>
+<tr>
+<td><code>JipProtocol</code></td>
+<td><code>static class</code></td>
+<td>JSON-Parsing, Response-Konvertierung</td>
+</tr>
+<tr>
+<td><code>JipDispatcher</code></td>
+<td><code>sealed class</code></td>
+<td>Fluent Handler-Registrierung</td>
+</tr>
+<tr>
+<td><code>Request</code></td>
+<td><code>record</code></td>
+<td>Wire-Typ: <code>What</code> + optionales <code>Data</code></td>
+</tr>
+<tr>
+<td><code>Response</code></td>
+<td><code>record</code></td>
+<td>Wire-Typ: <code>Succeeded</code> + <code>Data?</code> + <code>Error?</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="abhangigkeiten">Abhängigkeiten</h2>
+<ul>
+<li><code>JOSYN.Foundation.ResultPattern</code> (lokaler NuGet-Feed)</li>
+<li><code>.NET 10</code> / C# <code>latest</code></li>
+</ul>
+<hr />
+<h2 id="projektstruktur">Projektstruktur</h2>
+<pre><code>JOSYN.Foundation.JIP\
+├── PipesServer.cs              # Transport: Server-Lifecycle
+├── PipesClient.cs              # Transport: Client-Verbindung
+├── PipesProtocol.cs            # Transport: Protokoll-Konstanten
+├── ServerStartArguments.cs     # Transport: Startkonfiguration
+├── Contracts\                  # API-Verträge (Transportschicht)
+│   ├── IPipesServer.cs
+│   ├── IPipesClient.cs
+│   ├── IPipesProtocol.cs
+│   └── IServerStartArguments.cs
+├── Jip\                        # Konventions-Layer
+│   ├── JipClient.cs
+│   ├── JipServer.cs
+│   ├── JipProtocol.cs
+│   ├── JipDispatcher.cs
+│   ├── Wire\                   # Request/Response Wire-Typen
+│   └── Contracts\              # API-Verträge (Konventions-Layer)
+│       ├── IJipProtocol.cs
+│       ├── IRequest.cs
+│       └── IResponse.cs
+└── Types\                      # ClientPipes, ServerPipes
+</code></pre>
+<hr />
+<p><em>JOSYN.Foundation.JIP — © 2026 HAEVG AG — MIT License</em></p>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

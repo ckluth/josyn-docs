@@ -1,0 +1,209 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JOSYN Toolbox — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../index.html" class="nav-home">JOSYN Documentation</a>
+<details>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../architecture/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../architecture/components/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../architecture/platform/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../decisions/platform/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+</details>
+<details open>
+  <summary class="nav-section">Unsorted</summary>
+  <a href="../index.html" class="nav-link">Overview</a>
+<details open>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="index.html" class="nav-link active">README</a>
+</details>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-toolbox]/README.md</div><h1 id="josyn-toolbox">JOSYN Toolbox</h1>
+<blockquote>
+<p><strong>This repo contains maintainer tooling for the JOSYN platform. It is not a platform component.</strong>
+The platform never references it. It carries none of the platform's obligations.</p>
+</blockquote>
+<hr />
+<h2 id="purpose">Purpose</h2>
+<p><code>josyn-toolbox</code> is the maintainer's collection of operational scripts and developer utilities:</p>
+<ul>
+<li><strong>Deployment</strong> — full local deployment pipeline for the JOSYN stack</li>
+<li><strong>Machine synchronisation</strong> — keeping all repositories in sync across machines</li>
+<li><strong>Developer tools</strong> — code generators and documentation utilities used during development</li>
+</ul>
+<p>Tools here are stable and regularly executed. They are maintained to a higher standard than
+playground experiments, but they are not platform infrastructure.</p>
+<hr />
+<h2 id="what-this-repo-is-not">What this repo is not</h2>
+<ul>
+<li>Not a platform component</li>
+<li>Not maintained to platform standards</li>
+<li>Not a source of architectural truth</li>
+<li>Not referenced by any platform repo — in any form</li>
+</ul>
+<hr />
+<h2 id="the-one-hard-rule">The one hard rule</h2>
+<p><strong>The platform must never take any dependency on this repo.</strong></p>
+<hr />
+<h2 id="repository-layout">Repository layout</h2>
+<pre><code>josyn-toolbox/
+├── cfg/                        ← shared configuration: repo list, root detection
+├── git-tools/                  ← machine-sync scripts: clone, push-all, pull-all, repo-status
+├── arg-gen/                    ← .NET tool: generates local-arguments scaffold for deployed jobs
+├── site-builder/               ← documentation pipeline: index → assemble → HTML site
+│   ├── site-builder-indexer/   ← scans repos, produces docs-index.json
+│   ├── site-builder-assembler/ ← stages files by logical structure, generates landing/search
+│   └── site-builder-renderer/  ← .NET tool: markdown folder → static HTML site
+├── deploy/                     ← deployment pipeline: full local deploy of the JOSYN stack
+└── convenience-scripts/        ← one-shot utilities: NuGet total rebuild, etc.
+</code></pre>
+<hr />
+<h2 id="tools">Tools</h2>
+<h3 id="cfg"><a href="cfg/"><code>cfg/</code></a></h3>
+<p>Shared configuration used by all tools in this repo:</p>
+<ul>
+<li><code>cfg-detect-root.cmd</code> — maps hostname to the local <code>DevGit</code> root path</li>
+<li><code>cfg-repos-list.cmd</code> — ordered list of all JOSYN repositories (for git sync)</li>
+<li><code>cfg-docs-repos-list.cmd</code> — repositories included in the documentation index scan</li>
+</ul>
+<hr />
+<h3 id="git-tools"><a href="git-tools/"><code>git-tools/</code></a></h3>
+<p>Scripts for bootstrapping a fresh machine and keeping all JOSYN repositories in sync
+when switching between machines (Planet Home-Office ↔ Planet Company).</p>
+<p>See <a href="git-tools/index.html">git-tools/README.md</a> for full documentation.</p>
+<hr />
+<h3 id="deploy"><a href="deploy/"><code>deploy/</code></a></h3>
+<p>PowerShell deployment pipeline that builds and publishes the full JOSYN stack to the local
+developer machine. Covers NuGet pack, JAPServer, CLI, adapters, and demo job.</p>
+<p>See <a href="deploy/index.html">deploy/README.md</a> for full documentation.</p>
+<hr />
+<h3 id="arg-gen"><a href="arg-gen/"><code>arg-gen/</code></a></h3>
+<p>A .NET 10 console tool that generates the full <code>local-arguments\</code> scaffold for a deployed
+job — <code>arguments-default.ini</code>, <code>_launcher.cmd</code>, and <code>arguments-default.cmd</code>. Called by
+<code>deploy/deploy-maintainer.ps1</code> after each job publish step.</p>
+<p><code>local-arguments\</code> is a deploy-time artefact. It must not be committed to job repos.</p>
+<p><strong>Usage:</strong></p>
+<pre><code>dotnet run --project arg-gen -- &lt;job-exe-path&gt; --cli-path &lt;cli-exe-path&gt; [--output-dir &lt;dir&gt;]
+</code></pre>
+<hr />
+<h3 id="site-builder"><a href="site-builder/"><code>site-builder/</code></a></h3>
+<p>Three-part toolchain that assembles the scattered markdown documentation across all JOSYN
+repositories into a single, navigable HTML site in <code>josyn-docs</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Entry point</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="site-builder/site-builder-indexer/index.html"><code>site-builder-indexer</code></a></td>
+<td><code>site-builder-indexer.cmd</code></td>
+<td>Scans repos → <code>docs-index.json</code></td>
+</tr>
+<tr>
+<td><a href="site-builder/site-builder-assembler/index.html"><code>site-builder-assembler</code></a></td>
+<td><code>site-builder-assembler.cmd</code></td>
+<td>Stages files + calls renderer</td>
+</tr>
+<tr>
+<td><a href="site-builder/site-builder-renderer/index.html"><code>site-builder-renderer</code></a></td>
+<td>Called by assembler; also standalone</td>
+<td>Markdown folder → HTML site</td>
+</tr>
+</tbody>
+</table>
+<p>See <a href="site-builder/index.html">site-builder/README.md</a> for the full pipeline overview.</p>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+</body>
+</html>

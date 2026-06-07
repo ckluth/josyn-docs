@@ -1,0 +1,470 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JOSYN-IPC-Protocol — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details open>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../../../index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../../../../components/index.html" class="nav-link">Overview</a>
+</details>
+<details open>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../../../solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../../../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../../../decisions/platform/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-foundation]/josyn-foundation-jip/JOSYN.Foundation.JIP/Docs/josyn-ipc-protocol-draft-01.md</div><h1 id="josyn-ipc-protocol">JOSYN-IPC-Protocol</h1>
+<blockquote>
+<p><strong>Status:</strong> Draft · <strong>Version:</strong> 0.1 · <strong>Zielgruppe:</strong> Interne Entwickler</p>
+</blockquote>
+<hr />
+<h2 id="ubersicht">Übersicht</h2>
+<p>Das JOSYN-IPC-Protokoll definiert einen strukturierten, schichtbasierten Kommunikationskanal zwischen genau zwei Prozessen (Client und Server) auf Basis von <code>System.IO.Pipes</code>. Es ist für schnelle, robuste Übertragung kleiner bis mittelgroßer Datenmengen konzipiert – etwa Commands, Status-Updates oder kleine Dateipayloads.</p>
+<p>Durch die Nutzung von <code>System.IO.Pipes</code> ist das Protokoll plattformübergreifend portabel: Auf Windows werden Named Pipes verwendet, auf Linux werden diese transparent auf Unix-Domain-Sockets abgebildet.</p>
+<hr />
+<h2 id="schichtenmodell">Schichtenmodell</h2>
+<p>Das Protokoll ist in aufeinander aufbauenden Schichten organisiert:</p>
+<table>
+<thead>
+<tr>
+<th>Schicht</th>
+<th>Bezeichnung</th>
+<th>Status</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>Transport</td>
+<td>Implementiert</td>
+<td><code>System.IO.Pipes</code> – plattformübergreifende Pipe-Abstraktion</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Framing</td>
+<td>Implementiert</td>
+<td>Rohe Nutzdaten als <code>byte[]</code>-Arrays</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>[ 4 Bytes: Länge (int32, little-endian) ][ N Bytes: Payload (UTF-8) ]</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Textkodierung</td>
+<td>Implementiert</td>
+<td>UTF-8-Enkodierung der Nutzdaten</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Konventionen-Protokoll</td>
+<td>Geplant</td>
+<td>Strukturierte Felder: Verb, Payload, Status – voraussichtlich JSON-basiert</td>
+</tr>
+</tbody>
+</table>
+<p>Applikationsspezifische Layer, die konkrete Request-Typen definieren, liegen außerhalb des Scopes dieses Protokolls.</p>
+<hr />
+<h2 id="architektur-kommunikationsmodell">Architektur &amp; Kommunikationsmodell</h2>
+<p>Das Protokoll folgt einem strikten <strong>Request/Response-Muster</strong> zwischen genau einem Client und einem Server (1:1-Topologie).</p>
+<pre><code>  Client                             Server
+    │                                  │
+    │        Session etabliert         │
+    │─────────────────────────────────►│
+    │                                  │
+    │──── Request (req-pipe) ─────────►│
+    │◄─── Response (res-pipe) ─────────│
+    │                                  │
+    │──── Request (req-pipe) ─────────►│
+    │◄─── Response (res-pipe) ─────────│
+    │                                  │
+</code></pre>
+<h3 id="einschrankungen">Einschränkungen</h3>
+<table>
+<thead>
+<tr>
+<th>Eigenschaft</th>
+<th>Ausprägung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Topologie</td>
+<td>1:1 (one-to-one)</td>
+</tr>
+<tr>
+<td>Kommunikationsrichtung</td>
+<td>Unidirektional Requests: Client → Server</td>
+</tr>
+<tr>
+<td>Server-initiierte Anfragen</td>
+<td>Nicht unterstützt</td>
+</tr>
+<tr>
+<td>Multiplexing</td>
+<td>Nicht unterstützt</td>
+</tr>
+<tr>
+<td>Große Payloads</td>
+<td>Nicht vorgesehen</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="session-management">Session-Management</h2>
+<h3 id="session-key">Session-Key</h3>
+<p>Jede Kommunikationssitzung wird durch einen eindeutigen <strong>Session-Key</strong> identifiziert. Der Session-Key ist eine GUID (Globally Unique Identifier) und dient als Basis für die Ableitung beider Pipe-Namen.</p>
+<h3 id="pipe-namenskonvention">Pipe-Namenskonvention</h3>
+<p>Aus dem Session-Key werden zwei Pipe-Endpunkte nach folgendem Schema abgeleitet:</p>
+<table>
+<thead>
+<tr>
+<th>Pipe</th>
+<th>Namensschema</th>
+<th>Richtung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Request-Pipe</td>
+<td><code>req-pipe-{sessionKey}</code></td>
+<td>Client → Server</td>
+</tr>
+<tr>
+<td>Response-Pipe</td>
+<td><code>res-pipe-{sessionKey}</code></td>
+<td>Server → Client</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="bootstrap-handshake">Bootstrap &amp; Handshake</h2>
+<h3 id="cli-argument-konvention">CLI-Argument-Konvention</h3>
+<p>Die Übergabe des Session-Keys zwischen den Prozessen erfolgt über standardisierte CLI-Argumente. Alle IPC-bezogenen Argumente beginnen mit dem Magic-Token <code>JOSYN-IPC</code>, gefolgt vom Session-Key und optional dem Pfad zur Client-Executable.</p>
+<p><strong>Argumentstruktur:</strong></p>
+<pre><code>JOSYN-IPC &lt;session-key&gt; [&lt;client-exe-path&gt;]
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Pflicht</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Magic-Token</td>
+<td>Ja</td>
+<td>Fester Bezeichner <code>JOSYN-IPC</code></td>
+</tr>
+<tr>
+<td>Session-Key</td>
+<td>Ja</td>
+<td>GUID der aktuellen Session</td>
+</tr>
+<tr>
+<td>Client-Exe-Pfad</td>
+<td>Nein</td>
+<td>Absoluter Pfad zur Client-Executable (optional)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="szenario-1-autonomer-start-produktivbetrieb">Szenario 1 – Autonomer Start (Produktivbetrieb)</h3>
+<p>Der Server ermittelt den Pfad der Client-Executable eigenständig und steuert den gesamten Startprozess.</p>
+<pre><code>  Dritte Partei          Server                    Client
+       │                    │                          │
+       │── startet ────────►│                          │
+       │                    │── erzeugt Session-Key    │
+       │                    │── ermittelt Client-Exe   │
+       │                    │── startet Client ───────►│
+       │                    │   (übergibt Session-Key) │
+       │                    │◄──── verbindet ──────────│
+       │                    │                          │
+</code></pre>
+<p><strong>Ablauf:</strong></p>
+<ol>
+<li>Server wird ohne IPC-Argumente gestartet.</li>
+<li>Server erzeugt einen neuen Session-Key (GUID).</li>
+<li>Server ermittelt propriatär den Pfad der Client-Executable.</li>
+<li>Server startet die Client-Executable und übergibt den Session-Key als CLI-Argument.</li>
+<li>Client verbindet sich über die abgeleiteten Pipe-Namen.</li>
+</ol>
+<hr />
+<h3 id="szenario-2-extern-verwalteter-session-key-debugdemo">Szenario 2 – Extern verwalteter Session-Key (Debug/Demo)</h3>
+<p>Ein Dritter steuert sowohl Server als auch Client und übergibt beiden denselben Session-Key.</p>
+<pre><code>  Dritte Partei          Server                    Client
+       │                    │                         │
+       │── startet ────────►│  (mit Session-Key)      │
+       │                    │── öffnet Pipes          │
+       │                    │── wartet auf Connection │
+       │── startet ─────────────────────────────────► │  (mit Session-Key)
+       │                    │◄──── verbindet ─────────│
+       │                    │                         │
+</code></pre>
+<p><strong>Ablauf:</strong></p>
+<ol>
+<li>Server erhält Session-Key als CLI-Argument.</li>
+<li>Server öffnet die Pipes und wechselt in den Listen-Modus.</li>
+<li>Client wird separat von einer dritten Partei mit demselben Session-Key gestartet.</li>
+<li>Client verbindet sich über die abgeleiteten Pipe-Namen.</li>
+</ol>
+<blockquote>
+<p><strong>Hinweis:</strong> Dieses Szenario ist ausschließlich für Debug- und Demozwecke vorgesehen.</p>
+</blockquote>
+<hr />
+<h3 id="szenario-3-extern-verwalteter-session-key-mit-client-pfad-debugdemo">Szenario 3 – Extern verwalteter Session-Key mit Client-Pfad (Debug/Demo)</h3>
+<p>Erweiterung von Szenario 2: Die dritte Partei übergibt zusätzlich den Pfad zur Client-Executable, sodass der Server den Client selbst starten kann.</p>
+<pre><code>  Dritte Partei          Server                      Client
+       │                    │                           │
+       │── startet ────────►│ (Session-Key + Exe-Pfad)  │
+       │                    │── öffnet Pipes            │
+       │                    │── startet Client ────────►│
+       │                    │◄──── verbindet ───────────│
+       │                    │                           │
+</code></pre>
+<p><strong>Ablauf:</strong></p>
+<ol>
+<li>Server erhält Session-Key und Exe-Pfad als CLI-Argumente.</li>
+<li>Server öffnet die Pipes.</li>
+<li>Server startet die Client-Executable mit dem vorhandenen Session-Key.</li>
+<li>Client verbindet sich über die abgeleiteten Pipe-Namen.</li>
+</ol>
+<blockquote>
+<p><strong>Hinweis:</strong> Dieses Szenario ist ausschließlich für Debug- und Demozwecke vorgesehen.</p>
+</blockquote>
+<hr />
+<h3 id="szenario-vergleich">Szenario-Vergleich</h3>
+<table>
+<thead>
+<tr>
+<th>Kriterium</th>
+<th>Szenario 1</th>
+<th>Szenario 2</th>
+<th>Szenario 3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Session-Key-Erzeugung</td>
+<td>Server</td>
+<td>Dritte Partei</td>
+<td>Dritte Partei</td>
+</tr>
+<tr>
+<td>Client-Start</td>
+<td>Server</td>
+<td>Dritte Partei</td>
+<td>Server</td>
+</tr>
+<tr>
+<td>Client-Exe-Pfad erforderlich</td>
+<td>Nein (proprietär)</td>
+<td>Nein</td>
+<td>Ja (per Argument)</td>
+</tr>
+<tr>
+<td>Verwendungszweck</td>
+<td>Produktivbetrieb</td>
+<td>Debug / Demo</td>
+<td>Debug / Demo</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="verhalten-robustheit">Verhalten &amp; Robustheit</h2>
+<h3 id="fehlerbehandlung">Fehlerbehandlung</h3>
+<table>
+<thead>
+<tr>
+<th>Aspekt</th>
+<th>Status</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lokales Logging</td>
+<td>Vorgesehen</td>
+<td>Strukturiertes, definiertes Logging von Verbindungsabbrüchen und Fehlern</td>
+</tr>
+<tr>
+<td>Benachrichtigung</td>
+<td>Optional</td>
+<td>E-Mail-Benachrichtigung als mögliche Erweiterung evaluiert</td>
+</tr>
+<tr>
+<td>Connection-Timeout</td>
+<td>Implementiert</td>
+<td>Feste, praxiserprobte Timeoutwerte; Konfigurierbarkeit als Option vorgesehen</td>
+</tr>
+</tbody>
+</table>
+<h3 id="session-teardown">Session-Teardown</h3>
+<p>Ein expliziter Schließ-Handshake ist nicht vorgesehen. Der Server beendet die Session stattdessen reaktiv und robust in folgenden Fällen:</p>
+<table>
+<thead>
+<tr>
+<th>Beendigungsursache</th>
+<th>Verhalten</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Client schließt Pipes explizit</td>
+<td>Server terminiert sauber</td>
+</tr>
+<tr>
+<td>Client terminiert unsauber (Crash etc.)</td>
+<td>Server terminiert sauber</td>
+</tr>
+<tr>
+<td>Expliziter Server-Shutdown bei aktivem Client</td>
+<td>Nicht vorgesehen</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Cancellation-Mechanismus:</strong> Die Server-Implementierung verwendet ein <code>CancellationToken</code>, das sowohl den Connection-Aufbau als auch die Request-Loop absichert. Abbruchbedingungen sind über ein frei definierbares Predicate darstellbar, sodass beliebige Shutdown-Trigger integriert werden können.</p>
+<table>
+<thead>
+<tr>
+<th>Umgebung</th>
+<th>Cancellation-Implementierung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Demo</td>
+<td>Konsoleneingabe – Abbruch via <code>ESC</code>-Taste (<code>Console.ReadKey</code>)</td>
+</tr>
+<tr>
+<td>Produktion</td>
+<td>Applikationsspezifisch über Predicate zu implementieren</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reconnect">Reconnect</h3>
+<p>Reconnect nach Verbindungsverlust ist aktuell nicht vorgesehen. Jede neue Verbindung erfordert den Aufbau einer neuen Session.</p>
+<hr />
+<h2 id="ausblick">Ausblick</h2>
+<table>
+<thead>
+<tr>
+<th>Thema</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Layer 3 – Konventionsschicht</td>
+<td>Definition von Verb, Payload und Status; Evaluierung JSON als Trägerformat</td>
+</tr>
+<tr>
+<td>Konfigurierbare Timeouts</td>
+<td>Externalisierung der Timeout-Werte in eine Konfigurationsschicht</td>
+</tr>
+<tr>
+<td>Reconnect-Unterstützung</td>
+<td>Derzeit nicht geplant; bei Bedarf als explizites Feature zu spezifizieren</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>Dieses Dokument beschreibt den aktuellen Implementierungsstand sowie geplante Erweiterungen des JOSYN-IPC-Protokolls. Es ist als lebendes Dokument zu verstehen und wird mit fortschreitender Entwicklung aktualisiert.</em></p>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

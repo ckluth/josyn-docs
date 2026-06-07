@@ -1,0 +1,517 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ADR-014 — CLI  Command and Local Arguments Convention — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../../architecture/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../../../architecture/components/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../architecture/platform/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details open>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../index.html" class="nav-link">Overview</a>
+<details open>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-platform]/decisions/ADR-014-cli-run-job-local-args.md</div><h1 id="adr-014-cli-run-job-command-and-local-arguments-convention">ADR-014 — CLI <code>run-job</code> Command and Local Arguments Convention</h1>
+<p><strong>Date:</strong> 2026-06-06<br />
+<strong>Status:</strong> Accepted</p>
+<hr />
+<h2 id="context">Context</h2>
+<p><code>JOSYN.Backend.CLI</code> is the operator-facing executable for manually triggering job sessions.
+Its current implementation (<code>Program.cs</code>) has hardcoded demo values and a single static
+function <code>HardCodedDemoSessionStart()</code>. This is a PoC placeholder — the comment in the file
+reads: <em>&quot;replace with real inputs once CLI arg parsing is added&quot;</em>.</p>
+<p>The first production use case for the CLI is:</p>
+<blockquote>
+<p>An operator or maintainer wants to start a specific job with specific arguments — for
+integration testing, ad-hoc maintenance, or operator-triggered execution outside the normal
+scheduler flow — without modifying or recompiling the binary.</p>
+</blockquote>
+<p>This requires two things:</p>
+<ol>
+<li>A command-line argument processor in the CLI.</li>
+<li>A convention for storing reusable, named argument files alongside deployed job executables,
+with optional convenience launchers.</li>
+</ol>
+<hr />
+<h2 id="decision">Decision</h2>
+<h3 id="the-run-job-command">The <code>run-job</code> Command</h3>
+<p>The CLI's first production command (exact syntax is an implementation detail; the contract is):</p>
+<pre><code>JOSYN.Backend.CLI.exe &lt;run-job&gt; &lt;jobname&gt; [&lt;argument-file&gt;]
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;run-job&gt;</code></td>
+<td>yes</td>
+<td>Sub-command selector; exact form decided at implementation</td>
+</tr>
+<tr>
+<td><code>&lt;jobname&gt;</code></td>
+<td>yes</td>
+<td>Registered job type name, as stored in <code>josyn.JobRegistrations</code> (e.g. <code>Contoso.DemoProduct.DemoJob</code>)</td>
+</tr>
+<tr>
+<td><code>&lt;argument-file&gt;</code></td>
+<td>no</td>
+<td>Path to a <code>.ini</code> file in <code>PropertyBag</code> INI format; omitting it is valid only for zero-parameter jobs</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Dispatch:</strong> the CLI reads <code>&lt;argument-file&gt;</code> into a raw string and calls
+<code>ISessionStarter.StartSession(jobName, rawArguments)</code>. The job registry lookup (<code>IJobRegistry</code>)
+and process spawning remain unchanged.</p>
+<p><strong>Registry-only resolution:</strong> <code>&lt;jobname&gt;</code> is always resolved via <code>josyn.JobRegistrations</code>.
+There is no direct-path bypass. If the job is not registered, the CLI fails with a clear error
+before a session is created. This is consistent with how the scheduler triggers jobs at runtime.</p>
+<p><strong>Fire-and-forget:</strong> <code>StartSession</code> spawns <code>JAPServer</code> and returns a GUID immediately. The CLI
+does not wait for the job to complete. Errors that occur during job execution (including
+argument deserialisation failures) surface in the <code>ErrorStore</code> and <code>LocalLog</code>, not on the
+terminal. This is the CLI's intended character — it is a session trigger, not a job monitor.</p>
+<p><strong>Exit codes</strong> (inherit from the current pattern):</p>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code></td>
+<td>Session started successfully</td>
+</tr>
+<tr>
+<td>non-zero</td>
+<td>Session could not be started; error written to console</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="resolution-rule">Resolution Rule</h3>
+<p>When <code>&lt;argument-file&gt;</code> is omitted:</p>
+<ul>
+<li>The CLI passes an empty string to <code>StartSession</code>.</li>
+<li>This is valid for zero-parameter jobs. <code>JobInvoker</code> short-circuits before calling
+<code>GetRawArguments()</code> when <code>parameters.Length == 0</code> — the empty string is never read.</li>
+<li>For jobs that require arguments, <code>JobInvoker</code> must detect the empty string early and return
+a clear error (see <em>Required Code Fix</em> below).</li>
+</ul>
+<p>The CLI does <strong>not</strong> auto-discover <code>local-arguments\arguments-default.ini</code>. Its behaviour is
+fully determined by what was typed. The <code>.cmd</code> launcher is the right place to encode
+&quot;use this specific file for this context&quot;.</p>
+<hr />
+<h3 id="required-code-fix-jobinvoker-guard">Required Code Fix — <code>JobInvoker</code> Guard</h3>
+<p>Traced during design: <code>PropertyBag.Deserialize(&quot;&quot;)</code> fails with <code>&quot;No sections found.&quot;</code> — a
+serialiser-level message that gives the operator no hint of the actual mistake.</p>
+<p><code>JobInvoker.CreateInvocationArguments</code> must add a guard before attempting deserialisation:</p>
+<pre><code class="language-csharp">private static async Task&lt;Result&lt;object[]?&gt;&gt; CreateInvocationArguments(
+    MethodInfo func, IJosynApplicationProtocol japClient)
+{
+    var parameters = func.GetParameters();
+    if (parameters.Length == 0) return Result&lt;object[]?&gt;.Success(null);
+
+    var rawArguments = await japClient.GetRawArguments();
+    if (!rawArguments.Succeeded)
+        return Result&lt;object[]?&gt;.Propagate(rawArguments.ToResult&lt;object[]?&gt;());
+
+    if (string.IsNullOrWhiteSpace(rawArguments.Value))
+        return Result&lt;object[]?&gt;.Fail(
+            &quot;Job erwartet Argumente, aber es wurden keine übergeben.&quot;);
+
+    // ... existing deserialisation path
+}
+</code></pre>
+<p>This fix belongs in <code>josyn-job-host</code>. It produces a readable entry in the <code>ErrorStore</code> when
+an operator starts a parameterised job without an argument file.</p>
+<hr />
+<h3 id="the-local-arguments-convention">The <code>local-arguments</code> Convention</h3>
+<blockquote>
+<p><strong>Scope:</strong> <code>local-arguments\</code> is a CLI and maintainer convention. It is <strong>not</strong> a production
+execution vehicle. The <code>ticker-service</code> must not read from this folder without a dedicated
+architectural decision. How scheduled job arguments reach the ticker at runtime is an
+explicitly deferred question — see <em>Open Questions</em> below.</p>
+</blockquote>
+<p>Each job folder in the deployed job repository may optionally contain a <code>local-arguments\</code>
+subfolder:</p>
+<pre><code>$JobRepositoryRoot\
+  Contoso.DemoProduct.DemoJob\
+    Contoso.DemoProduct.DemoJob.exe
+    local-arguments\                          &lt;- entirely optional; generated at deploy time
+      _launcher.cmd                           &lt;- shared launcher; CLI path lives here once
+      arguments-default.ini
+      arguments-default.cmd                   &lt;- one-liner; calls _launcher.cmd
+      arguments-integration-test.ini
+      arguments-integration-test.cmd          &lt;- one-liner; calls _launcher.cmd
+</code></pre>
+<p><strong>Rules:</strong></p>
+<ul>
+<li>The subfolder name is fixed: <code>local-arguments</code>.</li>
+<li>The entire folder is <strong>optional</strong>. Jobs with no <code>[JobEntryPoint]</code> parameters need not have
+it at all — <code>ArgGen</code> will not generate one.</li>
+<li><code>local-arguments\</code> is a <strong>deploy-time artefact</strong>, not a source-controlled artefact. It is
+generated by <code>ArgGen</code> during deployment and must not be committed to the job repo.</li>
+<li><code>.ini</code> files may exist without a corresponding <code>.cmd</code>. The <code>.cmd</code> is a convenience — not
+a required pairing.</li>
+<li>The naming pattern <code>arguments-&lt;context&gt;.ini</code> / <code>arguments-&lt;context&gt;.cmd</code> is a convention,
+not enforced by the platform.</li>
+<li><code>ArgGen</code> generates the <code>default</code> context only. Additional named contexts (e.g.
+<code>arguments-integration-test</code>) are hand-authored post-deploy if needed.</li>
+</ul>
+<hr />
+<h3 id="the.ini-file">The <code>.ini</code> File</h3>
+<p>Standard <code>PropertyBag</code> INI format — the same format used for job arguments at runtime:</p>
+<pre><code class="language-ini">Message=Hallo JOSYN
+RepeatCount=3
+ScheduledFor=06.06.2025
+IsHighPriority=False
+Budget=1499,99
+</code></pre>
+<p>Culture is <code>de-DE</code> throughout (decimal separators, date formats), consistent with the
+platform-wide serialization convention.</p>
+<hr />
+<h3 id="the.cmd-launchers">The <code>.cmd</code> Launchers</h3>
+<p>The <code>local-arguments\</code> folder uses a two-level structure to avoid repeating the CLI path
+in every per-context file.</p>
+<p><strong><code>_launcher.cmd</code> — the shared launcher:</strong></p>
+<p>Contains the CLI path, the echo header, and the <code>CHOICE</code> confirmation gate. The CLI path
+is injected by <code>ArgGen</code> at deploy time.</p>
+<pre><code class="language-batch">@echo off
+CHCP 1252 &gt;nul
+
+set JOSYN_CLI=C:\ProgramData\JOSYN\CLI\JOSYN.Backend.CLI.exe
+set JOB_NAME=Contoso.DemoProduct.DemoJob
+
+echo.
+echo  Job:   %JOB_NAME%
+echo  Args:  %~1
+echo.
+
+set /p CONFIRM=&quot;ENTER zum Starten, CTRL-C zum Abbrechen... &quot;
+
+echo.
+&quot;%JOSYN_CLI%&quot; run-job &quot;%JOB_NAME%&quot; &quot;%~1&quot;
+exit /b %ERRORLEVEL%
+</code></pre>
+<p><strong>Per-context <code>.cmd</code> — a one-liner:</strong></p>
+<p>Each argument set gets a thin wrapper that passes its <code>.ini</code> path to <code>_launcher.cmd</code>:</p>
+<pre><code class="language-batch">@call &quot;%~dp0_launcher.cmd&quot; &quot;%~dp0arguments-default.ini&quot;
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li><code>%~dp0</code> expands to the directory of the calling <code>.cmd</code> file — the <code>.ini</code> path is always
+self-relative, requiring no hardcoded absolute path for the argument file itself.</li>
+<li>The CLI path in <code>_launcher.cmd</code> <strong>is</strong> hardcoded to the installation. This is consistent
+with the <code>launch.*.cmd</code> convention (see <code>architecture/local-build.md</code>): maintainer scripts
+may contain machine-specific paths. If the path changes, one file is edited.</li>
+<li>The <code>CHOICE</code> gate is intentional. There is no scripted bypass — scripts invoke the CLI
+directly and do not use the <code>.cmd</code> launchers.</li>
+<li>The <code>.cmd</code> files are implicitly environment-specific (the CLI path encodes the installation).
+On INT, a separate set of <code>.cmd</code> files points to the INT installation.</li>
+</ul>
+<hr />
+<h3 id="arggen-deploy-time-scaffold-generator"><code>ArgGen</code> — Deploy-Time Scaffold Generator</h3>
+<p><code>ArgGen</code> is a standalone console tool (<code>josyn-toolbox\arg-gen\</code>) that generates the
+full <code>local-arguments\</code> scaffold for a job after it has been published.</p>
+<p><strong>Call signature:</strong></p>
+<pre><code>ArgGen.exe &lt;job-exe-path&gt; --cli-path &lt;cli-exe-path&gt; [--output-dir &lt;dir&gt;]
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;job-exe-path&gt;</code></td>
+<td>yes</td>
+<td>Path to the published job executable</td>
+</tr>
+<tr>
+<td><code>--cli-path</code></td>
+<td>yes</td>
+<td>Path to <code>JOSYN.Backend.CLI.exe</code> on the target machine</td>
+</tr>
+<tr>
+<td><code>--output-dir</code></td>
+<td>no</td>
+<td>Output directory; defaults to <code>local-arguments\</code> next to the job exe</td>
+</tr>
+</tbody>
+</table>
+<p><strong>What it generates (full scaffold):</strong></p>
+<ul>
+<li><code>arguments-default.ini</code> — property names with type-appropriate placeholder values</li>
+<li><code>_launcher.cmd</code> — shared launcher with CLI path, echo header, and <code>CHOICE</code> confirmation gate</li>
+<li><code>arguments-default.cmd</code> — one-liner wrapper calling <code>_launcher.cmd</code> with the default INI</li>
+</ul>
+<p><strong>How it works internally:</strong></p>
+<ol>
+<li>Loads the published job assembly in an isolated <code>AssemblyLoadContext</code> (resolves
+dependencies from the job folder — no runtime execution occurs).</li>
+<li>Finds the <code>[JobEntryPoint]</code> method by attribute name.</li>
+<li>Detects single-record vs. flat-parameter signature (via <code>&lt;Clone&gt;$</code> — same heuristic as
+<code>JobInvoker.RetrieveInvocationArguments</code>).</li>
+<li>Derives property names and emits type-appropriate placeholder values (de-DE culture,
+consistent with the platform-wide serialization convention).</li>
+<li>Includes a <code>; TypeName</code> comment line in the generated INI for documentation.</li>
+<li>Job type name is derived from the exe file name — no extra input required.</li>
+</ol>
+<p><strong>Placeholder values by type:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Placeholder</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>string</code></td>
+<td><em>(empty)</em></td>
+</tr>
+<tr>
+<td>integer types</td>
+<td><code>0</code></td>
+</tr>
+<tr>
+<td><code>decimal</code> / <code>float</code> / <code>double</code></td>
+<td><code>0,00</code></td>
+</tr>
+<tr>
+<td><code>bool</code></td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>DateOnly</code></td>
+<td>today in <code>dd.MM.yyyy</code></td>
+</tr>
+<tr>
+<td><code>DateTime</code> / <code>DateTimeOffset</code></td>
+<td>now</td>
+</tr>
+<tr>
+<td><code>Guid</code></td>
+<td><code>00000000-0000-0000-0000-000000000000</code></td>
+</tr>
+<tr>
+<td><code>TimeSpan</code> / <code>TimeOnly</code></td>
+<td><code>00:00:00</code></td>
+</tr>
+<tr>
+<td><code>enum</code></td>
+<td>first declared value name</td>
+</tr>
+<tr>
+<td><code>T?</code> (nullable)</td>
+<td><em>(empty)</em></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exit behaviour:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Exit code</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scaffold written</td>
+<td><code>0</code></td>
+<td>Files in <code>--output-dir</code></td>
+</tr>
+<tr>
+<td>Job has no parameters</td>
+<td><code>0</code></td>
+<td>Nothing written; message to stderr</td>
+</tr>
+<tr>
+<td>Error (not found, no entry point, etc.)</td>
+<td>non-zero</td>
+<td>Error message to stderr</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Integration in <code>deploy-maintainer.ps1</code>:</strong></p>
+<p><code>ArgGen</code> is called after each job publish step, passing <code>$CliRoot</code> as <code>--cli-path</code> and
+the published job folder as <code>--output-dir</code>. This replaces any hand-authored
+<code>local-arguments\</code> content in deployed job folders.</p>
+<blockquote>
+<p><strong>Note:</strong> The <code>deploy-maintainer.ps1</code> script split (backend A vs. job B) proposed earlier
+in this document remains an open question and is not required for ArgGen integration.
+ArgGen is added as an additional step in the existing monolithic script.</p>
+</blockquote>
+<hr />
+<h2 id="open-questions">Open Questions</h2>
+<blockquote>
+<p><strong>⚠ DEFERRED — Production argument sourcing for the <code>ticker-service</code></strong></p>
+<p>How scheduled job arguments reach the <code>ticker-service</code> at runtime is an open architectural
+decision that must be resolved before the scheduling subsystem is designed.</p>
+<p>Candidate options:</p>
+<ul>
+<li><strong>A — Database:</strong> arguments stored inline in the scheduling descriptor or a dedicated
+<code>josyn.JobArgumentSets</code> table. Change path: SQL migration → source control → pipeline.</li>
+<li><strong>B — Source-controlled files:</strong> <code>.ini</code> files version-controlled in the job repo,
+deployed by pipeline. <code>local-arguments\</code> on production becomes a pipeline output.</li>
+<li><strong>C — Management surface:</strong> arguments managed via an admin API/UI, stored in DB,
+with built-in audit and versioning.</li>
+</ul>
+<p><strong>Governance constraint (non-negotiable):</strong> the chosen mechanism must support pipeline-based
+change management with full audit trail. RDP-based file editing is not an acceptable
+change path for production argument sets.</p>
+<p><code>local-arguments\</code> must <strong>not</strong> be assumed as the answer for the ticker-service without
+an explicit decision captured in a follow-up ADR.</p>
+</blockquote>
+<ol>
+<li><p><strong><code>local-arguments</code> source of truth:</strong> <del>Where do the <code>.ini</code> and <code>.cmd</code> files live before
+deployment?</del> <strong>Resolved — Option B.</strong> <code>local-arguments\</code> is a deploy-time artefact
+generated by <code>ArgGen</code>. Files are never checked into the job repo.</p>
+</li>
+<li><p><strong><code>_launcher.cmd</code> generation:</strong> <del>If <code>ArgGen</code> writes <code>_launcher.cmd</code>, it must know the
+installation path at deploy time.</del> <strong>Resolved.</strong> <code>ArgGen</code> receives the CLI path via
+<code>--cli-path</code>. The value is provided by <code>deploy-maintainer.ps1</code> as <code>$CliRoot</code>.</p>
+</li>
+<li><p><strong><code>ArgGen</code> — record type name as INI comment:</strong> <strong>Resolved.</strong> The generated <code>.ini</code>
+includes a <code>; TypeName</code> comment line for documentation. No platform impact.</p>
+</li>
+<li><p><strong><code>deploy-maintainer.ps1</code> split — manifest vs. literal list:</strong> Still open. The split into
+backend (A) and job (B) functions is desirable but not required for <code>ArgGen</code> integration.
+Deferred until the script grows unwieldy or multiple job repos are in play.</p>
+</li>
+</ol>
+<hr />
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>The CLI gains a real command surface; <code>HardCodedDemoSessionStart()</code> can be removed.</li>
+<li>Operators can trigger any registered job with any named argument set without IDE or source
+access.</li>
+<li>The <code>local-arguments\</code> convention is self-documenting: the presence and naming of <code>.ini</code>
+files communicates which execution contexts the maintainer has prepared.</li>
+<li>The <code>CHOICE</code> gate in <code>_launcher.cmd</code> prevents accidental execution from the file explorer.</li>
+<li>A single <code>_launcher.cmd</code> edit updates the CLI path for all argument sets in a job folder.</li>
+<li><code>ArgGen</code> generates the full <code>local-arguments\</code> scaffold at deploy time — hand-authored
+argument files in job repos are eliminated. The <code>contoso-demo-job\local-arguments\</code> hack
+can be removed once <code>ArgGen</code> is integrated into <code>deploy-maintainer.ps1</code>.</li>
+</ul>
+<hr />
+<h2 id="relation-to-other-adrs">Relation to Other ADRs</h2>
+<ul>
+<li><strong>ADR-012</strong> (Maintainer Deployment): <code>local-arguments\</code> lives inside the job folder
+deployed by ADR-012. <code>_launcher.cmd</code> references the CLI path established by ADR-012. The
+proposed script restructuring extends ADR-012's scope.</li>
+<li><strong>ADR-013</strong> (Job Dev Mode): <code>dev-args.ini</code> uses the same <code>PropertyBag</code> INI format as
+<code>local-arguments</code>. The two conventions address different lifecycle stages: IDE debugging
+(ADR-013) vs. operator execution against a deployed installation (this ADR).</li>
+<li><strong>ADR-005</strong> (JobRegistry): the <code>run-job</code> command resolves <code>&lt;jobname&gt;</code> exclusively via
+<code>josyn.JobRegistrations</code> — the same registry used at runtime by <code>SessionStarter</code>.</li>
+<li><strong>ADR-010</strong> (Environment Separation): <code>_launcher.cmd</code> hardcodes an installation path and is
+therefore implicitly environment-specific. This is acceptable for maintainer tooling but
+should be noted when INT deployment is formalised.</li>
+</ul>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>
