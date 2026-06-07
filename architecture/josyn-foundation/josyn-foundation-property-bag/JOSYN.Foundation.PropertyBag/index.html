@@ -1,0 +1,427 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JOSYN.Foundation.PropertyBag — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<div class="nav-section">Architecture</div>
+<a href="../../../josyn-backend/josyn-backend-bootstrap-config/JOSYN.Backend.BootstrapConfig/index.html" class="nav-link">Overview</a>
+<a href="../../../josyn-backend/josyn-backend-error-handler/JOSYN.Backend.ErrorHandler/index.html" class="nav-link">JOSYN.Backend.ErrorHandler</a>
+<a href="../../../josyn-backend/josyn-backend-jap-server/JOSYN.Jap.JAPServer/index.html" class="nav-link">JOSYN.Jap.JAPServer</a>
+<a href="../../../josyn-backend/josyn-backend-job-registry/JOSYN.Backend.JobRegistry/index.html" class="nav-link">JOSYN.Backend.JobRegistry</a>
+<a href="../../../josyn-backend/josyn-backend-session-starter/JOSYN.Backend.SessionStarter/index.html" class="nav-link">JOSYN.Backend.SessionStarter</a>
+<a href="../../../josyn-backend/josyn-backend-session-store/JOSYN.Backend.SessionStore/index.html" class="nav-link">JOSYN.Backend.SessionStore</a>
+<a href="../../../josyn-commons/josyn-commons-log/JOSYN.Commons.Log/index.html" class="nav-link">JOSYN.Commons.Log</a>
+<a href="../../josyn-foundation-jip/JOSYN.Foundation.JIP/Docs/josyn-ipc-protocol-draft-01.html" class="nav-link">JOSYN-IPC-Protocol</a>
+<a href="../../josyn-foundation-jip/JOSYN.Foundation.JIP/index.html" class="nav-link">JOSYN.Foundation.JIP</a>
+<a href="index.html" class="nav-link active">JOSYN.Foundation.PropertyBag</a>
+<a href="../../josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/index.html" class="nav-link">JOSYN.Foundation.ResultPattern</a>
+<a href="../../../josyn-jap/josyn-jap-shared/JOSYN.Jap.Shared.Contract/index.html" class="nav-link">JOSYN.Jap.Shared.Contract</a>
+<a href="../../../josyn-job-host/JOSYN.JobHost/index.html" class="nav-link">JOSYN.JobHost</a>
+<a href="../../../josyn-platform/architecture/overview.html" class="nav-link">Architecture Overview</a>
+<a href="../../../josyn-platform/architecture/storage.html" class="nav-link">JOSYN Storage Realm</a>
+<a href="../../../josyn-platform/solution-architecture/01-context/josyn-and-jobsystem.html" class="nav-link">JOSYN and its Predecessor</a>
+<a href="../../../josyn-platform/solution-architecture/01-context/index.html" class="nav-link">Context</a>
+<a href="../../../josyn-platform/solution-architecture/02-constraints-and-settled-decisions/index.html" class="nav-link">Constraints &amp; Settled Decisions</a>
+<a href="../../../josyn-platform/solution-architecture/02-constraints-and-settled-decisions/settled-decisions.html" class="nav-link">Settled Decisions</a>
+<a href="../../../josyn-platform/solution-architecture/03-physical-architecture/folder-layout.html" class="nav-link">Folder Layout</a>
+<a href="../../../josyn-platform/solution-architecture/03-physical-architecture/job-registry.html" class="nav-link">Job Registry</a>
+<a href="../../../josyn-platform/solution-architecture/03-physical-architecture/machine-topology.html" class="nav-link">Machine Topology</a>
+<a href="../../../josyn-platform/solution-architecture/03-physical-architecture/index.html" class="nav-link">Physical Architecture</a>
+<a href="../../../josyn-platform/solution-architecture/03-physical-architecture/services-and-executables.html" class="nav-link">Services and Executables</a>
+<a href="../../../josyn-platform/solution-architecture/03-physical-architecture/session-store.html" class="nav-link">Session Store</a>
+<a href="../../../josyn-platform/solution-architecture/04-identity-and-security/identity-and-impersonation.html" class="nav-link">Identity and Impersonation</a>
+<a href="../../../josyn-platform/solution-architecture/04-identity-and-security/index.html" class="nav-link">Identity &amp; Security</a>
+<a href="../../../josyn-platform/solution-architecture/05-deployment-and-operations/job-deployment.html" class="nav-link">Job Deployment</a>
+<a href="../../../josyn-platform/solution-architecture/05-deployment-and-operations/index.html" class="nav-link">Deployment &amp; Operations</a>
+<a href="../../../josyn-platform/solution-architecture/06-company-fit/audit-and-session-record.html" class="nav-link">Audit and the Session Record</a>
+<a href="../../../josyn-platform/solution-architecture/06-company-fit/coexistence-with-jobsystem.html" class="nav-link">Coexistence with JobSystem</a>
+<a href="../../../josyn-platform/solution-architecture/06-company-fit/isolation-vs-integration.html" class="nav-link">Isolation vs. Integration</a>
+<a href="../../../josyn-platform/solution-architecture/06-company-fit/maintainability-and-knowledge-transfer.html" class="nav-link">Maintainability and Knowledge Transfer</a>
+<a href="../../../josyn-platform/solution-architecture/06-company-fit/index.html" class="nav-link">Company Fit</a>
+<a href="../../../josyn-platform/solution-architecture/07-evolution-and-lifecycle/evolution-horizon.html" class="nav-link">Evolution Horizon</a>
+<a href="../../../josyn-platform/solution-architecture/07-evolution-and-lifecycle/index.html" class="nav-link">Evolution &amp; Lifecycle</a>
+<a href="../../../josyn-platform/solution-architecture/07-evolution-and-lifecycle/yagni-decisions.html" class="nav-link">YAGNI Decisions</a>
+<a href="../../../josyn-platform/solution-architecture/08-documentation-and-training/overview.html" class="nav-link">Documentation and Training — Overview</a>
+<a href="../../../josyn-platform/solution-architecture/08-documentation-and-training/index.html" class="nav-link">Documentation &amp; Training</a>
+<a href="../../../josyn-platform/solution-architecture/index.html" class="nav-link">Solution Architecture</a>
+<a href="../../../index.html" class="nav-link">Architecture</a>
+<div class="nav-section">Decisions</div>
+<a href="../../../../decisions/index.html" class="nav-link">Overview</a>
+<a href="../../../../decisions/josyn-platform/decisions/ADR-001-platform-naming.html" class="nav-link">ADR-001 — Platform Naming Vocabulary</a>
+<a href="../../../../decisions/josyn-platform/decisions/ADR-002-josyn-backend.html" class="nav-link">ADR-002 — Introducing `josyn-backend` as a Separate Layer</a>
+<a href="../../../../decisions/josyn-platform/decisions/ADR-003-josyn-commons.html" class="nav-link">ADR-003 — josyn-commons: A Generic Utility Layer</a>
+<a href="../../../../decisions/josyn-platform/decisions/ADR-004-japserver-relocation.html" class="nav-link">ADR-004 — JAPServer Relocation into josyn-backend</a>
+<a href="../../../../decisions/josyn-platform/decisions/ADR-005-documentation-governance.html" class="nav-link">ADR-005 — Documentation Governance and Agentic Way of Work</a>
+<a href="../../../../decisions/josyn-platform/decisions/ADR-006-instance-types-for-dependency-holding-services.html" class="nav-link">ADR-006 — Instance Types for Dependency-Holding Services</a>
+<a href="../../../../decisions/josyn-platform/decisions/ADR-007-storage-realm.html" class="nav-link">ADR-007 — The JOSYN Storage Realm</a>
+<a href="../../../../decisions/josyn-platform/decisions/ADR-008-locallog-relocation.html" class="nav-link">ADR-008 — LocalLog Relocation to josyn-commons</a>
+<a href="../../../../decisions/josyn-platform/decisions/ADR-009-runtime-context-provider-pattern.html" class="nav-link">ADR-009 — Runtime Context Provider Pattern for External Integrations</a>
+<a href="../../../../decisions/josyn-platform/decisions/ADR-010-environment-separation.html" class="nav-link">ADR-010 — Environment Separation and Installation Model</a>
+<a href="../../../../decisions/josyn-platform/decisions/ADR-011-jip-enum-support.html" class="nav-link">ADR-011 — JIP Wire-Type Extension: Enum Support in JipDispatcher</a>
+<a href="../../../../decisions/josyn-platform/decisions/ADR-012-maintainer-deployment.html" class="nav-link">ADR-012 — Maintainer Deployment (First Iteration)</a>
+<a href="../../../../decisions/josyn-platform/decisions/ADR-013-job-dev-mode.html" class="nav-link">ADR-013 — Job Dev Mode: Running a Job Locally from the IDE</a>
+<a href="../../../../decisions/josyn-platform/decisions/ADR-014-cli-run-job-local-args.html" class="nav-link">ADR-014 — CLI `run-job` Command and Local Arguments Convention</a>
+<a href="../../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-001-backend-building-block-model.html" class="nav-link">ADR-001 — Backend Building Block Model</a>
+<a href="../../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-002-session-store.html" class="nav-link">ADR-002 — SessionStore</a>
+<a href="../../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-003-global-config.html" class="nav-link">ADR-003 — GlobalConfig</a>
+<a href="../../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-004-backend-restructuring.html" class="nav-link">ADR-004 — Backend Restructuring: Trigger Executables, ErrorHandler, and SessionStarter Fire-and-Forget Correction</a>
+<a href="../../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-005-job-registry.html" class="nav-link">ADR-005 — JobRegistry</a>
+<a href="../../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-006-error-handler.html" class="nav-link">ADR-006 — ErrorHandler</a>
+<div class="nav-section">Guides</div>
+<a href="../../../../guides/josyn-platform/sanity/index.html" class="nav-link">Overview</a>
+<a href="../../../../guides/josyn-platform/sanity/criteria-review.html" class="nav-link">Sanity Criteria — Decision-Maker Review</a>
+<a href="../../../../guides/josyn-platform/sanity/overview.html" class="nav-link">Sanity Check — Platform Overview</a>
+<a href="../../../../guides/josyn-platform/temp/arggen-inspection-guide.html" class="nav-link">ArgGen — Inspection &amp; Smoke-Test Guide</a>
+<a href="../../../../guides/josyn-toolbox/deploy/index.html" class="nav-link">deploy</a>
+<a href="../../../../guides/josyn-toolbox/git-tools/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="../../../../guides/josyn-toolbox/site-builder/index.html" class="nav-link">site-builder — JOSYN Documentation Pipeline</a>
+<a href="../../../../guides/josyn-toolbox/site-builder/site-builder-assembler/index.html" class="nav-link">site-builder-assembler</a>
+<a href="../../../../guides/josyn-toolbox/site-builder/site-builder-indexer/index.html" class="nav-link">site-builder-indexer</a>
+<a href="../../../../guides/josyn-toolbox/site-builder/site-builder-renderer/index.html" class="nav-link">site-builder-renderer</a>
+<a href="../../../../guides/index.html" class="nav-link">Guides</a>
+<div class="nav-section">Notes</div>
+<a href="../../../../notes/index.html" class="nav-link">Overview</a>
+<a href="../../../../notes/josyn-platform/plans/sessionstore-poc-roadmap.html" class="nav-link">SessionStore -&gt; josyn-backend PoC Roadmap</a>
+<a href="../../../../notes/josyn-platform/ROADMAP.html" class="nav-link">JOSYN Platform — Roadmap &amp; Status</a>
+<a href="../../../../notes/josyn-platform/temp/poc-phases-2-5-notes.html" class="nav-link">PoC Phases 2–5 — Inspection &amp; Runtime Notes</a>
+<a href="../../../../notes/josyn-platform/thinking/documentation-taxonomy.html" class="nav-link">Documentation Taxonomy — Working Note</a>
+<div class="nav-section">Reference</div>
+<a href="../../../../reference/index.html" class="nav-link">Overview</a>
+<a href="../../../../reference/josyn-backend/db/error-report.html" class="nav-link">JOSYN Error Report</a>
+<a href="../../../../reference/josyn-backend/db/session-report.html" class="nav-link">JOSYN Session Report</a>
+<a href="../../../../reference/josyn-commons/MAINTAINERS.html" class="nav-link">Advice for Maintainers of josyn-commons</a>
+<a href="../../../../reference/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../../reference/josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../../reference/josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../../reference/josyn-platform/architecture/coding-standards.html" class="nav-link">Coding Standards — Functional-First C#</a>
+<a href="../../../../reference/josyn-platform/architecture/docs-index-vocabulary.html" class="nav-link">docs-index Vocabulary</a>
+<a href="../../../../reference/josyn-platform/architecture/local-build.html" class="nav-link">`.local-build` — Local Developer Tooling</a>
+<a href="../../../../reference/josyn-platform/architecture/naming-conventions.html" class="nav-link">Naming Conventions</a>
+<a href="../../../../reference/josyn-platform/architecture/repo-structure-conventions.html" class="nav-link">Repo Structure Conventions</a>
+<a href="../../../../reference/josyn-platform/MAINTAINERS.html" class="nav-link">JOSYN Platform — Maintainer&#39;s Guide</a>
+<a href="../../../../reference/josyn-platform/sanity/criteria/architecture.html" class="nav-link">Sanity Criteria — architecture</a>
+<a href="../../../../reference/josyn-platform/sanity/criteria/docs.html" class="nav-link">Sanity Criteria — docs</a>
+<a href="../../../../reference/josyn-platform/sanity/criteria/principles.html" class="nav-link">Sanity Criteria — principles</a>
+<a href="../../../../reference/josyn-platform/sanity/criteria/standards.html" class="nav-link">Sanity Criteria — standards</a>
+<a href="../../../../reference/josyn-platform/sanity/criteria/tests.html" class="nav-link">Sanity Criteria — tests</a>
+<a href="../../../../reference/josyn-platform/sanity/current-state/josyn-backend.html" class="nav-link">Sanity State — josyn-backend</a>
+<a href="../../../../reference/josyn-platform/sanity/current-state/josyn-commons.html" class="nav-link">Sanity State — josyn-commons</a>
+<a href="../../../../reference/josyn-platform/sanity/current-state/josyn-foundation.html" class="nav-link">Sanity State — josyn-foundation</a>
+<a href="../../../../reference/josyn-platform/sanity/current-state/josyn-jap.html" class="nav-link">Sanity State — josyn-jap</a>
+<a href="../../../../reference/josyn-platform/sanity/current-state/josyn-job-host.html" class="nav-link">Sanity State — josyn-job-host</a>
+<a href="../../../../reference/josyn-platform/sanity/triggers.html" class="nav-link">Sanity — Trigger Table</a>
+<div class="nav-section">Repos</div>
+<a href="../../../../repos/josyn-backend/index.html" class="nav-link">Overview</a>
+<a href="../../../../repos/josyn-commons/index.html" class="nav-link">josyn-commons</a>
+<a href="../../../../repos/josyn-contoso/index.html" class="nav-link">josyn-contoso</a>
+<a href="../../../../repos/josyn-foundation/josyn-foundation-jip/index.html" class="nav-link">josyn-foundation-jip</a>
+<a href="../../../../repos/josyn-foundation/josyn-foundation-property-bag/index.html" class="nav-link">josyn-foundation-property-bag</a>
+<a href="../../../../repos/josyn-foundation/josyn-foundation-result-pattern/index.html" class="nav-link">josyn-foundation-result-pattern</a>
+<a href="../../../../repos/josyn-foundation/index.html" class="nav-link">josyn-foundation</a>
+<a href="../../../../repos/josyn-jap/josyn-jap-shared/index.html" class="nav-link">JOSYN.Jap.Shared</a>
+<a href="../../../../repos/josyn-jap/index.html" class="nav-link">josyn-jap</a>
+<a href="../../../../repos/josyn-platform/index.html" class="nav-link">JOSYN Platform</a>
+<a href="../../../../repos/josyn-platform/repos/josyn-backend/overview.html" class="nav-link">josyn-backend</a>
+<a href="../../../../repos/josyn-platform/repos/josyn-commons.html" class="nav-link">josyn-commons</a>
+<a href="../../../../repos/josyn-platform/repos/josyn-foundation.html" class="nav-link">josyn-foundation</a>
+<a href="../../../../repos/josyn-platform/repos/josyn-jap.html" class="nav-link">josyn-jap</a>
+<a href="../../../../repos/josyn-platform/repos/josyn-job-host.html" class="nav-link">josyn-job-host</a>
+<a href="../../../../repos/josyn-toolbox/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="../../../../repos/index.html" class="nav-link">Repos</a>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="josyn.foundation.propertybag">JOSYN.Foundation.PropertyBag</h1>
+<p>Serialisiert und deserialisiert flache C#-<code>record</code>-Typen zu und aus String-Formaten —
+sectionloses INI oder JSON — mit vollständiger Integration des JOSYN-Result-Patterns.
+Designed für den Einsatz in JOSYN-IPC-Protokollen, wo strukturierte Daten als inspektierbarer
+String über Named-Pipes transportiert werden.</p>
+<blockquote>
+<p><strong>Scope.</strong> Dies ist keine General-Purpose-Bibliothek. Ihre spezifische Rolle ist die
+Serialisierung flacher Records und Methodenparameter für JOSYN's Named-Pipe-IPC-Kanal.
+Für allgemeine JSON-Serialisierung: <code>System.Text.Json</code> direkt verwenden.</p>
+</blockquote>
+<hr />
+<h2 id="schnellstart">Schnellstart</h2>
+<pre><code class="language-csharp">// Record definieren — beide Schreibweisen funktionieren
+public record JobRequest
+{
+    public required string JobId   { get; init; }
+    public int             Retries { get; init; }
+    public bool            Urgent  { get; init; }
+}
+
+var req = new JobRequest { JobId = &quot;JOB-42&quot;, Retries = 3, Urgent = true };
+
+// Zu INI serialisieren
+var ini = PropertyBag.Serialize(req, IniDictionarySerializer.Serialize);
+// JobId=JOB-42
+// Retries=3
+// Urgent=True
+
+// Zu JSON serialisieren
+var json = PropertyBag.Serialize(req, JsonDictionarySerializer.Serialize);
+// {
+//   &quot;JobId&quot;: &quot;JOB-42&quot;,
+//   &quot;Retries&quot;: &quot;3&quot;,
+//   &quot;Urgent&quot;: &quot;True&quot;
+// }
+
+// Deserialisieren — Format wird automatisch erkannt
+var result = PropertyBag.Deserialize&lt;JobRequest&gt;(ini.Value);
+// result.Value.JobId   == &quot;JOB-42&quot;
+// result.Value.Retries == 3
+</code></pre>
+<hr />
+<h2 id="api-ubersicht">API-Übersicht</h2>
+<p>Alle Methoden geben <code>Result</code> oder <code>Result&lt;T&gt;</code> zurück. Keine Exceptions propagieren nach oben.</p>
+<h3 id="propertybag-haupt-einstiegspunkt"><code>PropertyBag</code> — Haupt-Einstiegspunkt</h3>
+<table>
+<thead>
+<tr>
+<th>Methode</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Serialize&lt;TRecord&gt;(record, serializer)</code></td>
+<td>Serialisiert eine Record-Instanz mit dem angegebenen Format-Serializer.</td>
+</tr>
+<tr>
+<td><code>Serialize(object, Type, serializer)</code></td>
+<td>Dasselbe, mit dem Typ zur Laufzeit (für Reflection-basierte Aufrufer).</td>
+</tr>
+<tr>
+<td><code>Deserialize&lt;TRecord&gt;(string)</code></td>
+<td>Erkennt Format automatisch, deserialisiert in einen stark typisierten Record.</td>
+</tr>
+<tr>
+<td><code>Deserialize(string, Type)</code></td>
+<td>Dasselbe, mit dem Zieltyp zur Laufzeit. Gibt <code>Result&lt;object&gt;</code> zurück.</td>
+</tr>
+<tr>
+<td><code>Deserialize(string, ParameterInfo[])</code></td>
+<td>Erkennt Format automatisch, deserialisiert in ein <code>object[]</code> ausgerichtet an den gegebenen Methodenparametern. Für Reflection-basierten Dispatch.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="format-serializer">Format-Serializer</h3>
+<p>Als <code>serializer</code>-Argument an <code>PropertyBag.Serialize</code> übergeben:</p>
+<table>
+<thead>
+<tr>
+<th>Serializer</th>
+<th>Format</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IniDictionarySerializer.Serialize</code></td>
+<td>Sectionloses INI (<code>Key=Value</code>-Zeilen)</td>
+</tr>
+<tr>
+<td><code>JsonDictionarySerializer.Serialize</code></td>
+<td>Eingerücktes JSON mit String-Werten</td>
+</tr>
+</tbody>
+</table>
+<p><code>IniDictionarySerializer</code> und <code>JsonDictionarySerializer</code> sind auch direkt nutzbar für
+Low-Level-Dictionary-Zugriff.</p>
+<h3 id="format-erkennung">Format-Erkennung</h3>
+<p><code>Deserialize</code> prüft das erste Nicht-Whitespace-Zeichen des Inputs: <code>{</code> → JSON, sonst INI.
+Der Aufrufer muss das Format nicht separat tracken — beide Serializer erzeugen round-trip-fähige Ausgaben.</p>
+<hr />
+<h2 id="unterstutzte-property-typen">Unterstützte Property-Typen</h2>
+<p>Alle Properties eines serialisierten Records müssen einem der folgenden Typen entsprechen.
+Nullable-Wrapper (<code>T?</code>) sind für jeden Eintrag erlaubt. Alle <code>enum</code>-Typen werden unterstützt.</p>
+<table>
+<thead>
+<tr>
+<th>Kategorie</th>
+<th>Typen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Text</td>
+<td><code>string</code></td>
+</tr>
+<tr>
+<td>Zeichen</td>
+<td><code>char</code></td>
+</tr>
+<tr>
+<td>Boolean</td>
+<td><code>bool</code></td>
+</tr>
+<tr>
+<td>Integer</td>
+<td><code>byte</code>, <code>sbyte</code>, <code>short</code>, <code>ushort</code>, <code>int</code>, <code>uint</code>, <code>long</code>, <code>ulong</code></td>
+</tr>
+<tr>
+<td>Fließkomma</td>
+<td><code>float</code>, <code>double</code>, <code>decimal</code></td>
+</tr>
+<tr>
+<td>Datum / Zeit</td>
+<td><code>DateTime</code>, <code>DateTimeOffset</code>, <code>DateOnly</code>, <code>TimeOnly</code>, <code>TimeSpan</code></td>
+</tr>
+<tr>
+<td>Identität</td>
+<td><code>Guid</code></td>
+</tr>
+<tr>
+<td>Enum</td>
+<td>beliebiger <code>enum</code>-Typ</td>
+</tr>
+</tbody>
+</table>
+<p>Records mit anderen Property-Typen (verschachtelte Records, Collections, Arrays usw.)
+schlagen bei der Serialisierung mit einer informativen Fehlermeldung fehl.</p>
+<hr />
+<h2 id="nullable-properties">Nullable Properties</h2>
+<ul>
+<li>Eine nullable Property (<code>T?</code>), die im Input fehlt, wird stillschweigend auf <code>null</code> gesetzt.</li>
+<li>Eine nullable Property mit leerem Wert (<code>Key=</code>) wird ebenfalls auf <code>null</code> gesetzt.</li>
+<li>Eine nicht-nullable Property, die im Input fehlt, erzeugt einen Fehler.</li>
+</ul>
+<pre><code class="language-csharp">public record Config
+{
+    public required string Host    { get; init; }
+    public int?            Timeout { get; init; }   // optional — darf fehlen
+}
+</code></pre>
+<hr />
+<h2 id="enum-serialisierung">Enum-Serialisierung</h2>
+<p>Enums werden nach Name serialisiert (<code>Color.Green</code> → <code>&quot;Green&quot;</code>) und case-insensitiv
+deserialisiert (<code>&quot;green&quot;</code> → <code>Color.Green</code>).</p>
+<hr />
+<h2 id="ini-format-details">INI-Format — Details</h2>
+<ul>
+<li><strong>Nur sectionlos</strong> für Record-Serialisierung — kein <code>[Section]</code>-Header.</li>
+<li><strong>Whitespace wird getrimmt</strong> — Keys und Values werden beidseitig getrimmt. <code>Key = value</code>
+und <code>Key=value</code> sind äquivalent. Intentioneller Whitespace in Werten muss auf Applikationsebene
+gehandhabt werden (z. B. durch Quoting).</li>
+<li><strong>Kommentare</strong> — Zeilen mit <code>;</code> werden beim Deserialisieren ignoriert.</li>
+<li><strong>Doppelte Schlüssel</strong> erzeugen einen Deserialisierungsfehler.</li>
+</ul>
+<hr />
+<h2 id="json-format-details">JSON-Format — Details</h2>
+<ul>
+<li>Ausgabe ist <strong>eingerückt</strong>; Enum-Werte als Strings.</li>
+<li>Der JSON-Input muss ein <strong>flaches Objekt</strong> mit ausschließlich String-Werten sein.</li>
+<li>Culture-aware Konverter für <code>DateTime</code>, <code>DateOnly</code>, <code>TimeOnly</code> und <code>decimal</code>
+(aktuell: <code>de-DE</code>).</li>
+</ul>
+<hr />
+<h2 id="kultur">Kultur</h2>
+<p>Zahlen- und Datumsformatierung verwendet die <strong>aktuelle Thread-Kultur</strong> zum Zeitpunkt der
+Serialisierung. Die kanonische JOSYN-Kultur ist <code>de-DE</code> (deklariert in <code>JosynCulture.Default</code>).</p>
+<blockquote>
+<p><strong>Wichtig:</strong> <code>PropertyBag</code> setzt die Thread-Kultur <strong>nicht</strong> selbst. Jeder JOSYN-Host-Prozess
+setzt sie beim Start:</p>
+<pre><code class="language-csharp">CultureInfo.DefaultThreadCurrentCulture   = JosynCulture.Default;
+CultureInfo.DefaultThreadCurrentUICulture = JosynCulture.Default;
+</code></pre>
+<p>Serialisierte Daten und der lesende Prozess müssen dieselbe Kultur verwenden —
+sonst ist Round-Trip-Treue für Zahlen und Daten nicht garantiert.</p>
+</blockquote>
+<hr />
+<h2 id="einschrankungen">Einschränkungen</h2>
+<p><strong>Nur flache Records.</strong> Verschachtelte Records und Collections (<code>List&lt;T&gt;</code>, Arrays usw.)
+werden nicht unterstützt.</p>
+<p><strong>Schlüssel-Matching ist case-sensitiv</strong> bei der Record-Deserialisierung. Property-Namen
+im Record (PascalCase) müssen exakt mit den Schlüsseln im serialisierten String übereinstimmen.
+Die <code>ParameterInfo[]</code>-Überladung wendet ein Erster-Buchstabe-Toggle als Komfort an.</p>
+<p><strong>Beide Record-Schreibweisen funktionieren</strong> — Init-Property- und Primary-Constructor-Stil:</p>
+<pre><code class="language-csharp">// ✅ Init-Property-Stil
+public record JobRequest
+{
+    public required string JobId  { get; init; }
+    public int             Retries { get; init; }
+}
+
+// ✅ Primary-Constructor (positional) Stil
+public record JobRequest(string JobId, int Retries);
+</code></pre>
+<hr />
+<h2 id="delegate-typen">Delegate-Typen</h2>
+<p>Die Format-Plug-in-Punkte sind zwei Delegates, die <code>PropertyBag</code> von einem spezifischen
+Format entkoppeln:</p>
+<pre><code class="language-csharp">// Dictionary&lt;string, string&gt; → string  (von Serialize genutzt)
+public delegate Result&lt;string&gt; DictionaryToStringSerializer(Dictionary&lt;string, string&gt; data);
+
+// string → Dictionary&lt;string, string&gt;  (intern von Deserialize genutzt)
+public delegate Result&lt;Dictionary&lt;string, string&gt;&gt; StringToDictionarySerializer(string str);
+</code></pre>
+<p>Eigene Serializer können durch Implementierung dieser Delegate-Signaturen eingesteckt werden.</p>
+<hr />
+<h2 id="parameter-deserialisierung">Parameter-Deserialisierung</h2>
+<p><code>Deserialize(string raw, ParameterInfo[] parameters)</code> ist der Einstiegspunkt für Reflection-
+basierten Dispatch. Er parst den Input und konstruiert ein <code>object[]</code>, das positional zu den
+gegebenen Parametern ausgerichtet ist — bereit für <code>MethodBase.Invoke</code>.</p>
+<ul>
+<li>Schlüssel werden mit einem Erster-Buchstabe-Toggle gegen Parameter-Namen abgeglichen
+(z. B. <code>jobId</code> passt zu einem Parameter <code>JobId</code>).</li>
+<li>Nullable Parameter, die im Input fehlen, werden auf <code>null</code> gesetzt.</li>
+<li>Nicht-nullable Parameter, die im Input fehlen, erzeugen einen Fehler.</li>
+</ul>
+<hr />
+<h2 id="abhangigkeiten">Abhängigkeiten</h2>
+<ul>
+<li><code>JOSYN.Foundation.ResultPattern</code> — das Result-Pattern durchgängig eingesetzt.</li>
+<li><code>.NET 10</code> / C# <code>latest</code>.</li>
+</ul>
+<hr />
+<h2 id="projektstruktur">Projektstruktur</h2>
+<pre><code>JOSYN.Foundation.PropertyBag\
+├── PropertyBag.cs
+├── JosynCulture.cs
+├── SupportedPropertyTypes.cs
+├── Contracts\
+│   ├── IPropertyBag.cs
+│   ├── IIniDictionarySerializer.cs
+│   ├── IJsonDictionarySerializer.cs
+│   └── IJosynCulture.cs
+├── DictionarySerializers\
+│   ├── IniDictionarySerializer.cs
+│   └── JsonDictionarySerializer.cs
+├── CultureAwareConverters\
+│   ├── CultureAwareDateOnlyConverter.cs
+│   ├── CultureAwareDateTimeConverter.cs
+│   ├── CultureAwareDecimalConverter.cs
+│   └── CultureAwareTimeOnlyConverter.cs
+└── DelegateTypes\
+    ├── DictionaryToStringSerializer.cs
+    └── StringToDictionarySerializer.cs
+</code></pre>
+<hr />
+<p><em>JOSYN.Foundation.PropertyBag — © 2026 HAEVG AG — MIT License</em></p>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+</body>
+</html>

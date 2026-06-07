@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ADR-006 — Instance Types for Dependency-Holding Services — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../index.html" class="nav-home">JOSYN Documentation</a>
+<div class="nav-section">Architecture</div>
+<a href="../../../architecture/josyn-backend/josyn-backend-bootstrap-config/JOSYN.Backend.BootstrapConfig/index.html" class="nav-link">Overview</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-error-handler/JOSYN.Backend.ErrorHandler/index.html" class="nav-link">JOSYN.Backend.ErrorHandler</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-jap-server/JOSYN.Jap.JAPServer/index.html" class="nav-link">JOSYN.Jap.JAPServer</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-job-registry/JOSYN.Backend.JobRegistry/index.html" class="nav-link">JOSYN.Backend.JobRegistry</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-session-starter/JOSYN.Backend.SessionStarter/index.html" class="nav-link">JOSYN.Backend.SessionStarter</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-session-store/JOSYN.Backend.SessionStore/index.html" class="nav-link">JOSYN.Backend.SessionStore</a>
+<a href="../../../architecture/josyn-commons/josyn-commons-log/JOSYN.Commons.Log/index.html" class="nav-link">JOSYN.Commons.Log</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/Docs/josyn-ipc-protocol-draft-01.html" class="nav-link">JOSYN-IPC-Protocol</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/index.html" class="nav-link">JOSYN.Foundation.JIP</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/index.html" class="nav-link">JOSYN.Foundation.PropertyBag</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/index.html" class="nav-link">JOSYN.Foundation.ResultPattern</a>
+<a href="../../../architecture/josyn-jap/josyn-jap-shared/JOSYN.Jap.Shared.Contract/index.html" class="nav-link">JOSYN.Jap.Shared.Contract</a>
+<a href="../../../architecture/josyn-job-host/JOSYN.JobHost/index.html" class="nav-link">JOSYN.JobHost</a>
+<a href="../../../architecture/josyn-platform/architecture/overview.html" class="nav-link">Architecture Overview</a>
+<a href="../../../architecture/josyn-platform/architecture/storage.html" class="nav-link">JOSYN Storage Realm</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/01-context/josyn-and-jobsystem.html" class="nav-link">JOSYN and its Predecessor</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/01-context/index.html" class="nav-link">Context</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/index.html" class="nav-link">Constraints &amp; Settled Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/settled-decisions.html" class="nav-link">Settled Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/folder-layout.html" class="nav-link">Folder Layout</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/job-registry.html" class="nav-link">Job Registry</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/machine-topology.html" class="nav-link">Machine Topology</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/index.html" class="nav-link">Physical Architecture</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/services-and-executables.html" class="nav-link">Services and Executables</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/session-store.html" class="nav-link">Session Store</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/04-identity-and-security/identity-and-impersonation.html" class="nav-link">Identity and Impersonation</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/04-identity-and-security/index.html" class="nav-link">Identity &amp; Security</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/05-deployment-and-operations/job-deployment.html" class="nav-link">Job Deployment</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/05-deployment-and-operations/index.html" class="nav-link">Deployment &amp; Operations</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/audit-and-session-record.html" class="nav-link">Audit and the Session Record</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/coexistence-with-jobsystem.html" class="nav-link">Coexistence with JobSystem</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/isolation-vs-integration.html" class="nav-link">Isolation vs. Integration</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/maintainability-and-knowledge-transfer.html" class="nav-link">Maintainability and Knowledge Transfer</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/index.html" class="nav-link">Company Fit</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/evolution-horizon.html" class="nav-link">Evolution Horizon</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/index.html" class="nav-link">Evolution &amp; Lifecycle</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/yagni-decisions.html" class="nav-link">YAGNI Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/08-documentation-and-training/overview.html" class="nav-link">Documentation and Training — Overview</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/08-documentation-and-training/index.html" class="nav-link">Documentation &amp; Training</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/index.html" class="nav-link">Solution Architecture</a>
+<a href="../../../architecture/index.html" class="nav-link">Architecture</a>
+<div class="nav-section">Decisions</div>
+<a href="../../index.html" class="nav-link">Overview</a>
+<a href="ADR-001-platform-naming.html" class="nav-link">ADR-001 — Platform Naming Vocabulary</a>
+<a href="ADR-002-josyn-backend.html" class="nav-link">ADR-002 — Introducing `josyn-backend` as a Separate Layer</a>
+<a href="ADR-003-josyn-commons.html" class="nav-link">ADR-003 — josyn-commons: A Generic Utility Layer</a>
+<a href="ADR-004-japserver-relocation.html" class="nav-link">ADR-004 — JAPServer Relocation into josyn-backend</a>
+<a href="ADR-005-documentation-governance.html" class="nav-link">ADR-005 — Documentation Governance and Agentic Way of Work</a>
+<a href="ADR-006-instance-types-for-dependency-holding-services.html" class="nav-link active">ADR-006 — Instance Types for Dependency-Holding Services</a>
+<a href="ADR-007-storage-realm.html" class="nav-link">ADR-007 — The JOSYN Storage Realm</a>
+<a href="ADR-008-locallog-relocation.html" class="nav-link">ADR-008 — LocalLog Relocation to josyn-commons</a>
+<a href="ADR-009-runtime-context-provider-pattern.html" class="nav-link">ADR-009 — Runtime Context Provider Pattern for External Integrations</a>
+<a href="ADR-010-environment-separation.html" class="nav-link">ADR-010 — Environment Separation and Installation Model</a>
+<a href="ADR-011-jip-enum-support.html" class="nav-link">ADR-011 — JIP Wire-Type Extension: Enum Support in JipDispatcher</a>
+<a href="ADR-012-maintainer-deployment.html" class="nav-link">ADR-012 — Maintainer Deployment (First Iteration)</a>
+<a href="ADR-013-job-dev-mode.html" class="nav-link">ADR-013 — Job Dev Mode: Running a Job Locally from the IDE</a>
+<a href="ADR-014-cli-run-job-local-args.html" class="nav-link">ADR-014 — CLI `run-job` Command and Local Arguments Convention</a>
+<a href="../repos/josyn-backend/decisions/ADR-001-backend-building-block-model.html" class="nav-link">ADR-001 — Backend Building Block Model</a>
+<a href="../repos/josyn-backend/decisions/ADR-002-session-store.html" class="nav-link">ADR-002 — SessionStore</a>
+<a href="../repos/josyn-backend/decisions/ADR-003-global-config.html" class="nav-link">ADR-003 — GlobalConfig</a>
+<a href="../repos/josyn-backend/decisions/ADR-004-backend-restructuring.html" class="nav-link">ADR-004 — Backend Restructuring: Trigger Executables, ErrorHandler, and SessionStarter Fire-and-Forget Correction</a>
+<a href="../repos/josyn-backend/decisions/ADR-005-job-registry.html" class="nav-link">ADR-005 — JobRegistry</a>
+<a href="../repos/josyn-backend/decisions/ADR-006-error-handler.html" class="nav-link">ADR-006 — ErrorHandler</a>
+<div class="nav-section">Guides</div>
+<a href="../../../guides/josyn-platform/sanity/index.html" class="nav-link">Overview</a>
+<a href="../../../guides/josyn-platform/sanity/criteria-review.html" class="nav-link">Sanity Criteria — Decision-Maker Review</a>
+<a href="../../../guides/josyn-platform/sanity/overview.html" class="nav-link">Sanity Check — Platform Overview</a>
+<a href="../../../guides/josyn-platform/temp/arggen-inspection-guide.html" class="nav-link">ArgGen — Inspection &amp; Smoke-Test Guide</a>
+<a href="../../../guides/josyn-toolbox/deploy/index.html" class="nav-link">deploy</a>
+<a href="../../../guides/josyn-toolbox/git-tools/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="../../../guides/josyn-toolbox/site-builder/index.html" class="nav-link">site-builder — JOSYN Documentation Pipeline</a>
+<a href="../../../guides/josyn-toolbox/site-builder/site-builder-assembler/index.html" class="nav-link">site-builder-assembler</a>
+<a href="../../../guides/josyn-toolbox/site-builder/site-builder-indexer/index.html" class="nav-link">site-builder-indexer</a>
+<a href="../../../guides/josyn-toolbox/site-builder/site-builder-renderer/index.html" class="nav-link">site-builder-renderer</a>
+<a href="../../../guides/index.html" class="nav-link">Guides</a>
+<div class="nav-section">Notes</div>
+<a href="../../../notes/index.html" class="nav-link">Overview</a>
+<a href="../../../notes/josyn-platform/plans/sessionstore-poc-roadmap.html" class="nav-link">SessionStore -&gt; josyn-backend PoC Roadmap</a>
+<a href="../../../notes/josyn-platform/ROADMAP.html" class="nav-link">JOSYN Platform — Roadmap &amp; Status</a>
+<a href="../../../notes/josyn-platform/temp/poc-phases-2-5-notes.html" class="nav-link">PoC Phases 2–5 — Inspection &amp; Runtime Notes</a>
+<a href="../../../notes/josyn-platform/thinking/documentation-taxonomy.html" class="nav-link">Documentation Taxonomy — Working Note</a>
+<div class="nav-section">Reference</div>
+<a href="../../../reference/index.html" class="nav-link">Overview</a>
+<a href="../../../reference/josyn-backend/db/error-report.html" class="nav-link">JOSYN Error Report</a>
+<a href="../../../reference/josyn-backend/db/session-report.html" class="nav-link">JOSYN Session Report</a>
+<a href="../../../reference/josyn-commons/MAINTAINERS.html" class="nav-link">Advice for Maintainers of josyn-commons</a>
+<a href="../../../reference/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../reference/josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../reference/josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../reference/josyn-platform/architecture/coding-standards.html" class="nav-link">Coding Standards — Functional-First C#</a>
+<a href="../../../reference/josyn-platform/architecture/docs-index-vocabulary.html" class="nav-link">docs-index Vocabulary</a>
+<a href="../../../reference/josyn-platform/architecture/local-build.html" class="nav-link">`.local-build` — Local Developer Tooling</a>
+<a href="../../../reference/josyn-platform/architecture/naming-conventions.html" class="nav-link">Naming Conventions</a>
+<a href="../../../reference/josyn-platform/architecture/repo-structure-conventions.html" class="nav-link">Repo Structure Conventions</a>
+<a href="../../../reference/josyn-platform/MAINTAINERS.html" class="nav-link">JOSYN Platform — Maintainer&#39;s Guide</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/architecture.html" class="nav-link">Sanity Criteria — architecture</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/docs.html" class="nav-link">Sanity Criteria — docs</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/principles.html" class="nav-link">Sanity Criteria — principles</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/standards.html" class="nav-link">Sanity Criteria — standards</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/tests.html" class="nav-link">Sanity Criteria — tests</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-backend.html" class="nav-link">Sanity State — josyn-backend</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-commons.html" class="nav-link">Sanity State — josyn-commons</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-foundation.html" class="nav-link">Sanity State — josyn-foundation</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-jap.html" class="nav-link">Sanity State — josyn-jap</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-job-host.html" class="nav-link">Sanity State — josyn-job-host</a>
+<a href="../../../reference/josyn-platform/sanity/triggers.html" class="nav-link">Sanity — Trigger Table</a>
+<div class="nav-section">Repos</div>
+<a href="../../../repos/josyn-backend/index.html" class="nav-link">Overview</a>
+<a href="../../../repos/josyn-commons/index.html" class="nav-link">josyn-commons</a>
+<a href="../../../repos/josyn-contoso/index.html" class="nav-link">josyn-contoso</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-jip/index.html" class="nav-link">josyn-foundation-jip</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-property-bag/index.html" class="nav-link">josyn-foundation-property-bag</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-result-pattern/index.html" class="nav-link">josyn-foundation-result-pattern</a>
+<a href="../../../repos/josyn-foundation/index.html" class="nav-link">josyn-foundation</a>
+<a href="../../../repos/josyn-jap/josyn-jap-shared/index.html" class="nav-link">JOSYN.Jap.Shared</a>
+<a href="../../../repos/josyn-jap/index.html" class="nav-link">josyn-jap</a>
+<a href="../../../repos/josyn-platform/index.html" class="nav-link">JOSYN Platform</a>
+<a href="../../../repos/josyn-platform/repos/josyn-backend/overview.html" class="nav-link">josyn-backend</a>
+<a href="../../../repos/josyn-platform/repos/josyn-commons.html" class="nav-link">josyn-commons</a>
+<a href="../../../repos/josyn-platform/repos/josyn-foundation.html" class="nav-link">josyn-foundation</a>
+<a href="../../../repos/josyn-platform/repos/josyn-jap.html" class="nav-link">josyn-jap</a>
+<a href="../../../repos/josyn-platform/repos/josyn-job-host.html" class="nav-link">josyn-job-host</a>
+<a href="../../../repos/josyn-toolbox/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="../../../repos/index.html" class="nav-link">Repos</a>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="adr-006-instance-types-for-dependency-holding-services">ADR-006 — Instance Types for Dependency-Holding Services</h1>
+<p><strong>Date:</strong> 2026-06-03
+<strong>Status:</strong> Accepted</p>
+<hr />
+<h2 id="context">Context</h2>
+<p>The coding standard &quot;static wins (when in doubt)&quot; sets <code>static class</code> as the default.
+The tiebreaker is intentionally strong: if there is no clear reason to use an instance type,
+the static form wins.</p>
+<p>A recurring question arises when a type needs to store a dependency — typically a connection
+string, a file path, or a configuration value — that is injected once at construction and
+reused across all method calls. <code>SessionStore</code> is the canonical example:</p>
+<pre><code class="language-csharp">public sealed class SessionStore(string connectionString) : ISessionStore
+{
+    public Result SaveNewSession(IJobSession session) { ... }
+    public Result&lt;IJobSession&gt; GetSession(string uid) { ... }
+    public Result UpdateSession(IJobSession session) { ... }
+}
+</code></pre>
+<p>At first glance this appears to violate &quot;static wins&quot; because the methods could, in principle,
+accept <code>connectionString</code> as a parameter. The question this ADR answers: is that reading correct,
+or is the instance form the right tool here?</p>
+<hr />
+<h2 id="decision">Decision</h2>
+<p>An instance type is justified — and the &quot;static wins&quot; tiebreaker does not apply — when <strong>all
+three of the following conditions are met</strong>:</p>
+<ol>
+<li><p><strong>Encapsulated dependency.</strong> The type stores a value (connection string, path, endpoint,
+credential) that is injected once and is logically fixed for the lifetime of the object.
+Passing it on every call would be mechanical noise, not meaningful parameterisation.</p>
+</li>
+<li><p><strong>Natural identity.</strong> Two instances with different dependencies are meaningfully distinct
+objects. A <code>SessionStore</code> pointing at database A is not interchangeable with one pointing
+at database B.</p>
+</li>
+<li><p><strong>Interface contract.</strong> The type implements an interface, making the instance form a
+prerequisite for polymorphism — the canonical reason to choose <code>class</code> over <code>static class</code>
+in JOSYN.</p>
+</li>
+</ol>
+<p>When all three conditions are present, the instance form is the correct and intentional choice.
+It is not a concession or an exception to the static-first rule — the rule itself lists
+&quot;mutable state that needs encapsulation&quot; and &quot;genuine polymorphism need&quot; as the triggers for
+choosing an instance type. This ADR makes that reasoning explicit and named.</p>
+<h3 id="what-does-not-qualify">What does not qualify</h3>
+<p>A type that merely calls an external resource without storing any dependency does not meet
+condition 1 and should remain <code>static</code>. Accepting a connection string as a method parameter
+is the correct form in that case.</p>
+<p>A type that stores state but exposes no interface does not meet condition 3. Revisit whether
+the interface is missing or whether the static form is actually correct.</p>
+<h3 id="dbcontext-lifetime-not-a-performance-concern">DbContext lifetime — not a performance concern</h3>
+<p>Each method in <code>SessionStore</code> opens its own <code>DbContext</code>:</p>
+<pre><code class="language-csharp">using var ctx = new SessionStoreDbContext(_connectionString);
+</code></pre>
+<p>This is not an overhead or pooling concern — it is the correct EF Core pattern. <code>DbContext</code>
+is designed as a short-lived unit-of-work object: one instance per operation, disposed
+immediately after. Connection pooling happens at the ADO.NET / <code>SqlClient</code> layer and is
+unaffected by how frequently <code>DbContext</code> is created and disposed. Sharing a single
+<code>DbContext</code> across calls would introduce stale change-tracker state and subtle concurrency
+bugs. The per-method form is intentional and correct.</p>
+<hr />
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>Agents and reviewers have a named reference (ADR-006) for resolving the static-vs-instance
+question when a dependency-holding service is introduced, without re-litigating the reasoning
+each time.</li>
+<li>The three-condition test provides a concrete checklist. A type that cannot satisfy all three
+conditions reverts to the static default.</li>
+<li>The decision does not weaken the &quot;static wins&quot; rule — it sharpens it by making the boundary
+explicit.</li>
+</ul>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+</body>
+</html>

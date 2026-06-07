@@ -1,0 +1,315 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ADR-008 — LocalLog Relocation to josyn-commons — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../index.html" class="nav-home">JOSYN Documentation</a>
+<div class="nav-section">Architecture</div>
+<a href="../../../architecture/josyn-backend/josyn-backend-bootstrap-config/JOSYN.Backend.BootstrapConfig/index.html" class="nav-link">Overview</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-error-handler/JOSYN.Backend.ErrorHandler/index.html" class="nav-link">JOSYN.Backend.ErrorHandler</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-jap-server/JOSYN.Jap.JAPServer/index.html" class="nav-link">JOSYN.Jap.JAPServer</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-job-registry/JOSYN.Backend.JobRegistry/index.html" class="nav-link">JOSYN.Backend.JobRegistry</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-session-starter/JOSYN.Backend.SessionStarter/index.html" class="nav-link">JOSYN.Backend.SessionStarter</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-session-store/JOSYN.Backend.SessionStore/index.html" class="nav-link">JOSYN.Backend.SessionStore</a>
+<a href="../../../architecture/josyn-commons/josyn-commons-log/JOSYN.Commons.Log/index.html" class="nav-link">JOSYN.Commons.Log</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/Docs/josyn-ipc-protocol-draft-01.html" class="nav-link">JOSYN-IPC-Protocol</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/index.html" class="nav-link">JOSYN.Foundation.JIP</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/index.html" class="nav-link">JOSYN.Foundation.PropertyBag</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/index.html" class="nav-link">JOSYN.Foundation.ResultPattern</a>
+<a href="../../../architecture/josyn-jap/josyn-jap-shared/JOSYN.Jap.Shared.Contract/index.html" class="nav-link">JOSYN.Jap.Shared.Contract</a>
+<a href="../../../architecture/josyn-job-host/JOSYN.JobHost/index.html" class="nav-link">JOSYN.JobHost</a>
+<a href="../../../architecture/josyn-platform/architecture/overview.html" class="nav-link">Architecture Overview</a>
+<a href="../../../architecture/josyn-platform/architecture/storage.html" class="nav-link">JOSYN Storage Realm</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/01-context/josyn-and-jobsystem.html" class="nav-link">JOSYN and its Predecessor</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/01-context/index.html" class="nav-link">Context</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/index.html" class="nav-link">Constraints &amp; Settled Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/settled-decisions.html" class="nav-link">Settled Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/folder-layout.html" class="nav-link">Folder Layout</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/job-registry.html" class="nav-link">Job Registry</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/machine-topology.html" class="nav-link">Machine Topology</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/index.html" class="nav-link">Physical Architecture</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/services-and-executables.html" class="nav-link">Services and Executables</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/session-store.html" class="nav-link">Session Store</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/04-identity-and-security/identity-and-impersonation.html" class="nav-link">Identity and Impersonation</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/04-identity-and-security/index.html" class="nav-link">Identity &amp; Security</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/05-deployment-and-operations/job-deployment.html" class="nav-link">Job Deployment</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/05-deployment-and-operations/index.html" class="nav-link">Deployment &amp; Operations</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/audit-and-session-record.html" class="nav-link">Audit and the Session Record</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/coexistence-with-jobsystem.html" class="nav-link">Coexistence with JobSystem</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/isolation-vs-integration.html" class="nav-link">Isolation vs. Integration</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/maintainability-and-knowledge-transfer.html" class="nav-link">Maintainability and Knowledge Transfer</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/index.html" class="nav-link">Company Fit</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/evolution-horizon.html" class="nav-link">Evolution Horizon</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/index.html" class="nav-link">Evolution &amp; Lifecycle</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/yagni-decisions.html" class="nav-link">YAGNI Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/08-documentation-and-training/overview.html" class="nav-link">Documentation and Training — Overview</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/08-documentation-and-training/index.html" class="nav-link">Documentation &amp; Training</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/index.html" class="nav-link">Solution Architecture</a>
+<a href="../../../architecture/index.html" class="nav-link">Architecture</a>
+<div class="nav-section">Decisions</div>
+<a href="../../index.html" class="nav-link">Overview</a>
+<a href="ADR-001-platform-naming.html" class="nav-link">ADR-001 — Platform Naming Vocabulary</a>
+<a href="ADR-002-josyn-backend.html" class="nav-link">ADR-002 — Introducing `josyn-backend` as a Separate Layer</a>
+<a href="ADR-003-josyn-commons.html" class="nav-link">ADR-003 — josyn-commons: A Generic Utility Layer</a>
+<a href="ADR-004-japserver-relocation.html" class="nav-link">ADR-004 — JAPServer Relocation into josyn-backend</a>
+<a href="ADR-005-documentation-governance.html" class="nav-link">ADR-005 — Documentation Governance and Agentic Way of Work</a>
+<a href="ADR-006-instance-types-for-dependency-holding-services.html" class="nav-link">ADR-006 — Instance Types for Dependency-Holding Services</a>
+<a href="ADR-007-storage-realm.html" class="nav-link">ADR-007 — The JOSYN Storage Realm</a>
+<a href="ADR-008-locallog-relocation.html" class="nav-link active">ADR-008 — LocalLog Relocation to josyn-commons</a>
+<a href="ADR-009-runtime-context-provider-pattern.html" class="nav-link">ADR-009 — Runtime Context Provider Pattern for External Integrations</a>
+<a href="ADR-010-environment-separation.html" class="nav-link">ADR-010 — Environment Separation and Installation Model</a>
+<a href="ADR-011-jip-enum-support.html" class="nav-link">ADR-011 — JIP Wire-Type Extension: Enum Support in JipDispatcher</a>
+<a href="ADR-012-maintainer-deployment.html" class="nav-link">ADR-012 — Maintainer Deployment (First Iteration)</a>
+<a href="ADR-013-job-dev-mode.html" class="nav-link">ADR-013 — Job Dev Mode: Running a Job Locally from the IDE</a>
+<a href="ADR-014-cli-run-job-local-args.html" class="nav-link">ADR-014 — CLI `run-job` Command and Local Arguments Convention</a>
+<a href="../repos/josyn-backend/decisions/ADR-001-backend-building-block-model.html" class="nav-link">ADR-001 — Backend Building Block Model</a>
+<a href="../repos/josyn-backend/decisions/ADR-002-session-store.html" class="nav-link">ADR-002 — SessionStore</a>
+<a href="../repos/josyn-backend/decisions/ADR-003-global-config.html" class="nav-link">ADR-003 — GlobalConfig</a>
+<a href="../repos/josyn-backend/decisions/ADR-004-backend-restructuring.html" class="nav-link">ADR-004 — Backend Restructuring: Trigger Executables, ErrorHandler, and SessionStarter Fire-and-Forget Correction</a>
+<a href="../repos/josyn-backend/decisions/ADR-005-job-registry.html" class="nav-link">ADR-005 — JobRegistry</a>
+<a href="../repos/josyn-backend/decisions/ADR-006-error-handler.html" class="nav-link">ADR-006 — ErrorHandler</a>
+<div class="nav-section">Guides</div>
+<a href="../../../guides/josyn-platform/sanity/index.html" class="nav-link">Overview</a>
+<a href="../../../guides/josyn-platform/sanity/criteria-review.html" class="nav-link">Sanity Criteria — Decision-Maker Review</a>
+<a href="../../../guides/josyn-platform/sanity/overview.html" class="nav-link">Sanity Check — Platform Overview</a>
+<a href="../../../guides/josyn-platform/temp/arggen-inspection-guide.html" class="nav-link">ArgGen — Inspection &amp; Smoke-Test Guide</a>
+<a href="../../../guides/josyn-toolbox/deploy/index.html" class="nav-link">deploy</a>
+<a href="../../../guides/josyn-toolbox/git-tools/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="../../../guides/josyn-toolbox/site-builder/index.html" class="nav-link">site-builder — JOSYN Documentation Pipeline</a>
+<a href="../../../guides/josyn-toolbox/site-builder/site-builder-assembler/index.html" class="nav-link">site-builder-assembler</a>
+<a href="../../../guides/josyn-toolbox/site-builder/site-builder-indexer/index.html" class="nav-link">site-builder-indexer</a>
+<a href="../../../guides/josyn-toolbox/site-builder/site-builder-renderer/index.html" class="nav-link">site-builder-renderer</a>
+<a href="../../../guides/index.html" class="nav-link">Guides</a>
+<div class="nav-section">Notes</div>
+<a href="../../../notes/index.html" class="nav-link">Overview</a>
+<a href="../../../notes/josyn-platform/plans/sessionstore-poc-roadmap.html" class="nav-link">SessionStore -&gt; josyn-backend PoC Roadmap</a>
+<a href="../../../notes/josyn-platform/ROADMAP.html" class="nav-link">JOSYN Platform — Roadmap &amp; Status</a>
+<a href="../../../notes/josyn-platform/temp/poc-phases-2-5-notes.html" class="nav-link">PoC Phases 2–5 — Inspection &amp; Runtime Notes</a>
+<a href="../../../notes/josyn-platform/thinking/documentation-taxonomy.html" class="nav-link">Documentation Taxonomy — Working Note</a>
+<div class="nav-section">Reference</div>
+<a href="../../../reference/index.html" class="nav-link">Overview</a>
+<a href="../../../reference/josyn-backend/db/error-report.html" class="nav-link">JOSYN Error Report</a>
+<a href="../../../reference/josyn-backend/db/session-report.html" class="nav-link">JOSYN Session Report</a>
+<a href="../../../reference/josyn-commons/MAINTAINERS.html" class="nav-link">Advice for Maintainers of josyn-commons</a>
+<a href="../../../reference/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../reference/josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../reference/josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../reference/josyn-platform/architecture/coding-standards.html" class="nav-link">Coding Standards — Functional-First C#</a>
+<a href="../../../reference/josyn-platform/architecture/docs-index-vocabulary.html" class="nav-link">docs-index Vocabulary</a>
+<a href="../../../reference/josyn-platform/architecture/local-build.html" class="nav-link">`.local-build` — Local Developer Tooling</a>
+<a href="../../../reference/josyn-platform/architecture/naming-conventions.html" class="nav-link">Naming Conventions</a>
+<a href="../../../reference/josyn-platform/architecture/repo-structure-conventions.html" class="nav-link">Repo Structure Conventions</a>
+<a href="../../../reference/josyn-platform/MAINTAINERS.html" class="nav-link">JOSYN Platform — Maintainer&#39;s Guide</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/architecture.html" class="nav-link">Sanity Criteria — architecture</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/docs.html" class="nav-link">Sanity Criteria — docs</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/principles.html" class="nav-link">Sanity Criteria — principles</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/standards.html" class="nav-link">Sanity Criteria — standards</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/tests.html" class="nav-link">Sanity Criteria — tests</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-backend.html" class="nav-link">Sanity State — josyn-backend</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-commons.html" class="nav-link">Sanity State — josyn-commons</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-foundation.html" class="nav-link">Sanity State — josyn-foundation</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-jap.html" class="nav-link">Sanity State — josyn-jap</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-job-host.html" class="nav-link">Sanity State — josyn-job-host</a>
+<a href="../../../reference/josyn-platform/sanity/triggers.html" class="nav-link">Sanity — Trigger Table</a>
+<div class="nav-section">Repos</div>
+<a href="../../../repos/josyn-backend/index.html" class="nav-link">Overview</a>
+<a href="../../../repos/josyn-commons/index.html" class="nav-link">josyn-commons</a>
+<a href="../../../repos/josyn-contoso/index.html" class="nav-link">josyn-contoso</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-jip/index.html" class="nav-link">josyn-foundation-jip</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-property-bag/index.html" class="nav-link">josyn-foundation-property-bag</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-result-pattern/index.html" class="nav-link">josyn-foundation-result-pattern</a>
+<a href="../../../repos/josyn-foundation/index.html" class="nav-link">josyn-foundation</a>
+<a href="../../../repos/josyn-jap/josyn-jap-shared/index.html" class="nav-link">JOSYN.Jap.Shared</a>
+<a href="../../../repos/josyn-jap/index.html" class="nav-link">josyn-jap</a>
+<a href="../../../repos/josyn-platform/index.html" class="nav-link">JOSYN Platform</a>
+<a href="../../../repos/josyn-platform/repos/josyn-backend/overview.html" class="nav-link">josyn-backend</a>
+<a href="../../../repos/josyn-platform/repos/josyn-commons.html" class="nav-link">josyn-commons</a>
+<a href="../../../repos/josyn-platform/repos/josyn-foundation.html" class="nav-link">josyn-foundation</a>
+<a href="../../../repos/josyn-platform/repos/josyn-jap.html" class="nav-link">josyn-jap</a>
+<a href="../../../repos/josyn-platform/repos/josyn-job-host.html" class="nav-link">josyn-job-host</a>
+<a href="../../../repos/josyn-toolbox/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="../../../repos/index.html" class="nav-link">Repos</a>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="adr-008-locallog-relocation-to-josyn-commons">ADR-008 — LocalLog Relocation to josyn-commons</h1>
+<p><strong>Date:</strong> 2026-06-05
+<strong>Status:</strong> Proposed</p>
+<hr />
+<h2 id="context">Context</h2>
+<p><code>LocalLog</code> (from <code>JOSYN.Jap.Shared.Log</code>) is the platform's process-local file logger.
+It is a static utility: writes timestamped entries to a structured log directory, supports
+per-causer subdirectories, swallows I/O errors silently, and optionally mirrors output to
+the console in debug builds.</p>
+<p>It is already consumed by three distinct repos:</p>
+<table>
+<thead>
+<tr>
+<th>Consumer</th>
+<th>Repo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JOSYN.Jap.JAPServer</code></td>
+<td><code>josyn-backend</code></td>
+</tr>
+<tr>
+<td><code>JOSYN.JobHost</code></td>
+<td><code>josyn-job-host</code></td>
+</tr>
+<tr>
+<td><code>JOSYN.Jap.Shared.Log.Test</code></td>
+<td><code>josyn-jap</code></td>
+</tr>
+</tbody>
+</table>
+<p>A fourth consumer is imminent: <code>JOSYN.Backend.ErrorHandler</code> (ADR-006) requires <code>LocalLog</code>
+as its last-resort fallback when SQL storage is unavailable.</p>
+<p><code>LocalLog</code> currently lives in <code>JOSYN.Jap.Shared.Log</code> — a package whose identity is the
+JAP protocol layer. This is a misplacement: <code>LocalLog</code> carries no JAP protocol knowledge,
+no session context, no IPC concern. It is a general-purpose file logger that happens to
+have been written alongside the JAP shared packages.</p>
+<p>Leaving it there creates two concrete problems:</p>
+<ol>
+<li><p><strong>Wrong dependency signal.</strong> Any repo that needs <code>LocalLog</code> must take a NuGet dependency
+on a package named <code>JOSYN.Jap.Shared.Log</code>. This implies a JAP protocol relationship
+where none exists.</p>
+</li>
+<li><p><strong>DRY violation risk.</strong> <code>JOSYN.Backend.ErrorHandler</code> cannot use a JAP-named package
+for its fallback without the wrong dependency signal. The alternative — a self-contained
+fallback implementation — creates two diverging implementations of the same behaviour.</p>
+</li>
+</ol>
+<hr />
+<h2 id="decision">Decision</h2>
+<h3 id="locallog-moves-to-josyn-commons-as-josyn.commons.log">1. LocalLog moves to josyn-commons as <code>JOSYN.Commons.Log</code></h3>
+<p><code>LocalLog</code> and its companion interface <code>ILocalLog</code> are extracted from <code>JOSYN.Jap.Shared.Log</code>
+and re-homed in a new <code>josyn-commons</code> package: <code>JOSYN.Commons.Log</code>.</p>
+<p>The public API, behaviour, and dependency (ResultPattern only) are unchanged.</p>
+<pre><code>josyn-commons/
+└── josyn-commons-log/
+    ├── nuget.config
+    ├── JOSYN.Commons.Log.slnx
+    ├── .local-build/
+    └── JOSYN.Commons.Log/
+        ├── Contracts/
+        │   └── ILocalLog.cs
+        └── LocalLog.cs
+</code></pre>
+<h3 id="josyn-commons-identity-is-reframed">2. josyn-commons identity is reframed</h3>
+<p><code>josyn-commons</code> is not an &quot;optional&quot; satellite — it is the <strong>domain-agnostic platform utilities</strong>
+layer. The distinction from <code>josyn-foundation</code> is not importance but scope: foundation packages
+are intrinsic to the JOSYN communication model (result propagation, serialization, IPC transport);
+commons packages are general-purpose helpers reusable across the platform.</p>
+<p>The admission criteria are unchanged:</p>
+<ol>
+<li>Reusable across ≥ 2 josyn repos.</li>
+<li>Carries no JOSYN domain knowledge — no sessions, no jobs, no IPC, no scheduling.</li>
+<li>Could theoretically live in any C# project, not just JOSYN.</li>
+</ol>
+<p>The dependency constraint is unchanged: commons packages may only reference nothing or
+<code>JOSYN.Foundation.ResultPattern</code>. Foundation never references commons.</p>
+<h3 id="josyn.jap.shared.log-is-retired">3. JOSYN.Jap.Shared.Log is retired</h3>
+<p><code>JOSYN.Jap.Shared.Log</code> contained only <code>LocalLog</code> and <code>ILocalLog</code>. Once these are moved,
+the package has no remaining content. It is retired: the project is removed from
+<code>josyn-jap</code>, the NuGet package is withdrawn from the local feed.</p>
+<p>All consumers are updated in the same migration:</p>
+<table>
+<thead>
+<tr>
+<th>Consumer</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JOSYN.Jap.JAPServer</code></td>
+<td><code>PackageReference</code> updated from <code>JOSYN.Jap.Shared.Log</code> → <code>JOSYN.Commons.Log</code></td>
+</tr>
+<tr>
+<td><code>JOSYN.JobHost</code></td>
+<td>same</td>
+</tr>
+<tr>
+<td><code>JOSYN.Backend.ErrorHandler</code></td>
+<td>references <code>JOSYN.Commons.Log</code> from first version</td>
+</tr>
+</tbody>
+</table>
+<h3 id="josyn-jap-documentation-is-updated">4. josyn-jap documentation is updated</h3>
+<p><code>repos/josyn-jap.md</code> is updated to remove the <code>JOSYN.Jap.Shared.Log</code> section and reflect
+the retirement. The repo description is updated: &quot;JAP protocol contracts — shared contract
+package (<code>JOSYN.Jap.Shared.Contract</code>) only.&quot;</p>
+<hr />
+<h2 id="decision-challenge-objections-and-rebuttals">Decision challenge — objections and rebuttals</h2>
+<p><strong>Attacker:</strong> <code>josyn-commons</code> is described as an optional utility satellite. Making <code>LocalLog</code>
+live there gives it a load-bearing role in the error handler fallback path. That weakens the
+&quot;optional&quot; character of commons — once a critical component depends on it, it is no longer
+truly optional.</p>
+<p><strong>Defender:</strong> The &quot;optional&quot; label was always a perception, not a hard rule. The only hard rule
+is that <code>josyn-foundation</code> never references <code>josyn-commons</code>. Everything else may reference it.
+<code>josyn-commons</code> is optional in the sense that no project is <em>forced</em> to use it — not in the
+sense that it is unimportant. Reframing it as &quot;domain-agnostic platform utilities&quot; removes the
+false impression without changing any architectural constraint.</p>
+<hr />
+<p><strong>Attacker:</strong> The simpler fix is to keep <code>LocalLog</code> in <code>josyn-jap</code> and just have
+<code>JOSYN.Backend.ErrorHandler</code> take a dependency on <code>JOSYN.Jap.Shared.Log</code>. That dependency
+direction is already established — <code>JAPServer</code> does it. No migration, no new package.</p>
+<p><strong>Defender:</strong> <code>JAPServer</code> takes that dependency because it is a JAP protocol server — the
+dependency is semantically correct for it. <code>JOSYN.Backend.ErrorHandler</code> is a pure backend
+component with no JAP protocol concern. Forcing it to depend on a JAP-named package to get
+a file logger sends the wrong signal to every future reader of the dependency graph. The
+naming matters: a developer seeing <code>JOSYN.Jap.Shared.Log</code> as a dependency of the error
+handler will correctly ask &quot;why?&quot;, and the honest answer is &quot;misplacement&quot;. Moving the package
+fixes the root cause rather than papering over it.</p>
+<hr />
+<p><strong>Attacker:</strong> The alternative is a self-contained fallback write inside <code>ErrorHandler</code> — a
+private five-line method that writes a timestamped line to a file. No migration, no new
+package, no dependency at all. The existing <code>FileSystemErrorHandler</code> stub already shows this
+pattern.</p>
+<p><strong>Defender:</strong> That creates two independent implementations of process-local file logging in
+the same platform — one in <code>JOSYN.Jap.Shared.Log</code> (or its successor) and one embedded in
+<code>ErrorHandler</code>. They will diverge: different formats, different path strategies, different
+silent-failure handling. A new developer will not know which to trust or extend. A documented
+DRY violation is still a DRY violation — the documentation does not eliminate the maintenance
+cost, it only makes it visible. The one-time migration cost of moving <code>LocalLog</code> is smaller
+than the permanent maintenance burden of two diverging implementations.</p>
+<hr />
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>All consumers of <code>LocalLog</code> use the same implementation with no naming confusion</li>
+<li><code>JOSYN.Jap.Shared.Log</code> is retired cleanly — no dormant package left in the feed</li>
+<li><code>josyn-commons</code> receives its first real package, validating the layer's existence</li>
+<li>The dependency signal is correct: consumers of <code>LocalLog</code> depend on <code>JOSYN.Commons.Log</code>,
+not on a JAP protocol package</li>
+<li><code>JOSYN.Backend.ErrorHandler</code> can reference <code>JOSYN.Commons.Log</code> without architectural compromise</li>
+<li>The &quot;domain-agnostic platform utilities&quot; reframing of commons removes the false impression
+that commons packages are unimportant or skippable</li>
+</ul>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+</body>
+</html>

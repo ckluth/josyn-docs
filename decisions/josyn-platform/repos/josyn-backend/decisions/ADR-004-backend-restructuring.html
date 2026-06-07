@@ -1,0 +1,416 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ADR-004 — Backend Restructuring: Trigger Executables, ErrorHandler, and SessionStarter Fire-and-Forget Correction — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<div class="nav-section">Architecture</div>
+<a href="../../../../../architecture/josyn-backend/josyn-backend-bootstrap-config/JOSYN.Backend.BootstrapConfig/index.html" class="nav-link">Overview</a>
+<a href="../../../../../architecture/josyn-backend/josyn-backend-error-handler/JOSYN.Backend.ErrorHandler/index.html" class="nav-link">JOSYN.Backend.ErrorHandler</a>
+<a href="../../../../../architecture/josyn-backend/josyn-backend-jap-server/JOSYN.Jap.JAPServer/index.html" class="nav-link">JOSYN.Jap.JAPServer</a>
+<a href="../../../../../architecture/josyn-backend/josyn-backend-job-registry/JOSYN.Backend.JobRegistry/index.html" class="nav-link">JOSYN.Backend.JobRegistry</a>
+<a href="../../../../../architecture/josyn-backend/josyn-backend-session-starter/JOSYN.Backend.SessionStarter/index.html" class="nav-link">JOSYN.Backend.SessionStarter</a>
+<a href="../../../../../architecture/josyn-backend/josyn-backend-session-store/JOSYN.Backend.SessionStore/index.html" class="nav-link">JOSYN.Backend.SessionStore</a>
+<a href="../../../../../architecture/josyn-commons/josyn-commons-log/JOSYN.Commons.Log/index.html" class="nav-link">JOSYN.Commons.Log</a>
+<a href="../../../../../architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/Docs/josyn-ipc-protocol-draft-01.html" class="nav-link">JOSYN-IPC-Protocol</a>
+<a href="../../../../../architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/index.html" class="nav-link">JOSYN.Foundation.JIP</a>
+<a href="../../../../../architecture/josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/index.html" class="nav-link">JOSYN.Foundation.PropertyBag</a>
+<a href="../../../../../architecture/josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/index.html" class="nav-link">JOSYN.Foundation.ResultPattern</a>
+<a href="../../../../../architecture/josyn-jap/josyn-jap-shared/JOSYN.Jap.Shared.Contract/index.html" class="nav-link">JOSYN.Jap.Shared.Contract</a>
+<a href="../../../../../architecture/josyn-job-host/JOSYN.JobHost/index.html" class="nav-link">JOSYN.JobHost</a>
+<a href="../../../../../architecture/josyn-platform/architecture/overview.html" class="nav-link">Architecture Overview</a>
+<a href="../../../../../architecture/josyn-platform/architecture/storage.html" class="nav-link">JOSYN Storage Realm</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/01-context/josyn-and-jobsystem.html" class="nav-link">JOSYN and its Predecessor</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/01-context/index.html" class="nav-link">Context</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/index.html" class="nav-link">Constraints &amp; Settled Decisions</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/settled-decisions.html" class="nav-link">Settled Decisions</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/folder-layout.html" class="nav-link">Folder Layout</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/job-registry.html" class="nav-link">Job Registry</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/machine-topology.html" class="nav-link">Machine Topology</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/index.html" class="nav-link">Physical Architecture</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/services-and-executables.html" class="nav-link">Services and Executables</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/session-store.html" class="nav-link">Session Store</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/04-identity-and-security/identity-and-impersonation.html" class="nav-link">Identity and Impersonation</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/04-identity-and-security/index.html" class="nav-link">Identity &amp; Security</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/05-deployment-and-operations/job-deployment.html" class="nav-link">Job Deployment</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/05-deployment-and-operations/index.html" class="nav-link">Deployment &amp; Operations</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/06-company-fit/audit-and-session-record.html" class="nav-link">Audit and the Session Record</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/06-company-fit/coexistence-with-jobsystem.html" class="nav-link">Coexistence with JobSystem</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/06-company-fit/isolation-vs-integration.html" class="nav-link">Isolation vs. Integration</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/06-company-fit/maintainability-and-knowledge-transfer.html" class="nav-link">Maintainability and Knowledge Transfer</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/06-company-fit/index.html" class="nav-link">Company Fit</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/evolution-horizon.html" class="nav-link">Evolution Horizon</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/index.html" class="nav-link">Evolution &amp; Lifecycle</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/yagni-decisions.html" class="nav-link">YAGNI Decisions</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/08-documentation-and-training/overview.html" class="nav-link">Documentation and Training — Overview</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/08-documentation-and-training/index.html" class="nav-link">Documentation &amp; Training</a>
+<a href="../../../../../architecture/josyn-platform/solution-architecture/index.html" class="nav-link">Solution Architecture</a>
+<a href="../../../../../architecture/index.html" class="nav-link">Architecture</a>
+<div class="nav-section">Decisions</div>
+<a href="../../../../index.html" class="nav-link">Overview</a>
+<a href="../../../decisions/ADR-001-platform-naming.html" class="nav-link">ADR-001 — Platform Naming Vocabulary</a>
+<a href="../../../decisions/ADR-002-josyn-backend.html" class="nav-link">ADR-002 — Introducing `josyn-backend` as a Separate Layer</a>
+<a href="../../../decisions/ADR-003-josyn-commons.html" class="nav-link">ADR-003 — josyn-commons: A Generic Utility Layer</a>
+<a href="../../../decisions/ADR-004-japserver-relocation.html" class="nav-link">ADR-004 — JAPServer Relocation into josyn-backend</a>
+<a href="../../../decisions/ADR-005-documentation-governance.html" class="nav-link">ADR-005 — Documentation Governance and Agentic Way of Work</a>
+<a href="../../../decisions/ADR-006-instance-types-for-dependency-holding-services.html" class="nav-link">ADR-006 — Instance Types for Dependency-Holding Services</a>
+<a href="../../../decisions/ADR-007-storage-realm.html" class="nav-link">ADR-007 — The JOSYN Storage Realm</a>
+<a href="../../../decisions/ADR-008-locallog-relocation.html" class="nav-link">ADR-008 — LocalLog Relocation to josyn-commons</a>
+<a href="../../../decisions/ADR-009-runtime-context-provider-pattern.html" class="nav-link">ADR-009 — Runtime Context Provider Pattern for External Integrations</a>
+<a href="../../../decisions/ADR-010-environment-separation.html" class="nav-link">ADR-010 — Environment Separation and Installation Model</a>
+<a href="../../../decisions/ADR-011-jip-enum-support.html" class="nav-link">ADR-011 — JIP Wire-Type Extension: Enum Support in JipDispatcher</a>
+<a href="../../../decisions/ADR-012-maintainer-deployment.html" class="nav-link">ADR-012 — Maintainer Deployment (First Iteration)</a>
+<a href="../../../decisions/ADR-013-job-dev-mode.html" class="nav-link">ADR-013 — Job Dev Mode: Running a Job Locally from the IDE</a>
+<a href="../../../decisions/ADR-014-cli-run-job-local-args.html" class="nav-link">ADR-014 — CLI `run-job` Command and Local Arguments Convention</a>
+<a href="ADR-001-backend-building-block-model.html" class="nav-link">ADR-001 — Backend Building Block Model</a>
+<a href="ADR-002-session-store.html" class="nav-link">ADR-002 — SessionStore</a>
+<a href="ADR-003-global-config.html" class="nav-link">ADR-003 — GlobalConfig</a>
+<a href="ADR-004-backend-restructuring.html" class="nav-link active">ADR-004 — Backend Restructuring: Trigger Executables, ErrorHandler, and SessionStarter Fire-and-Forget Correction</a>
+<a href="ADR-005-job-registry.html" class="nav-link">ADR-005 — JobRegistry</a>
+<a href="ADR-006-error-handler.html" class="nav-link">ADR-006 — ErrorHandler</a>
+<div class="nav-section">Guides</div>
+<a href="../../../../../guides/josyn-platform/sanity/index.html" class="nav-link">Overview</a>
+<a href="../../../../../guides/josyn-platform/sanity/criteria-review.html" class="nav-link">Sanity Criteria — Decision-Maker Review</a>
+<a href="../../../../../guides/josyn-platform/sanity/overview.html" class="nav-link">Sanity Check — Platform Overview</a>
+<a href="../../../../../guides/josyn-platform/temp/arggen-inspection-guide.html" class="nav-link">ArgGen — Inspection &amp; Smoke-Test Guide</a>
+<a href="../../../../../guides/josyn-toolbox/deploy/index.html" class="nav-link">deploy</a>
+<a href="../../../../../guides/josyn-toolbox/git-tools/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="../../../../../guides/josyn-toolbox/site-builder/index.html" class="nav-link">site-builder — JOSYN Documentation Pipeline</a>
+<a href="../../../../../guides/josyn-toolbox/site-builder/site-builder-assembler/index.html" class="nav-link">site-builder-assembler</a>
+<a href="../../../../../guides/josyn-toolbox/site-builder/site-builder-indexer/index.html" class="nav-link">site-builder-indexer</a>
+<a href="../../../../../guides/josyn-toolbox/site-builder/site-builder-renderer/index.html" class="nav-link">site-builder-renderer</a>
+<a href="../../../../../guides/index.html" class="nav-link">Guides</a>
+<div class="nav-section">Notes</div>
+<a href="../../../../../notes/index.html" class="nav-link">Overview</a>
+<a href="../../../../../notes/josyn-platform/plans/sessionstore-poc-roadmap.html" class="nav-link">SessionStore -&gt; josyn-backend PoC Roadmap</a>
+<a href="../../../../../notes/josyn-platform/ROADMAP.html" class="nav-link">JOSYN Platform — Roadmap &amp; Status</a>
+<a href="../../../../../notes/josyn-platform/temp/poc-phases-2-5-notes.html" class="nav-link">PoC Phases 2–5 — Inspection &amp; Runtime Notes</a>
+<a href="../../../../../notes/josyn-platform/thinking/documentation-taxonomy.html" class="nav-link">Documentation Taxonomy — Working Note</a>
+<div class="nav-section">Reference</div>
+<a href="../../../../../reference/index.html" class="nav-link">Overview</a>
+<a href="../../../../../reference/josyn-backend/db/error-report.html" class="nav-link">JOSYN Error Report</a>
+<a href="../../../../../reference/josyn-backend/db/session-report.html" class="nav-link">JOSYN Session Report</a>
+<a href="../../../../../reference/josyn-commons/MAINTAINERS.html" class="nav-link">Advice for Maintainers of josyn-commons</a>
+<a href="../../../../../reference/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../../../reference/josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../../../reference/josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../../../reference/josyn-platform/architecture/coding-standards.html" class="nav-link">Coding Standards — Functional-First C#</a>
+<a href="../../../../../reference/josyn-platform/architecture/docs-index-vocabulary.html" class="nav-link">docs-index Vocabulary</a>
+<a href="../../../../../reference/josyn-platform/architecture/local-build.html" class="nav-link">`.local-build` — Local Developer Tooling</a>
+<a href="../../../../../reference/josyn-platform/architecture/naming-conventions.html" class="nav-link">Naming Conventions</a>
+<a href="../../../../../reference/josyn-platform/architecture/repo-structure-conventions.html" class="nav-link">Repo Structure Conventions</a>
+<a href="../../../../../reference/josyn-platform/MAINTAINERS.html" class="nav-link">JOSYN Platform — Maintainer&#39;s Guide</a>
+<a href="../../../../../reference/josyn-platform/sanity/criteria/architecture.html" class="nav-link">Sanity Criteria — architecture</a>
+<a href="../../../../../reference/josyn-platform/sanity/criteria/docs.html" class="nav-link">Sanity Criteria — docs</a>
+<a href="../../../../../reference/josyn-platform/sanity/criteria/principles.html" class="nav-link">Sanity Criteria — principles</a>
+<a href="../../../../../reference/josyn-platform/sanity/criteria/standards.html" class="nav-link">Sanity Criteria — standards</a>
+<a href="../../../../../reference/josyn-platform/sanity/criteria/tests.html" class="nav-link">Sanity Criteria — tests</a>
+<a href="../../../../../reference/josyn-platform/sanity/current-state/josyn-backend.html" class="nav-link">Sanity State — josyn-backend</a>
+<a href="../../../../../reference/josyn-platform/sanity/current-state/josyn-commons.html" class="nav-link">Sanity State — josyn-commons</a>
+<a href="../../../../../reference/josyn-platform/sanity/current-state/josyn-foundation.html" class="nav-link">Sanity State — josyn-foundation</a>
+<a href="../../../../../reference/josyn-platform/sanity/current-state/josyn-jap.html" class="nav-link">Sanity State — josyn-jap</a>
+<a href="../../../../../reference/josyn-platform/sanity/current-state/josyn-job-host.html" class="nav-link">Sanity State — josyn-job-host</a>
+<a href="../../../../../reference/josyn-platform/sanity/triggers.html" class="nav-link">Sanity — Trigger Table</a>
+<div class="nav-section">Repos</div>
+<a href="../../../../../repos/josyn-backend/index.html" class="nav-link">Overview</a>
+<a href="../../../../../repos/josyn-commons/index.html" class="nav-link">josyn-commons</a>
+<a href="../../../../../repos/josyn-contoso/index.html" class="nav-link">josyn-contoso</a>
+<a href="../../../../../repos/josyn-foundation/josyn-foundation-jip/index.html" class="nav-link">josyn-foundation-jip</a>
+<a href="../../../../../repos/josyn-foundation/josyn-foundation-property-bag/index.html" class="nav-link">josyn-foundation-property-bag</a>
+<a href="../../../../../repos/josyn-foundation/josyn-foundation-result-pattern/index.html" class="nav-link">josyn-foundation-result-pattern</a>
+<a href="../../../../../repos/josyn-foundation/index.html" class="nav-link">josyn-foundation</a>
+<a href="../../../../../repos/josyn-jap/josyn-jap-shared/index.html" class="nav-link">JOSYN.Jap.Shared</a>
+<a href="../../../../../repos/josyn-jap/index.html" class="nav-link">josyn-jap</a>
+<a href="../../../../../repos/josyn-platform/index.html" class="nav-link">JOSYN Platform</a>
+<a href="../../../../../repos/josyn-platform/repos/josyn-backend/overview.html" class="nav-link">josyn-backend</a>
+<a href="../../../../../repos/josyn-platform/repos/josyn-commons.html" class="nav-link">josyn-commons</a>
+<a href="../../../../../repos/josyn-platform/repos/josyn-foundation.html" class="nav-link">josyn-foundation</a>
+<a href="../../../../../repos/josyn-platform/repos/josyn-jap.html" class="nav-link">josyn-jap</a>
+<a href="../../../../../repos/josyn-platform/repos/josyn-job-host.html" class="nav-link">josyn-job-host</a>
+<a href="../../../../../repos/josyn-toolbox/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="../../../../../repos/index.html" class="nav-link">Repos</a>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="adr-004-backend-restructuring-trigger-executables-errorhandler-and-sessionstarter-fire-and-forget-correction">ADR-004 — Backend Restructuring: Trigger Executables, ErrorHandler, and SessionStarter Fire-and-Forget Correction</h1>
+<p><strong>Date:</strong> 2026-06-04
+<strong>Status:</strong> Proposed</p>
+<hr />
+<h2 id="context">Context</h2>
+<p>The current <code>josyn-backend</code> repo contains five building blocks:</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Type</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JOSYN.Backend.GlobalConfig</code></td>
+<td>NuGet (Cat A)</td>
+<td>Runtime config contract + PoC placeholder</td>
+</tr>
+<tr>
+<td><code>JOSYN.Backend.SessionStore</code></td>
+<td>NuGet (Cat A)</td>
+<td>Session persistence via EF Core</td>
+</tr>
+<tr>
+<td><code>JOSYN.Backend.SessionStarter</code></td>
+<td>NuGet (Cat A)</td>
+<td>Allocates GUID, persists session, spawns JAPServer</td>
+</tr>
+<tr>
+<td><code>JOSYN.Jap.JAPServer</code></td>
+<td>EXE (Cat B)</td>
+<td>Per-session JAP protocol server</td>
+</tr>
+<tr>
+<td><code>JOSYN.Backend.Demo.FakeSessionStarterConsumer</code></td>
+<td>EXE (Cat B, PoC demo)</td>
+<td>End-to-end round-trip demonstration</td>
+</tr>
+</tbody>
+</table>
+<p>This structure has three gaps that must be addressed before real execution logic is added:</p>
+<p><strong>Gap 1 — No trigger executables.</strong>
+The backend has <code>SessionStarter</code> but nothing that calls it in production. The legacy system has three distinct trigger roles: a remote-request server (<code>JobSystem.Service</code>, WCF), a timer poller (<code>JobSystem.TriggerAgent</code>), and a manual operator CLI (also part of <code>TriggerAgent</code>). JOSYN must have structural equivalents — even as stubs — before any trigger logic is written, to ensure that logic lands in the right place.</p>
+<p><strong>Gap 2 — No error reporting endpoint.</strong>
+<code>LocalLog</code> (from <code>josyn-jap</code>) is a process-local file logger used by JAPServer and job executables. It was never intended as the platform's error reporting authority. There is currently no component that handles error notification (alerting an operator) or durable error storage (beyond the local log file). Every component that encounters an unrecoverable error has nowhere to send it. This gap must be closed with a stable contract before more components are added.</p>
+<p><strong>Gap 3 — SessionStarter's <code>StartSession</code> contains a faulty spawn-site probe.</strong>
+The current implementation issues a 500 ms <code>WaitForExit</code> call immediately after <code>Process.Start</code>. The intent was to detect an immediate JAPServer crash and surface it at the caller. The mechanism is unreliable: a JAPServer that crashes 501 ms after start passes the probe and returns false success; a JAPServer that starts but deadlocks on pipe creation also passes. More importantly, the probe <em>delays every healthy call by 500 ms</em> — an overhead that compounds across concurrent sessions. The correct mechanism for detecting a crashed JAPServer is a session status column in the store; that is a documented PoC limitation addressed in a later session. The probe must be removed to make <code>StartSession</code> a true fire-and-forget call.</p>
+<hr />
+<h2 id="decision">Decision</h2>
+<h3 id="three-new-trigger-executables-listener-ticker-cli">1. Three new trigger executables: Listener, Ticker, CLI</h3>
+<p>Three new Category B executables are introduced as structural stubs:</p>
+<table>
+<thead>
+<tr>
+<th>Executable</th>
+<th>Replaces</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JOSYN.Backend.Listener</code></td>
+<td><code>JobSystem.Service</code> (WCF)</td>
+<td>Future REST server; receives remote &quot;start session&quot; requests</td>
+</tr>
+<tr>
+<td><code>JOSYN.Backend.Ticker</code></td>
+<td><code>JobSystem.TriggerAgent</code> (timer role)</td>
+<td>Future Windows Service; polls once per minute for scheduled sessions and workflow-triggered sessions</td>
+</tr>
+<tr>
+<td><code>JOSYN.Backend.CLI</code></td>
+<td><code>JobSystem.TriggerAgent</code> (CLI role)</td>
+<td>Manual session start; maintenance, integration testing, demonstration</td>
+</tr>
+</tbody>
+</table>
+<p>All three remain totally empty stubs in this iteration. Their purpose is structural: to establish the correct solution membership, dependency graph, and classification before any trigger logic is written.</p>
+<h3 id="three-separate-solutions-one-per-trigger-executable">2. Three separate solutions — one per trigger executable</h3>
+<p>Each trigger executable lives in its own Pattern B sub-folder and solution:</p>
+<pre><code>josyn-backend-listener/
+├── nuget.config
+├── JOSYN.Backend.Listener.slnx
+├── .local-build/
+│   ├── build.cmd
+│   └── clean.cmd
+└── JOSYN.Backend.Listener/
+    └── Program.cs                  ← EXE stub; references SessionStarter via NuGet
+
+josyn-backend-ticker/
+├── nuget.config
+├── JOSYN.Backend.Ticker.slnx
+├── .local-build/
+│   ├── build.cmd
+│   └── clean.cmd
+└── JOSYN.Backend.Ticker/
+    └── Program.cs                  ← EXE stub; references SessionStarter via NuGet
+
+josyn-backend-cli/
+├── nuget.config
+├── JOSYN.Backend.CLI.slnx
+├── .local-build/
+│   ├── build.cmd
+│   └── clean.cmd
+└── JOSYN.Backend.CLI/
+    └── Program.cs                  ← EXE stub; references SessionStarter via NuGet
+</code></pre>
+<p>Each solution is self-contained. <code>SessionStarter</code> is consumed via <code>PackageReference</code> from <code>local-packages</code>, not via a cross-solution project reference.</p>
+<p>Listener, Ticker, and CLI will evolve into components with completely different runtime profiles (REST server, Windows Service, interactive tool). Sharing a solution would couple their release cycles, build configurations, and dependency sets before those profiles are known. Establishing separate solutions now, when the work is cheapest, prevents a future session from unravelling solution structure.</p>
+<h3 id="new-nuget-josyn.backend.errorhandler">3. New NuGet: JOSYN.Backend.ErrorHandler</h3>
+<p><code>JOSYN.Backend.ErrorHandler</code> is a new Category A NuGet and the platform's single error-reporting authority. It lives in its own solution:</p>
+<pre><code>josyn-backend-error-handler/
+├── nuget.config
+├── JOSYN.Backend.ErrorHandler.slnx
+├── .local-build/
+│   ├── build.cmd
+│   ├── clean.cmd
+│   └── pack.cmd
+└── JOSYN.Backend.ErrorHandler/
+    ├── Contracts/
+    │   └── IErrorHandler.cs
+    └── ErrorHandler.cs                 ← first version: file-system log + Console.Write
+</code></pre>
+<p>First-version responsibilities: receive an error report, write it to a file-system log, and write to the console. Notification and durable storage are deferred.</p>
+<h3 id="sessionstarter-fire-and-forget-correction">4. SessionStarter fire-and-forget correction</h3>
+<p><code>SessionStarter.StartSession</code> is corrected: after <code>Process.Start</code>, the method returns <code>sessionGuid</code> immediately without waiting or probing the JAPServer process. The 500 ms <code>WaitForExit</code> probe is removed. Orphaned sessions resulting from a JAPServer crash are the responsibility of a future session-status mechanism — this is an already-documented PoC limitation and the correct fix is a status column in the session store, not a fragile spawn-site probe.</p>
+<h3 id="japserver-gains-errorhandler-dependency">5. JAPServer gains ErrorHandler dependency</h3>
+<p><code>JOSYN.Jap.JAPServer</code> adds <code>JOSYN.Backend.ErrorHandler</code> as a NuGet dependency. This is the only change to the existing JAPServer.</p>
+<h3 id="what-does-not-change">6. What does not change</h3>
+<ul>
+<li><code>JOSYN.Backend.GlobalConfig</code> — unchanged</li>
+<li><code>JOSYN.Backend.SessionStore</code> — unchanged (the <code>SessionStore → GlobalConfig</code> dependency, noted in the prompt, is deferred to a later session)</li>
+<li><code>JOSYN.Backend.SessionStarter</code> — NuGet classification and solution placement unchanged; only the 500 ms probe is removed</li>
+<li><code>JOSYN.Jap.JAPServer</code> — logic unchanged; dependency list gains <code>ErrorHandler</code> only</li>
+<li><code>JOSYN.Backend.Demo.FakeSessionStarterConsumer</code> — out of scope for this restructuring; addressed in a dedicated future session</li>
+</ul>
+<hr />
+<h2 id="resulting-structure">Resulting structure</h2>
+<pre><code>josyn-backend/
+├── .local-build/
+│   ├── build.cmd         ← updated: adds listener, ticker, cli, error-handler
+│   └── pack.cmd          ← updated: adds error-handler
+├── local-packages/
+├── josyn-backend-global-config/          (unchanged)
+├── josyn-backend-session-store/          (unchanged)
+├── josyn-backend-session-starter/        (500ms probe corrected; NuGet classification unchanged)
+├── josyn-backend-error-handler/          ← NEW
+├── josyn-backend-listener/               ← NEW
+├── josyn-backend-ticker/                 ← NEW
+├── josyn-backend-cli/                    ← NEW
+├── josyn-backend-jap-server/             (ErrorHandler ref added)
+└── josyn-backend-demo/                   (out of scope)
+</code></pre>
+<hr />
+<h2 id="dependency-graph-complete-post-restructuring">Dependency graph (complete, post-restructuring)</h2>
+<pre><code>JOSYN.Foundation.ResultPattern   (no deps)
+JOSYN.Backend.GlobalConfig       (no deps)
+JOSYN.Backend.SessionStore       → ResultPattern
+JOSYN.Backend.ErrorHandler       → ResultPattern, GlobalConfig
+
+JOSYN.Backend.SessionStarter     → ResultPattern, SessionStore, GlobalConfig    [NuGet, Cat A]
+JOSYN.Backend.Listener           → SessionStarter, GlobalConfig, ErrorHandler, ResultPattern
+JOSYN.Backend.Ticker             → SessionStarter, GlobalConfig, ErrorHandler, ResultPattern
+JOSYN.Backend.CLI                → SessionStarter, GlobalConfig, ErrorHandler, ResultPattern
+
+JOSYN.Jap.JAPServer              → SessionStore, GlobalConfig, ErrorHandler,
+                                    JIP, PropertyBag, ResultPattern,
+                                    Jap.Shared.Contract, Jap.Shared.Log
+</code></pre>
+<hr />
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>The trigger layer has named structural homes before any trigger logic is written; future implementations land in the correct executable without architectural debate.</li>
+<li>Each trigger executable occupies its own solution; it can evolve, be deployed, and be released independently without affecting the others.</li>
+<li><code>SessionStarter</code>'s NuGet classification is reinforced: a stable shared component consumed by three independent solutions via <code>PackageReference</code> is exactly the Category A model.</li>
+<li><code>ErrorHandler</code> establishes the contract for error reporting across the entire backend before multiple consumers invent independent mechanisms.</li>
+<li>The solution-boundary rule is preserved: no cross-solution project references exist; <code>SessionStarter</code> is consumed via <code>PackageReference</code> by each trigger solution.</li>
+<li>The 500 ms probe is removed; the PoC limitation it was obscuring is now visible and documented, awaiting the correct fix (session status column).</li>
+<li><code>JOSYN.Backend.Demo.FakeSessionStarterConsumer</code> currently takes <code>SessionStarter</code> as a NuGet reference. It is unaffected by this restructuring, since <code>SessionStarter</code>'s NuGet identity does not change. The demo remains deferred to a dedicated future session.</li>
+</ul>
+<hr />
+<h2 id="decision-challenge-objections-and-rebuttals">Decision challenge — objections and rebuttals</h2>
+<h3 id="challenge-1-sessionstarter-should-be-reclassified-to-classlibrary-its-only-consumers-are-in-this-repo">Challenge 1 — &quot;SessionStarter should be reclassified to ClassLibrary — its only consumers are in this repo&quot;</h3>
+<p><em><code>SessionStarter</code> is never consumed outside <code>josyn-backend</code>. Its three consumers — Listener,
+Ticker, CLI — are sibling solutions in the same repo. A ClassLibrary is simpler: no versioning,
+no pack step, no restore cycle. Packaging it as a NuGet for intra-repo use is unnecessary
+ceremony.</em></p>
+<p><strong>Rebuttal:</strong> The Category A / Category B model is defined by solution boundaries, not repo
+boundaries. Cross-solution project references are forbidden by the platform's structural rule.
+<code>SessionStarter</code> is consumed by three separate solutions; the only mechanism for sharing a
+compiled artifact across solutions without violating that rule is a NuGet package from
+<code>local-packages</code>. The &quot;intra-repo&quot; qualifier does not change the structural constraint. Furthermore,
+<code>SessionStarter</code> is explicitly described as stable, low-churn shared infrastructure — exactly the
+profile for which the packaging overhead is lowest. A component that seldom changes has low
+versioning cost and high sharing benefit; the overhead argument weighs least against the component
+least likely to generate it.</p>
+<hr />
+<h3 id="challenge-2-three-separate-solutions-for-three-nearly-identical-exe-stubs-is-over-engineering-one-solution-would-be-simpler">Challenge 2 — &quot;Three separate solutions for three nearly identical EXE stubs is over-engineering — one solution would be simpler&quot;</h3>
+<p><em>Listener, Ticker, and CLI are currently empty stubs. They are nearly identical: one <code>Program.cs</code>,
+one set of NuGet references, one <code>.local-build</code>. Maintaining three separate solutions, build
+scripts, and <code>nuget.config</code> files for three stub projects imposes structural overhead
+with no immediate benefit.</em></p>
+<p><strong>Rebuttal:</strong> The overhead at stub stage is exactly one <code>Program.cs</code> and a build script per
+project. The cost of separation now is trivial; the cost of separation later — after Listener
+is a REST server with middleware, Ticker is a Windows Service with a scheduler, and CLI is an
+interactive tool with argument parsing — is a session of restructuring work plus ADR updates.
+Pattern B's unit is the independently releasable deliverable. Listener, Ticker, and CLI are
+three independent deliverables: they have different runtime hosts, different deployment targets,
+different release cadences. Grouping them in one solution because they are currently empty makes
+the solution structure describe the current (temporary) state rather than the (permanent)
+architectural intent. The platform's structural-commitment-first approach: decide structure when
+the slate is clean, not when it is too late.</p>
+<hr />
+<h3 id="challenge-3-errorhandler-as-a-nuget-is-premature-the-first-version-is-just-a-file-write">Challenge 3 — &quot;ErrorHandler as a NuGet is premature — the first version is just a file write&quot;</h3>
+<p><em>Introducing a versioned NuGet artifact for a component whose initial implementation is
+<code>Console.Write</code> and a file append adds overhead without substance. It can be added when
+there is real logic to ship.</em></p>
+<p><strong>Rebuttal:</strong> The contract, not the implementation, is what needs to exist now. Every
+executable and JAPServer needs an error reporting destination. Without <code>IErrorHandler</code>,
+each component will invent its own mechanism — the same antipattern that <code>IGlobalConfig</code>
+was introduced to prevent (ADR-003 Context). The minimal first implementation is
+intentional: it establishes the seam while adding no risk. Replacing <code>FileSystemErrorHandler</code>
+with a real notification and storage implementation later requires only a change at the
+composition root. Deferring the NuGet means that when real error handling logic is finally
+needed, all consumers must be retrofitted simultaneously — expensive and error-prone.</p>
+<hr />
+<h3 id="challenge-4-removing-the-500-ms-probe-makes-japserver-startup-failures-silent">Challenge 4 — &quot;Removing the 500 ms probe makes JAPServer startup failures silent&quot;</h3>
+<p><em>The probe is imperfect, but it is the only immediate feedback path. Removing it means
+<code>StartSession</code> returns <code>Ok(guid)</code> even when JAPServer never starts. The caller has no way
+to distinguish a healthy session from a dead one.</em></p>
+<p><strong>Rebuttal:</strong> The probe's guarantee is illusory. A JAPServer that crashes 501 ms after
+start, or one that starts but immediately deadlocks on pipe creation, passes the probe and
+returns false success. More importantly, the probe <em>delays every healthy call by 500 ms</em> —
+an overhead that compounds across concurrent sessions. The correct mechanism is already
+identified: a session status column in the store. <code>SessionStarter</code> writes <code>status=Pending</code>;
+JAPServer writes <code>status=Running</code> on startup and <code>status=Completed</code> or <code>status=Failed</code> on
+exit. The absence of a status transition within a configurable timeout is the correct crash
+signal — robust, auditable, and handled outside the spawn site by the component responsible
+for monitoring (the future <code>Ticker</code> or a watchdog). Removing the probe does not create a
+new failure mode; it makes an existing undocumented failure mode explicit and directs it to
+its correct future owner.</p>
+<hr />
+<h3 id="challenge-5-cli-has-no-defined-behavior-adding-it-now-is-speculation-dressed-up-as-architecture">Challenge 5 — &quot;CLI has no defined behavior — adding it now is speculation dressed up as architecture&quot;</h3>
+<p><em>Listener and Ticker have future-state descriptions (REST server, Windows Service timer).
+CLI is defined only as &quot;manual session start.&quot; Adding an empty executable with no concrete
+specification is premature commitment to a name and a home.</em></p>
+<p><strong>Rebuttal:</strong> &quot;Manual session start&quot; is a sufficiently concrete role. It replaces the CLI
+functionality that <code>JobSystem.TriggerAgent</code> had — a real, exercised capability in the legacy
+system. The legacy precedent is documentation enough. Adding it now, while the trigger solutions
+are being created, costs nothing: one project file, one <code>Program.cs</code> with a <code>// TODO</code> comment,
+one entry in the build script. Deferring it means a future session must revisit the solution
+structure, the build scripts, the ADR, and this discussion — all to add what is already known
+to be needed. The rule that governs: structural decisions are cheapest when the slate is clean.
+The CLI's home is decided here; its behavior is not.</p>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+</body>
+</html>

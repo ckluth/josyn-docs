@@ -1,0 +1,348 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PoC Phases 2–5 — Inspection &amp; Runtime Notes — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../index.html" class="nav-home">JOSYN Documentation</a>
+<div class="nav-section">Architecture</div>
+<a href="../../../architecture/josyn-backend/josyn-backend-bootstrap-config/JOSYN.Backend.BootstrapConfig/index.html" class="nav-link">Overview</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-error-handler/JOSYN.Backend.ErrorHandler/index.html" class="nav-link">JOSYN.Backend.ErrorHandler</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-jap-server/JOSYN.Jap.JAPServer/index.html" class="nav-link">JOSYN.Jap.JAPServer</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-job-registry/JOSYN.Backend.JobRegistry/index.html" class="nav-link">JOSYN.Backend.JobRegistry</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-session-starter/JOSYN.Backend.SessionStarter/index.html" class="nav-link">JOSYN.Backend.SessionStarter</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-session-store/JOSYN.Backend.SessionStore/index.html" class="nav-link">JOSYN.Backend.SessionStore</a>
+<a href="../../../architecture/josyn-commons/josyn-commons-log/JOSYN.Commons.Log/index.html" class="nav-link">JOSYN.Commons.Log</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/Docs/josyn-ipc-protocol-draft-01.html" class="nav-link">JOSYN-IPC-Protocol</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/index.html" class="nav-link">JOSYN.Foundation.JIP</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/index.html" class="nav-link">JOSYN.Foundation.PropertyBag</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/index.html" class="nav-link">JOSYN.Foundation.ResultPattern</a>
+<a href="../../../architecture/josyn-jap/josyn-jap-shared/JOSYN.Jap.Shared.Contract/index.html" class="nav-link">JOSYN.Jap.Shared.Contract</a>
+<a href="../../../architecture/josyn-job-host/JOSYN.JobHost/index.html" class="nav-link">JOSYN.JobHost</a>
+<a href="../../../architecture/josyn-platform/architecture/overview.html" class="nav-link">Architecture Overview</a>
+<a href="../../../architecture/josyn-platform/architecture/storage.html" class="nav-link">JOSYN Storage Realm</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/01-context/josyn-and-jobsystem.html" class="nav-link">JOSYN and its Predecessor</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/01-context/index.html" class="nav-link">Context</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/index.html" class="nav-link">Constraints &amp; Settled Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/settled-decisions.html" class="nav-link">Settled Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/folder-layout.html" class="nav-link">Folder Layout</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/job-registry.html" class="nav-link">Job Registry</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/machine-topology.html" class="nav-link">Machine Topology</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/index.html" class="nav-link">Physical Architecture</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/services-and-executables.html" class="nav-link">Services and Executables</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/session-store.html" class="nav-link">Session Store</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/04-identity-and-security/identity-and-impersonation.html" class="nav-link">Identity and Impersonation</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/04-identity-and-security/index.html" class="nav-link">Identity &amp; Security</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/05-deployment-and-operations/job-deployment.html" class="nav-link">Job Deployment</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/05-deployment-and-operations/index.html" class="nav-link">Deployment &amp; Operations</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/audit-and-session-record.html" class="nav-link">Audit and the Session Record</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/coexistence-with-jobsystem.html" class="nav-link">Coexistence with JobSystem</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/isolation-vs-integration.html" class="nav-link">Isolation vs. Integration</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/maintainability-and-knowledge-transfer.html" class="nav-link">Maintainability and Knowledge Transfer</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/index.html" class="nav-link">Company Fit</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/evolution-horizon.html" class="nav-link">Evolution Horizon</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/index.html" class="nav-link">Evolution &amp; Lifecycle</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/yagni-decisions.html" class="nav-link">YAGNI Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/08-documentation-and-training/overview.html" class="nav-link">Documentation and Training — Overview</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/08-documentation-and-training/index.html" class="nav-link">Documentation &amp; Training</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/index.html" class="nav-link">Solution Architecture</a>
+<a href="../../../architecture/index.html" class="nav-link">Architecture</a>
+<div class="nav-section">Decisions</div>
+<a href="../../../decisions/index.html" class="nav-link">Overview</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-001-platform-naming.html" class="nav-link">ADR-001 — Platform Naming Vocabulary</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-002-josyn-backend.html" class="nav-link">ADR-002 — Introducing `josyn-backend` as a Separate Layer</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-003-josyn-commons.html" class="nav-link">ADR-003 — josyn-commons: A Generic Utility Layer</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-004-japserver-relocation.html" class="nav-link">ADR-004 — JAPServer Relocation into josyn-backend</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-005-documentation-governance.html" class="nav-link">ADR-005 — Documentation Governance and Agentic Way of Work</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-006-instance-types-for-dependency-holding-services.html" class="nav-link">ADR-006 — Instance Types for Dependency-Holding Services</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-007-storage-realm.html" class="nav-link">ADR-007 — The JOSYN Storage Realm</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-008-locallog-relocation.html" class="nav-link">ADR-008 — LocalLog Relocation to josyn-commons</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-009-runtime-context-provider-pattern.html" class="nav-link">ADR-009 — Runtime Context Provider Pattern for External Integrations</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-010-environment-separation.html" class="nav-link">ADR-010 — Environment Separation and Installation Model</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-011-jip-enum-support.html" class="nav-link">ADR-011 — JIP Wire-Type Extension: Enum Support in JipDispatcher</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-012-maintainer-deployment.html" class="nav-link">ADR-012 — Maintainer Deployment (First Iteration)</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-013-job-dev-mode.html" class="nav-link">ADR-013 — Job Dev Mode: Running a Job Locally from the IDE</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-014-cli-run-job-local-args.html" class="nav-link">ADR-014 — CLI `run-job` Command and Local Arguments Convention</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-001-backend-building-block-model.html" class="nav-link">ADR-001 — Backend Building Block Model</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-002-session-store.html" class="nav-link">ADR-002 — SessionStore</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-003-global-config.html" class="nav-link">ADR-003 — GlobalConfig</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-004-backend-restructuring.html" class="nav-link">ADR-004 — Backend Restructuring: Trigger Executables, ErrorHandler, and SessionStarter Fire-and-Forget Correction</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-005-job-registry.html" class="nav-link">ADR-005 — JobRegistry</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-006-error-handler.html" class="nav-link">ADR-006 — ErrorHandler</a>
+<div class="nav-section">Guides</div>
+<a href="../../../guides/josyn-platform/sanity/index.html" class="nav-link">Overview</a>
+<a href="../../../guides/josyn-platform/sanity/criteria-review.html" class="nav-link">Sanity Criteria — Decision-Maker Review</a>
+<a href="../../../guides/josyn-platform/sanity/overview.html" class="nav-link">Sanity Check — Platform Overview</a>
+<a href="../../../guides/josyn-platform/temp/arggen-inspection-guide.html" class="nav-link">ArgGen — Inspection &amp; Smoke-Test Guide</a>
+<a href="../../../guides/josyn-toolbox/deploy/index.html" class="nav-link">deploy</a>
+<a href="../../../guides/josyn-toolbox/git-tools/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="../../../guides/josyn-toolbox/site-builder/index.html" class="nav-link">site-builder — JOSYN Documentation Pipeline</a>
+<a href="../../../guides/josyn-toolbox/site-builder/site-builder-assembler/index.html" class="nav-link">site-builder-assembler</a>
+<a href="../../../guides/josyn-toolbox/site-builder/site-builder-indexer/index.html" class="nav-link">site-builder-indexer</a>
+<a href="../../../guides/josyn-toolbox/site-builder/site-builder-renderer/index.html" class="nav-link">site-builder-renderer</a>
+<a href="../../../guides/index.html" class="nav-link">Guides</a>
+<div class="nav-section">Notes</div>
+<a href="../../index.html" class="nav-link">Overview</a>
+<a href="../plans/sessionstore-poc-roadmap.html" class="nav-link">SessionStore -&gt; josyn-backend PoC Roadmap</a>
+<a href="../ROADMAP.html" class="nav-link">JOSYN Platform — Roadmap &amp; Status</a>
+<a href="poc-phases-2-5-notes.html" class="nav-link active">PoC Phases 2–5 — Inspection &amp; Runtime Notes</a>
+<a href="../thinking/documentation-taxonomy.html" class="nav-link">Documentation Taxonomy — Working Note</a>
+<div class="nav-section">Reference</div>
+<a href="../../../reference/index.html" class="nav-link">Overview</a>
+<a href="../../../reference/josyn-backend/db/error-report.html" class="nav-link">JOSYN Error Report</a>
+<a href="../../../reference/josyn-backend/db/session-report.html" class="nav-link">JOSYN Session Report</a>
+<a href="../../../reference/josyn-commons/MAINTAINERS.html" class="nav-link">Advice for Maintainers of josyn-commons</a>
+<a href="../../../reference/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../reference/josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../reference/josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../reference/josyn-platform/architecture/coding-standards.html" class="nav-link">Coding Standards — Functional-First C#</a>
+<a href="../../../reference/josyn-platform/architecture/docs-index-vocabulary.html" class="nav-link">docs-index Vocabulary</a>
+<a href="../../../reference/josyn-platform/architecture/local-build.html" class="nav-link">`.local-build` — Local Developer Tooling</a>
+<a href="../../../reference/josyn-platform/architecture/naming-conventions.html" class="nav-link">Naming Conventions</a>
+<a href="../../../reference/josyn-platform/architecture/repo-structure-conventions.html" class="nav-link">Repo Structure Conventions</a>
+<a href="../../../reference/josyn-platform/MAINTAINERS.html" class="nav-link">JOSYN Platform — Maintainer&#39;s Guide</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/architecture.html" class="nav-link">Sanity Criteria — architecture</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/docs.html" class="nav-link">Sanity Criteria — docs</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/principles.html" class="nav-link">Sanity Criteria — principles</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/standards.html" class="nav-link">Sanity Criteria — standards</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/tests.html" class="nav-link">Sanity Criteria — tests</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-backend.html" class="nav-link">Sanity State — josyn-backend</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-commons.html" class="nav-link">Sanity State — josyn-commons</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-foundation.html" class="nav-link">Sanity State — josyn-foundation</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-jap.html" class="nav-link">Sanity State — josyn-jap</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-job-host.html" class="nav-link">Sanity State — josyn-job-host</a>
+<a href="../../../reference/josyn-platform/sanity/triggers.html" class="nav-link">Sanity — Trigger Table</a>
+<div class="nav-section">Repos</div>
+<a href="../../../repos/josyn-backend/index.html" class="nav-link">Overview</a>
+<a href="../../../repos/josyn-commons/index.html" class="nav-link">josyn-commons</a>
+<a href="../../../repos/josyn-contoso/index.html" class="nav-link">josyn-contoso</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-jip/index.html" class="nav-link">josyn-foundation-jip</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-property-bag/index.html" class="nav-link">josyn-foundation-property-bag</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-result-pattern/index.html" class="nav-link">josyn-foundation-result-pattern</a>
+<a href="../../../repos/josyn-foundation/index.html" class="nav-link">josyn-foundation</a>
+<a href="../../../repos/josyn-jap/josyn-jap-shared/index.html" class="nav-link">JOSYN.Jap.Shared</a>
+<a href="../../../repos/josyn-jap/index.html" class="nav-link">josyn-jap</a>
+<a href="../../../repos/josyn-platform/index.html" class="nav-link">JOSYN Platform</a>
+<a href="../../../repos/josyn-platform/repos/josyn-backend/overview.html" class="nav-link">josyn-backend</a>
+<a href="../../../repos/josyn-platform/repos/josyn-commons.html" class="nav-link">josyn-commons</a>
+<a href="../../../repos/josyn-platform/repos/josyn-foundation.html" class="nav-link">josyn-foundation</a>
+<a href="../../../repos/josyn-platform/repos/josyn-jap.html" class="nav-link">josyn-jap</a>
+<a href="../../../repos/josyn-platform/repos/josyn-job-host.html" class="nav-link">josyn-job-host</a>
+<a href="../../../repos/josyn-toolbox/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="../../../repos/index.html" class="nav-link">Repos</a>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="poc-phases-25-inspection-runtime-notes">PoC Phases 2–5 — Inspection &amp; Runtime Notes</h1>
+<p>Generated after session: implementing the SessionStore PoC roadmap (Phases 2–5).
+Date: 2026-06-03</p>
+<hr />
+<h2 id="what-was-built">What was built</h2>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Deliverable</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>JOSYN.Backend.SessionStore</code> NuGet package</td>
+<td>✅ Done (prior session)</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>JOSYN.Backend.GlobalConfig</code> NuGet package</td>
+<td>✅ Done</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>JOSYN.Backend.SessionStarter</code> NuGet package</td>
+<td>✅ Done</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>JOSYN.Jap.JAPServer</code> wired to real SessionStore; <code>FakeSessionStarterConsumer</code> demo EXE</td>
+<td>✅ Done</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>architecture/overview.md</code> component map + dependency chain updated</td>
+<td>✅ Done</td>
+</tr>
+</tbody>
+</table>
+<p>All 5 solutions build clean (<code>josyn-backend/.local-build/build.cmd Release</code>).</p>
+<hr />
+<h2 id="before-you-run-anything-required-setup">Before you run anything — required setup</h2>
+<h3 id="adjust-hardcodedglobalconfig.cs">1. Adjust <code>HardcodedGlobalConfig.cs</code></h3>
+<p>File: <code>josyn-backend/josyn-backend-global-config/JOSYN.Backend.GlobalConfig/HardcodedGlobalConfig.cs</code></p>
+<p>The two values are machine-specific developer constants:</p>
+<pre><code class="language-csharp">public string SessionStoreConnectionString =&gt;
+    &quot;Server=localhost;Database=JobSystem;Integrated Security=true;TrustServerCertificate=true;&quot;;
+
+public string JapServerExePath =&gt;
+    @&quot;C:\Temp\VS.OUT\JOSYN\JOSYN.Jap.JAPServer\bin\Release\JOSYN.Jap.JAPServer.exe&quot;;
+</code></pre>
+<ul>
+<li><strong>Connection string</strong>: verify SQL Server is reachable at <code>localhost</code>, database <code>JobSystem</code> exists.</li>
+<li><strong>JapServerExePath</strong>: verify the Release build output path matches your machine.
+After <code>build.cmd Release</code>, the EXE should be at exactly that path.</li>
+</ul>
+<p>If you change these values you must re-pack GlobalConfig:</p>
+<pre><code>josyn-backend/josyn-backend-global-config/.local-build/pack.cmd
+</code></pre>
+<p>...and then rebuild JAPServer + Demo so they pick up the new NuGet.</p>
+<h3 id="sql-server-jobsessions-table">2. SQL Server — <code>JobSessions</code> table</h3>
+<p>The <code>SessionStore</code> uses EF Core but ships <strong>no migration runner</strong> in the PoC.
+The table must exist before the demo runs.</p>
+<p>Check the <code>SessionStoreEntity</code> and <code>SessionStoreDbContext</code> in
+<code>josyn-backend/josyn-backend-session-store/JOSYN.Backend.SessionStore/Db/</code>
+for the schema, then create the table manually or run an EF migration.</p>
+<p>Minimum required columns (inferred from code):</p>
+<ul>
+<li><code>UID</code> — <code>uniqueidentifier</code>, PK</li>
+<li><code>JobTypeName</code> — <code>nvarchar</code></li>
+<li><code>Arguments</code> — <code>nvarchar(max)</code></li>
+<li><code>Result</code> — <code>nvarchar(max)</code></li>
+</ul>
+<hr />
+<h2 id="do-you-have-a-complete-running-demo-round-trip">Do you have a complete running demo round-trip?</h2>
+<p><strong>Not fully automated — one gap remains.</strong></p>
+<p>What the demo EXE does:</p>
+<ol>
+<li>Calls <code>StartSession(&quot;DemoJob&quot;, &lt;INI args&gt;)</code> → saves a session row → spawns <code>JAPServer.exe JOSYN-IPC &lt;guid&gt;</code></li>
+<li>Polls the <code>SessionStore</code> every 500 ms for up to 30 s waiting for <code>Result</code> to be non-empty</li>
+<li>Prints the result (or reports a DB error / timeout)</li>
+</ol>
+<p>What JAPServer does when spawned:</p>
+<ol>
+<li>Reads <code>HardcodedGlobalConfig</code> for the connection string</li>
+<li>Constructs <code>SessionStore</code></li>
+<li>Waits (via JIP/Named Pipes) for a <code>job.exe</code> client to connect</li>
+<li>When <code>job.exe</code> calls <code>GetRawArguments()</code> → reads <code>Arguments</code> from <code>SessionStore</code></li>
+<li>When <code>job.exe</code> calls <code>PutRawResult(result)</code> → writes <code>Result</code> back to <code>SessionStore</code></li>
+</ol>
+<p><strong>The gap:</strong> No <code>job.exe</code> is part of the demo. JAPServer waits indefinitely for a JIP client.
+The consumer will time out after 30 s.</p>
+<h3 id="how-to-close-the-loop-manually">How to close the loop manually</h3>
+<p><strong>Option A — two-step manual demo:</strong></p>
+<ol>
+<li>Run <code>FakeSessionStarterConsumer.exe</code>, note the GUID printed to console.</li>
+<li>Run any existing <code>job.exe</code> (from <code>josyn-job-host</code>) with <code>JOSYN-IPC &lt;guid&gt;</code>.</li>
+<li>The job reads arguments from JAPServer (→ DB), processes, calls PutRawResult (→ DB).</li>
+<li>The consumer poll loop sees the result and exits.</li>
+</ol>
+<p><strong>Option B — VS debug launch:</strong></p>
+<ol>
+<li>In <code>josyn-backend-jap-server</code>, manually insert a test row into the DB for the GUID
+in <code>launchSettings.json</code> (<code>dea5611d-d740-437f-ad93-7a5dc5ae4299</code>).</li>
+<li>Launch JAPServer from VS using the <code>Run-JAPServer</code> profile.</li>
+<li>Connect a job.exe to that GUID.</li>
+</ol>
+<p><strong>What Phase 4 proved architecturally:</strong> All the plumbing is correct — the session
+is saved before JAPServer spawns (required by the protocol), JAPServer reads from
+the store, writes back to the store. The demo just lacks an automated job-side client.</p>
+<hr />
+<h2 id="manual-inspection-checklist">Manual inspection checklist</h2>
+<h3 id="josyn-platform-docs">josyn-platform (docs)</h3>
+<ul class="contains-task-list">
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> <code>architecture/overview.md</code> — Component Map: josyn-backend block shows GlobalConfig,
+SessionStore, SessionStarter, JAPServer (with real wiring note), Demo EXE, future
+placeholders (TriggerAgent, Scheduling, Service, WorkflowAdapter, listener-service,
+ticker-service, cli-exe)</li>
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> <code>architecture/overview.md</code> — Dependency Chain: Foundation/JAP/JobHost diagram
+unchanged; JAPServer entry now lists <code>+ SessionStore + GlobalConfig</code>; new
+<code>── josyn-backend package chain ──</code> block added below</li>
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> <code>repos/josyn-backend/overview.md</code> — Current state paragraph updated for all phases;
+directory tree has 5 sub-folders; JAPServer structure section shows real constructor;
+Dependencies table updated; build section updated; sanity notes cleaned up</li>
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> <code>repos/josyn-backend/decisions/ADR-003-global-config.md</code> — rationale for placeholder
+interface; zero-dependency design</li>
+</ul>
+<h3 id="josyn-backend-japserver-most-critical-change">josyn-backend — JAPServer (most critical change)</h3>
+<ul class="contains-task-list">
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> <code>josyn-backend-jap-server/.../JOSYN.Jap.JAPServer.csproj</code> — two new PackageReferences:
+<code>JOSYN.Backend.SessionStore</code>, <code>JOSYN.Backend.GlobalConfig</code></li>
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> <code>josyn-backend-jap-server/.../Host.cs</code> — <code>HardcodedGlobalConfig</code> + <code>SessionStore</code>
+constructed after <code>sessionKey</code> parsed; passed into <code>RunServer(sessionKey, sessionStore)</code>;
+<code>_japServer</code> static field gone; <code>JAPServer</code> constructed locally as <code>new JAPServer(sessionStore, sessionKey)</code></li>
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> <code>josyn-backend-jap-server/.../JAPServer.cs</code> — constructor <code>(ISessionStore, Guid)</code>;
+<code>GetRawArguments</code> reads from DB (<code>GetSession</code> → <code>.Arguments</code>);
+<code>PutRawResult</code> reads session → constructs <code>new JobSession { Result = result }</code> →
+<code>UpdateSession</code> → console output only after successful DB write;
+<code>PutError</code> unchanged; <code>FakeReadArgumentsFromFile</code> gone</li>
+</ul>
+<h3 id="josyn-backend-globalconfig-phase-2">josyn-backend — GlobalConfig (Phase 2)</h3>
+<ul class="contains-task-list">
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> <code>josyn-backend-global-config/.../Contracts/IGlobalConfig.cs</code> — two properties</li>
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> <code>josyn-backend-global-config/.../HardcodedGlobalConfig.cs</code> — PoC constants,
+<strong>machine-specific</strong> (see setup section above)</li>
+</ul>
+<h3 id="josyn-backend-sessionstarter-phase-3">josyn-backend — SessionStarter (Phase 3)</h3>
+<ul class="contains-task-list">
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> <code>josyn-backend-session-starter/.../Contracts/ISessionStarter.cs</code> — <code>Result&lt;Guid&gt; StartSession(string, string)</code></li>
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> <code>josyn-backend-session-starter/.../SessionStarter.cs</code> — key details:
+<ul>
+<li><code>File.Exists</code> pre-check on JapServerExePath</li>
+<li>Save-before-spawn order (required — JAPServer reads from DB at startup)</li>
+<li><code>Result&lt;Guid&gt;.Propagate(save.ToResult&lt;Guid&gt;())</code> — cross-type error propagation</li>
+<li>500 ms <code>WaitForExit</code> crash-detection window after spawn</li>
+</ul>
+</li>
+</ul>
+<h3 id="josyn-backend-demo-exe-phase-4">josyn-backend — Demo EXE (Phase 4)</h3>
+<ul class="contains-task-list">
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> <code>josyn-backend-demo/.../Program.cs</code> — wiring order correct; poll loop tracks
+<code>lastPollError</code>; reports last DB error on timeout (not a silent 30 s hang)</li>
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> <code>josyn-backend-demo/.local-build/</code> — <code>build.cmd</code>, <code>clean.cmd</code>, <code>all.cmd</code> present;
+<strong>no <code>pack.cmd</code></strong> (correct — EXE is not a NuGet package)</li>
+</ul>
+<h3 id="josyn-backend-batch-orchestrator-scripts">josyn-backend — Batch orchestrator scripts</h3>
+<ul class="contains-task-list">
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> <code>.local-build/build.cmd</code> — order: SessionStore → GlobalConfig → SessionStarter →
+JAPServer → Demo</li>
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> <code>.local-build/clean.cmd</code> — all 5 sub-folders listed</li>
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> <code>.local-build/pack.cmd</code> — still only 3 entries (SessionStore, GlobalConfig,
+SessionStarter); JAPServer and Demo correctly absent</li>
+</ul>
+<hr />
+<h2 id="stale-item-to-clean-up">Stale item to clean up</h2>
+<p>This section is now obsolete — <code>FakeReadArgumentsFromFile</code> was removed in Phase 4.</p>
+<hr />
+<h2 id="known-poc-limitations-not-violations">Known PoC limitations (not violations)</h2>
+<p>These are documented in <code>repos/josyn-backend/overview.md</code> sanity notes:</p>
+<ul>
+<li><code>HardcodedGlobalConfig</code> uses compile-time developer-machine constants</li>
+<li><code>SessionStarter</code>: if <code>Process.Start</code> succeeds but JAPServer crashes after the 500 ms
+window, the session row stays with empty <code>Result</code> — requires a status column to fix properly</li>
+<li><code>FakeSessionStarterConsumer</code> uses a 500 ms poll loop — production would use a push signal</li>
+<li>No test projects for any of the PoC packages (known gap)</li>
+</ul>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+</body>
+</html>

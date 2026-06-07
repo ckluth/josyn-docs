@@ -1,0 +1,424 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Coding Standards — Functional-First C# — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../index.html" class="nav-home">JOSYN Documentation</a>
+<div class="nav-section">Architecture</div>
+<a href="../../../architecture/josyn-backend/josyn-backend-bootstrap-config/JOSYN.Backend.BootstrapConfig/index.html" class="nav-link">Overview</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-error-handler/JOSYN.Backend.ErrorHandler/index.html" class="nav-link">JOSYN.Backend.ErrorHandler</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-jap-server/JOSYN.Jap.JAPServer/index.html" class="nav-link">JOSYN.Jap.JAPServer</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-job-registry/JOSYN.Backend.JobRegistry/index.html" class="nav-link">JOSYN.Backend.JobRegistry</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-session-starter/JOSYN.Backend.SessionStarter/index.html" class="nav-link">JOSYN.Backend.SessionStarter</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-session-store/JOSYN.Backend.SessionStore/index.html" class="nav-link">JOSYN.Backend.SessionStore</a>
+<a href="../../../architecture/josyn-commons/josyn-commons-log/JOSYN.Commons.Log/index.html" class="nav-link">JOSYN.Commons.Log</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/Docs/josyn-ipc-protocol-draft-01.html" class="nav-link">JOSYN-IPC-Protocol</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/index.html" class="nav-link">JOSYN.Foundation.JIP</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/index.html" class="nav-link">JOSYN.Foundation.PropertyBag</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/index.html" class="nav-link">JOSYN.Foundation.ResultPattern</a>
+<a href="../../../architecture/josyn-jap/josyn-jap-shared/JOSYN.Jap.Shared.Contract/index.html" class="nav-link">JOSYN.Jap.Shared.Contract</a>
+<a href="../../../architecture/josyn-job-host/JOSYN.JobHost/index.html" class="nav-link">JOSYN.JobHost</a>
+<a href="../../../architecture/josyn-platform/architecture/overview.html" class="nav-link">Architecture Overview</a>
+<a href="../../../architecture/josyn-platform/architecture/storage.html" class="nav-link">JOSYN Storage Realm</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/01-context/josyn-and-jobsystem.html" class="nav-link">JOSYN and its Predecessor</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/01-context/index.html" class="nav-link">Context</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/index.html" class="nav-link">Constraints &amp; Settled Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/settled-decisions.html" class="nav-link">Settled Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/folder-layout.html" class="nav-link">Folder Layout</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/job-registry.html" class="nav-link">Job Registry</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/machine-topology.html" class="nav-link">Machine Topology</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/index.html" class="nav-link">Physical Architecture</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/services-and-executables.html" class="nav-link">Services and Executables</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/session-store.html" class="nav-link">Session Store</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/04-identity-and-security/identity-and-impersonation.html" class="nav-link">Identity and Impersonation</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/04-identity-and-security/index.html" class="nav-link">Identity &amp; Security</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/05-deployment-and-operations/job-deployment.html" class="nav-link">Job Deployment</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/05-deployment-and-operations/index.html" class="nav-link">Deployment &amp; Operations</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/audit-and-session-record.html" class="nav-link">Audit and the Session Record</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/coexistence-with-jobsystem.html" class="nav-link">Coexistence with JobSystem</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/isolation-vs-integration.html" class="nav-link">Isolation vs. Integration</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/maintainability-and-knowledge-transfer.html" class="nav-link">Maintainability and Knowledge Transfer</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/index.html" class="nav-link">Company Fit</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/evolution-horizon.html" class="nav-link">Evolution Horizon</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/index.html" class="nav-link">Evolution &amp; Lifecycle</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/yagni-decisions.html" class="nav-link">YAGNI Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/08-documentation-and-training/overview.html" class="nav-link">Documentation and Training — Overview</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/08-documentation-and-training/index.html" class="nav-link">Documentation &amp; Training</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/index.html" class="nav-link">Solution Architecture</a>
+<a href="../../../architecture/index.html" class="nav-link">Architecture</a>
+<div class="nav-section">Decisions</div>
+<a href="../../../decisions/index.html" class="nav-link">Overview</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-001-platform-naming.html" class="nav-link">ADR-001 — Platform Naming Vocabulary</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-002-josyn-backend.html" class="nav-link">ADR-002 — Introducing `josyn-backend` as a Separate Layer</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-003-josyn-commons.html" class="nav-link">ADR-003 — josyn-commons: A Generic Utility Layer</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-004-japserver-relocation.html" class="nav-link">ADR-004 — JAPServer Relocation into josyn-backend</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-005-documentation-governance.html" class="nav-link">ADR-005 — Documentation Governance and Agentic Way of Work</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-006-instance-types-for-dependency-holding-services.html" class="nav-link">ADR-006 — Instance Types for Dependency-Holding Services</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-007-storage-realm.html" class="nav-link">ADR-007 — The JOSYN Storage Realm</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-008-locallog-relocation.html" class="nav-link">ADR-008 — LocalLog Relocation to josyn-commons</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-009-runtime-context-provider-pattern.html" class="nav-link">ADR-009 — Runtime Context Provider Pattern for External Integrations</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-010-environment-separation.html" class="nav-link">ADR-010 — Environment Separation and Installation Model</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-011-jip-enum-support.html" class="nav-link">ADR-011 — JIP Wire-Type Extension: Enum Support in JipDispatcher</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-012-maintainer-deployment.html" class="nav-link">ADR-012 — Maintainer Deployment (First Iteration)</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-013-job-dev-mode.html" class="nav-link">ADR-013 — Job Dev Mode: Running a Job Locally from the IDE</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-014-cli-run-job-local-args.html" class="nav-link">ADR-014 — CLI `run-job` Command and Local Arguments Convention</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-001-backend-building-block-model.html" class="nav-link">ADR-001 — Backend Building Block Model</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-002-session-store.html" class="nav-link">ADR-002 — SessionStore</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-003-global-config.html" class="nav-link">ADR-003 — GlobalConfig</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-004-backend-restructuring.html" class="nav-link">ADR-004 — Backend Restructuring: Trigger Executables, ErrorHandler, and SessionStarter Fire-and-Forget Correction</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-005-job-registry.html" class="nav-link">ADR-005 — JobRegistry</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-006-error-handler.html" class="nav-link">ADR-006 — ErrorHandler</a>
+<div class="nav-section">Guides</div>
+<a href="../../../guides/josyn-platform/sanity/index.html" class="nav-link">Overview</a>
+<a href="../../../guides/josyn-platform/sanity/criteria-review.html" class="nav-link">Sanity Criteria — Decision-Maker Review</a>
+<a href="../../../guides/josyn-platform/sanity/overview.html" class="nav-link">Sanity Check — Platform Overview</a>
+<a href="../../../guides/josyn-platform/temp/arggen-inspection-guide.html" class="nav-link">ArgGen — Inspection &amp; Smoke-Test Guide</a>
+<a href="../../../guides/josyn-toolbox/deploy/index.html" class="nav-link">deploy</a>
+<a href="../../../guides/josyn-toolbox/git-tools/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="../../../guides/josyn-toolbox/site-builder/index.html" class="nav-link">site-builder — JOSYN Documentation Pipeline</a>
+<a href="../../../guides/josyn-toolbox/site-builder/site-builder-assembler/index.html" class="nav-link">site-builder-assembler</a>
+<a href="../../../guides/josyn-toolbox/site-builder/site-builder-indexer/index.html" class="nav-link">site-builder-indexer</a>
+<a href="../../../guides/josyn-toolbox/site-builder/site-builder-renderer/index.html" class="nav-link">site-builder-renderer</a>
+<a href="../../../guides/index.html" class="nav-link">Guides</a>
+<div class="nav-section">Notes</div>
+<a href="../../../notes/index.html" class="nav-link">Overview</a>
+<a href="../../../notes/josyn-platform/plans/sessionstore-poc-roadmap.html" class="nav-link">SessionStore -&gt; josyn-backend PoC Roadmap</a>
+<a href="../../../notes/josyn-platform/ROADMAP.html" class="nav-link">JOSYN Platform — Roadmap &amp; Status</a>
+<a href="../../../notes/josyn-platform/temp/poc-phases-2-5-notes.html" class="nav-link">PoC Phases 2–5 — Inspection &amp; Runtime Notes</a>
+<a href="../../../notes/josyn-platform/thinking/documentation-taxonomy.html" class="nav-link">Documentation Taxonomy — Working Note</a>
+<div class="nav-section">Reference</div>
+<a href="../../index.html" class="nav-link">Overview</a>
+<a href="../../josyn-backend/db/error-report.html" class="nav-link">JOSYN Error Report</a>
+<a href="../../josyn-backend/db/session-report.html" class="nav-link">JOSYN Session Report</a>
+<a href="../../josyn-commons/MAINTAINERS.html" class="nav-link">Advice for Maintainers of josyn-commons</a>
+<a href="../../josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="coding-standards.html" class="nav-link active">Coding Standards — Functional-First C#</a>
+<a href="docs-index-vocabulary.html" class="nav-link">docs-index Vocabulary</a>
+<a href="local-build.html" class="nav-link">`.local-build` — Local Developer Tooling</a>
+<a href="naming-conventions.html" class="nav-link">Naming Conventions</a>
+<a href="repo-structure-conventions.html" class="nav-link">Repo Structure Conventions</a>
+<a href="../MAINTAINERS.html" class="nav-link">JOSYN Platform — Maintainer&#39;s Guide</a>
+<a href="../sanity/criteria/architecture.html" class="nav-link">Sanity Criteria — architecture</a>
+<a href="../sanity/criteria/docs.html" class="nav-link">Sanity Criteria — docs</a>
+<a href="../sanity/criteria/principles.html" class="nav-link">Sanity Criteria — principles</a>
+<a href="../sanity/criteria/standards.html" class="nav-link">Sanity Criteria — standards</a>
+<a href="../sanity/criteria/tests.html" class="nav-link">Sanity Criteria — tests</a>
+<a href="../sanity/current-state/josyn-backend.html" class="nav-link">Sanity State — josyn-backend</a>
+<a href="../sanity/current-state/josyn-commons.html" class="nav-link">Sanity State — josyn-commons</a>
+<a href="../sanity/current-state/josyn-foundation.html" class="nav-link">Sanity State — josyn-foundation</a>
+<a href="../sanity/current-state/josyn-jap.html" class="nav-link">Sanity State — josyn-jap</a>
+<a href="../sanity/current-state/josyn-job-host.html" class="nav-link">Sanity State — josyn-job-host</a>
+<a href="../sanity/triggers.html" class="nav-link">Sanity — Trigger Table</a>
+<div class="nav-section">Repos</div>
+<a href="../../../repos/josyn-backend/index.html" class="nav-link">Overview</a>
+<a href="../../../repos/josyn-commons/index.html" class="nav-link">josyn-commons</a>
+<a href="../../../repos/josyn-contoso/index.html" class="nav-link">josyn-contoso</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-jip/index.html" class="nav-link">josyn-foundation-jip</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-property-bag/index.html" class="nav-link">josyn-foundation-property-bag</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-result-pattern/index.html" class="nav-link">josyn-foundation-result-pattern</a>
+<a href="../../../repos/josyn-foundation/index.html" class="nav-link">josyn-foundation</a>
+<a href="../../../repos/josyn-jap/josyn-jap-shared/index.html" class="nav-link">JOSYN.Jap.Shared</a>
+<a href="../../../repos/josyn-jap/index.html" class="nav-link">josyn-jap</a>
+<a href="../../../repos/josyn-platform/index.html" class="nav-link">JOSYN Platform</a>
+<a href="../../../repos/josyn-platform/repos/josyn-backend/overview.html" class="nav-link">josyn-backend</a>
+<a href="../../../repos/josyn-platform/repos/josyn-commons.html" class="nav-link">josyn-commons</a>
+<a href="../../../repos/josyn-platform/repos/josyn-foundation.html" class="nav-link">josyn-foundation</a>
+<a href="../../../repos/josyn-platform/repos/josyn-jap.html" class="nav-link">josyn-jap</a>
+<a href="../../../repos/josyn-platform/repos/josyn-job-host.html" class="nav-link">josyn-job-host</a>
+<a href="../../../repos/josyn-toolbox/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="../../../repos/index.html" class="nav-link">Repos</a>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="coding-standards-functional-first-c">Coding Standards — Functional-First C#</h1>
+<blockquote>
+<p><strong>Philosophy:</strong> Functional-first C#. Not F#, but C# written <em>as if it could be</em>.
+Every design choice is measured against: &quot;Would this pattern translate naturally into a functional language?&quot;</p>
+</blockquote>
+<hr />
+<h2 id="principles-ranked-by-priority">Principles (ranked by priority)</h2>
+<h3 id="static-wins-when-in-doubt">1. Static wins (when in doubt)</h3>
+<p>Prefer <code>static class</code> and <code>static</code> methods over instance methods.</p>
+<p>Instance types and OOP patterns are <em>tools</em>, pulled in only when they earn their place:</p>
+<ul>
+<li>a natural identity</li>
+<li>mutable state that needs encapsulation</li>
+<li>a genuine polymorphism need</li>
+</ul>
+<p><em>&quot;In doubt — static wins&quot;</em> is the tiebreaker.</p>
+<pre><code class="language-csharp">// Preferred
+public static class JobInvoker
+{
+    public static async Task&lt;Result&gt; InvokeJob(...) { ... }
+}
+
+// Only if mutable state or polymorphism is genuinely needed
+public sealed class JAPClient : IJosynApplicationProtocol { ... }
+</code></pre>
+<h3 id="immutability-by-default">2. Immutability by default</h3>
+<p>Prefer <code>record</code> over <code>class</code>. Prefer <code>readonly</code> fields and <code>init</code>-only properties.
+Mutable state must be explicitly justified — never the path of least resistance.</p>
+<pre><code class="language-csharp">// Preferred
+public sealed record ErrorReport(
+    string Causer,
+    string Message,
+    string? CallStack,
+    string? ExceptionDetails,
+    DateTimeOffset OccurredAt);
+
+// Mutable state only when justified
+public static string LogDirectory { get; set; }   // LocalLog — process-global config
+</code></pre>
+<h3 id="pure-functions-over-side-effects">3. Pure functions over side effects</h3>
+<p>A method that does not mutate state and returns a value encoding its full result is the ideal.
+Side effects are isolated, named explicitly, and pushed to the edges of the call graph.</p>
+<h3 id="errors-as-values-never-exceptions">4. Errors as values, never exceptions</h3>
+<p><code>Result</code> / <code>Result&lt;T&gt;</code> is the single mechanism for propagating failures.</p>
+<pre><code class="language-csharp">// Correct
+public static Result&lt;Assembly&gt; FindEntryPointAssembly(Type? hint = null)
+{
+    try
+    {
+        var asm = hint != null ? Assembly.GetAssembly(hint) : Assembly.GetEntryAssembly();
+        return asm ?? Result.Error(&quot;Assembly nicht gefunden.&quot;);
+    }
+    catch (Exception ex) { return ex; }  // ← bottom-layer catch: converts to Result
+}
+
+// Wrong — never propagate exceptions
+public static Assembly FindEntryPointAssembly() { ... }  // throws
+</code></pre>
+<p><strong>Propagation rule:</strong> use <code>Result.Propagate(inner)</code> to accumulate the call chain. Never re-wrap manually.</p>
+<pre><code class="language-csharp">var find = FindEntryPointAssembly();
+if (!find.Succeeded)
+    return Result.Propagate(find.ToResult());  // ✓ preserves call chain
+</code></pre>
+<p><strong>Implicit conversions</strong> keep happy-path code concise:</p>
+<pre><code class="language-csharp">// All valid:
+return asm;                          // Assembly → Result&lt;Assembly&gt;
+return new Error(&quot;Fehlermeldung&quot;);   // Error → Result&lt;Assembly&gt;
+return ex;                           // Exception → Result&lt;Assembly&gt;
+return Result.Success;               // void success
+</code></pre>
+<blockquote>
+<p><strong>Ternary trap — <code>Result&lt;string&gt;</code>:</strong> When <code>TValue = string</code>, never rely on the implicit
+<code>string → Result&lt;string&gt;</code> conversion as a ternary branch when the other branch is <code>Error</code>.
+The C# compiler resolves the common type of both branches — not the target type — and will
+silently convert the <code>string</code> to <code>Error(string)</code> (a failure). Always use
+<code>Result&lt;string&gt;.Success(value)</code> explicitly on the success branch:</p>
+<pre><code class="language-csharp">// WRONG — &quot;INT&quot; silently becomes Error(&quot;INT&quot;):
+Result&lt;string&gt; GetValue(string key) =&gt;
+    dict.TryGetValue(key, out var v) ? v : Result.Error(&quot;not found&quot;);
+
+// CORRECT:
+Result&lt;string&gt; GetValue(string key) =&gt;
+    dict.TryGetValue(key, out var v) ? Result&lt;string&gt;.Success(v) : Result.Error(&quot;not found&quot;);
+</code></pre>
+<p><code>implicit operator Error(string)</code> has been deliberately removed from <code>Error</code> to prevent
+this class of bug. <code>string → Error</code> no longer compiles.</p>
+</blockquote>
+<h3 id="interfaces-as-contracts-not-polymorphism">5. Interfaces as contracts, not polymorphism</h3>
+<p>Public static types get a companion interface with <code>static abstract</code> members in <code>Contracts/</code>.
+These interfaces are API documentation and shape contracts, not polymorphism points.</p>
+<pre><code class="language-csharp">// Contracts/IPropertyBag.cs
+public interface IPropertyBag
+{
+    static abstract Result&lt;string&gt; Serialize&lt;TRecord&gt;(TRecord record)
+        where TRecord : class;
+    // ...
+}
+
+// PropertyBag.cs
+public static class PropertyBag : IPropertyBag
+{
+    /// &lt;inheritdoc cref=&quot;IPropertyBag.Serialize{TRecord}&quot;/&gt;
+    public static Result&lt;string&gt; Serialize&lt;TRecord&gt;(TRecord record) { ... }
+}
+</code></pre>
+<h3 id="explicit-over-magic">6. Explicit over magic</h3>
+<p>No reflection-based wiring (except the deliberately designed <code>[JobEntryPoint]</code> dispatch), no DI containers, no hidden conventions.</p>
+<h3 id="minimal-surface-area">7. Minimal surface area</h3>
+<p>A type should expose only what is needed. Internal types stay internal.</p>
+<h3 id="strict-access-modifiers">8. Strict access modifiers</h3>
+<p>Be as strict as possible. Expose only what must be exposed.
+Prefer <code>internal</code> over <code>public</code> wherever the wider API surface is not required.</p>
+<hr />
+<h2 id="agent-application-guide">Agent Application Guide</h2>
+<h3 id="apply-automatically-without-being-asked">Apply automatically — without being asked</h3>
+<ul>
+<li>When proposing a new type: start with <code>static class</code> and state why if choosing something else.</li>
+<li>When reviewing existing code: flag instance types that have no state and could be <code>static</code>.</li>
+<li>When writing XML docs: put them on the interface, not the implementation.</li>
+<li>When a failure path exists: return <code>Result.Error(...)</code> or <code>return ex;</code> — never <code>throw</code>.</li>
+<li>When propagating a failure upward: use <code>Result.Propagate(inner)</code> — never re-wrap.</li>
+<li>When choosing an access modifier: default to <code>internal</code>; escalate to <code>public</code> only when the member is part of the intended public API.</li>
+<li>When calling <code>IErrorHandler.Handle()</code> and a failed <code>Result</code> is in scope at the call site: use the <code>Handle(Result, ...)</code> overload — it extracts all diagnostic context automatically. The raw <code>Handle(string, string?, string?, ...)</code> overload is for paths where no <code>Result</code> exists; passing <code>null, null</code> there is correct and deliberate. Using the raw overload when a <code>Result</code> is available is a violation.</li>
+<li>When calling <code>IErrorHandler.Handle()</code>: do not also call <code>LocalLog</code> at the same site. The handler's own fallback writes to <code>LocalLog</code> if SQL fails — calling both unconditionally makes <code>LocalLog</code> a co-primary, not a fallback. The only legitimate <code>LocalLog</code> call sites outside <code>SqlErrorHandler</code> itself are bootstrap paths that execute before the error handler is constructed.</li>
+</ul>
+<h3 id="never-do">Never do</h3>
+<ul>
+<li>Add OOP abstraction layers &quot;just in case&quot; future flexibility is needed.</li>
+<li>Reach for dependency injection when a static call or a delegate parameter suffices.</li>
+<li>Create mutable state when an immutable data pipeline would work.</li>
+<li>Write defensive <code>try/catch</code> blocks outside the lowest-layer boundary.</li>
+<li>Use <code>public</code> where <code>internal</code> is sufficient.</li>
+<li>Use the null-forgiving operator (<code>!</code>) without an inline comment that proves the value cannot be null — prefer eliminating it via Result propagation entirely.</li>
+<li>Call <code>LocalLog.WriteError(...)</code> and <code>errorHandler.Handle(...)</code> at the same error site — that is double-logging. <code>LocalLog</code> is the fallback <em>inside</em> the handler; call sites must not duplicate it. The no-swallow guarantee in ADR-006 §6 proves the fallback chain is closed without call-site involvement.</li>
+</ul>
+<hr />
+<h2 id="code-style">Code Style</h2>
+<table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Preference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Class kind</td>
+<td><code>static class</code> by default; <code>record</code> for data; <code>class</code> only when mutable state or OOP is needed</td>
+</tr>
+<tr>
+<td>Nullability</td>
+<td><code>Nullable=enable</code> everywhere; <code>?</code> is deliberate, never defensive; <code>!</code> requires an inline justification comment — eliminate it via Result propagation where possible</td>
+</tr>
+<tr>
+<td>Error handling</td>
+<td><code>Result</code> / <code>Result&lt;T&gt;</code> — no <code>throw</code>, no <code>try/catch</code> above the lowest layer</td>
+</tr>
+<tr>
+<td>Comments</td>
+<td>Only where the <em>why</em> is non-obvious; no restating what the code already says</td>
+</tr>
+<tr>
+<td>XML docs</td>
+<td>On interfaces/contracts; implementations use <code>&lt;inheritdoc&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;remarks&gt;</code></td>
+<td>Used for &quot;not yet implemented&quot; placeholders on future-planned attributes</td>
+</tr>
+<tr>
+<td>Pragmas</td>
+<td><code>#pragma warning disable IDE0130</code> used only to suppress namespace-path mismatch warnings in flat-namespace projects</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="result-pattern-quick-reference">Result Pattern — Quick Reference</h2>
+<pre><code class="language-csharp">using JOSYN.Foundation.ResultPattern;
+
+// Void operation
+Result DoSomething()
+{
+    if (failed) return Result.Error(&quot;Fehlermeldung&quot;);
+    return Result.Success;
+}
+
+// Typed operation
+Result&lt;string&gt; GetSomething()
+{
+    if (failed) return new Error(&quot;Fehlermeldung&quot;, optionalException);
+    return &quot;the value&quot;;    // implicit conversion
+}
+
+// Propagate upward (preserves call chain)
+var inner = DoSomething();
+if (!inner.Succeeded)
+    return Result.Propagate(inner);
+
+// Inspect
+if (!result.Succeeded)
+{
+    Console.WriteLine(result.ErrorMessage);
+    Console.WriteLine(result.CallStackAsString);
+}
+</code></pre>
+<p><strong>Key types:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Result</code></td>
+<td>Void operation result</td>
+</tr>
+<tr>
+<td><code>Result&lt;T&gt;</code></td>
+<td>Typed operation result</td>
+</tr>
+<tr>
+<td><code>Error</code></td>
+<td>Value-type error carrier (<code>string</code> + <code>Exception?</code>)</td>
+</tr>
+<tr>
+<td><code>CallerInfo</code></td>
+<td>One entry in the propagation chain</td>
+</tr>
+<tr>
+<td><code>IResult&lt;TSelf&gt;</code></td>
+<td>Static abstract contract for <code>Result</code></td>
+</tr>
+<tr>
+<td><code>IResult&lt;TSelf,T&gt;</code></td>
+<td>Static abstract contract for <code>Result&lt;T&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="project-file-conventions">Project File Conventions</h2>
+<p>Every NuGet-publishable project includes:</p>
+<pre><code class="language-xml">&lt;PropertyGroup&gt;
+    &lt;TargetFramework&gt;net10.0&lt;/TargetFramework&gt;
+    &lt;Nullable&gt;enable&lt;/Nullable&gt;
+    &lt;ImplicitUsings&gt;enable&lt;/ImplicitUsings&gt;
+    &lt;LangVersion&gt;latest&lt;/LangVersion&gt;
+    &lt;Version&gt;1.0.0-preview01&lt;/Version&gt;
+    &lt;Company&gt;HAEVG&lt;/Company&gt;
+    &lt;Authors&gt;HAEVG SWE&lt;/Authors&gt;
+    &lt;PackageLicenseExpression&gt;MIT&lt;/PackageLicenseExpression&gt;
+    &lt;Copyright&gt;Copyright © 2026 HAEVG AG&lt;/Copyright&gt;
+    &lt;GenerateDocumentationFile&gt;true&lt;/GenerateDocumentationFile&gt;
+    &lt;AppendTargetFrameworkToOutputPath&gt;false&lt;/AppendTargetFrameworkToOutputPath&gt;
+    &lt;IncludeSourceRevisionInInformationalVersion&gt;false&lt;/IncludeSourceRevisionInInformationalVersion&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<hr />
+<h2 id="nuget-feed">NuGet Feed</h2>
+<p>All packages are resolved from a local feed at <code>..\..\local-packages\</code> (relative to each repo root).
+Defined in each repo's <code>nuget.config</code>.</p>
+<p>Build + pack workflow via <code>.local-build\pack.cmd</code> → outputs to the local feed.
+Consuming repos then pick up the new version on restore.</p>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+</body>
+</html>

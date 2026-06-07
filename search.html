@@ -1,0 +1,862 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Search — JOSYN Documentation</title>
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="index.html" class="nav-home">JOSYN Documentation</a>
+<div class="nav-section">Architecture</div>
+<a href="architecture/josyn-backend/josyn-backend-bootstrap-config/JOSYN.Backend.BootstrapConfig/index.html" class="nav-link">Overview</a>
+<a href="architecture/josyn-backend/josyn-backend-error-handler/JOSYN.Backend.ErrorHandler/index.html" class="nav-link">JOSYN.Backend.ErrorHandler</a>
+<a href="architecture/josyn-backend/josyn-backend-jap-server/JOSYN.Jap.JAPServer/index.html" class="nav-link">JOSYN.Jap.JAPServer</a>
+<a href="architecture/josyn-backend/josyn-backend-job-registry/JOSYN.Backend.JobRegistry/index.html" class="nav-link">JOSYN.Backend.JobRegistry</a>
+<a href="architecture/josyn-backend/josyn-backend-session-starter/JOSYN.Backend.SessionStarter/index.html" class="nav-link">JOSYN.Backend.SessionStarter</a>
+<a href="architecture/josyn-backend/josyn-backend-session-store/JOSYN.Backend.SessionStore/index.html" class="nav-link">JOSYN.Backend.SessionStore</a>
+<a href="architecture/josyn-commons/josyn-commons-log/JOSYN.Commons.Log/index.html" class="nav-link">JOSYN.Commons.Log</a>
+<a href="architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/Docs/josyn-ipc-protocol-draft-01.html" class="nav-link">JOSYN-IPC-Protocol</a>
+<a href="architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/index.html" class="nav-link">JOSYN.Foundation.JIP</a>
+<a href="architecture/josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/index.html" class="nav-link">JOSYN.Foundation.PropertyBag</a>
+<a href="architecture/josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/index.html" class="nav-link">JOSYN.Foundation.ResultPattern</a>
+<a href="architecture/josyn-jap/josyn-jap-shared/JOSYN.Jap.Shared.Contract/index.html" class="nav-link">JOSYN.Jap.Shared.Contract</a>
+<a href="architecture/josyn-job-host/JOSYN.JobHost/index.html" class="nav-link">JOSYN.JobHost</a>
+<a href="architecture/josyn-platform/architecture/overview.html" class="nav-link">Architecture Overview</a>
+<a href="architecture/josyn-platform/architecture/storage.html" class="nav-link">JOSYN Storage Realm</a>
+<a href="architecture/josyn-platform/solution-architecture/01-context/josyn-and-jobsystem.html" class="nav-link">JOSYN and its Predecessor</a>
+<a href="architecture/josyn-platform/solution-architecture/01-context/index.html" class="nav-link">Context</a>
+<a href="architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/index.html" class="nav-link">Constraints &amp; Settled Decisions</a>
+<a href="architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/settled-decisions.html" class="nav-link">Settled Decisions</a>
+<a href="architecture/josyn-platform/solution-architecture/03-physical-architecture/folder-layout.html" class="nav-link">Folder Layout</a>
+<a href="architecture/josyn-platform/solution-architecture/03-physical-architecture/job-registry.html" class="nav-link">Job Registry</a>
+<a href="architecture/josyn-platform/solution-architecture/03-physical-architecture/machine-topology.html" class="nav-link">Machine Topology</a>
+<a href="architecture/josyn-platform/solution-architecture/03-physical-architecture/index.html" class="nav-link">Physical Architecture</a>
+<a href="architecture/josyn-platform/solution-architecture/03-physical-architecture/services-and-executables.html" class="nav-link">Services and Executables</a>
+<a href="architecture/josyn-platform/solution-architecture/03-physical-architecture/session-store.html" class="nav-link">Session Store</a>
+<a href="architecture/josyn-platform/solution-architecture/04-identity-and-security/identity-and-impersonation.html" class="nav-link">Identity and Impersonation</a>
+<a href="architecture/josyn-platform/solution-architecture/04-identity-and-security/index.html" class="nav-link">Identity &amp; Security</a>
+<a href="architecture/josyn-platform/solution-architecture/05-deployment-and-operations/job-deployment.html" class="nav-link">Job Deployment</a>
+<a href="architecture/josyn-platform/solution-architecture/05-deployment-and-operations/index.html" class="nav-link">Deployment &amp; Operations</a>
+<a href="architecture/josyn-platform/solution-architecture/06-company-fit/audit-and-session-record.html" class="nav-link">Audit and the Session Record</a>
+<a href="architecture/josyn-platform/solution-architecture/06-company-fit/coexistence-with-jobsystem.html" class="nav-link">Coexistence with JobSystem</a>
+<a href="architecture/josyn-platform/solution-architecture/06-company-fit/isolation-vs-integration.html" class="nav-link">Isolation vs. Integration</a>
+<a href="architecture/josyn-platform/solution-architecture/06-company-fit/maintainability-and-knowledge-transfer.html" class="nav-link">Maintainability and Knowledge Transfer</a>
+<a href="architecture/josyn-platform/solution-architecture/06-company-fit/index.html" class="nav-link">Company Fit</a>
+<a href="architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/evolution-horizon.html" class="nav-link">Evolution Horizon</a>
+<a href="architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/index.html" class="nav-link">Evolution &amp; Lifecycle</a>
+<a href="architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/yagni-decisions.html" class="nav-link">YAGNI Decisions</a>
+<a href="architecture/josyn-platform/solution-architecture/08-documentation-and-training/overview.html" class="nav-link">Documentation and Training — Overview</a>
+<a href="architecture/josyn-platform/solution-architecture/08-documentation-and-training/index.html" class="nav-link">Documentation &amp; Training</a>
+<a href="architecture/josyn-platform/solution-architecture/index.html" class="nav-link">Solution Architecture</a>
+<a href="architecture/index.html" class="nav-link">Architecture</a>
+<div class="nav-section">Decisions</div>
+<a href="decisions/index.html" class="nav-link">Overview</a>
+<a href="decisions/josyn-platform/decisions/ADR-001-platform-naming.html" class="nav-link">ADR-001 — Platform Naming Vocabulary</a>
+<a href="decisions/josyn-platform/decisions/ADR-002-josyn-backend.html" class="nav-link">ADR-002 — Introducing `josyn-backend` as a Separate Layer</a>
+<a href="decisions/josyn-platform/decisions/ADR-003-josyn-commons.html" class="nav-link">ADR-003 — josyn-commons: A Generic Utility Layer</a>
+<a href="decisions/josyn-platform/decisions/ADR-004-japserver-relocation.html" class="nav-link">ADR-004 — JAPServer Relocation into josyn-backend</a>
+<a href="decisions/josyn-platform/decisions/ADR-005-documentation-governance.html" class="nav-link">ADR-005 — Documentation Governance and Agentic Way of Work</a>
+<a href="decisions/josyn-platform/decisions/ADR-006-instance-types-for-dependency-holding-services.html" class="nav-link">ADR-006 — Instance Types for Dependency-Holding Services</a>
+<a href="decisions/josyn-platform/decisions/ADR-007-storage-realm.html" class="nav-link">ADR-007 — The JOSYN Storage Realm</a>
+<a href="decisions/josyn-platform/decisions/ADR-008-locallog-relocation.html" class="nav-link">ADR-008 — LocalLog Relocation to josyn-commons</a>
+<a href="decisions/josyn-platform/decisions/ADR-009-runtime-context-provider-pattern.html" class="nav-link">ADR-009 — Runtime Context Provider Pattern for External Integrations</a>
+<a href="decisions/josyn-platform/decisions/ADR-010-environment-separation.html" class="nav-link">ADR-010 — Environment Separation and Installation Model</a>
+<a href="decisions/josyn-platform/decisions/ADR-011-jip-enum-support.html" class="nav-link">ADR-011 — JIP Wire-Type Extension: Enum Support in JipDispatcher</a>
+<a href="decisions/josyn-platform/decisions/ADR-012-maintainer-deployment.html" class="nav-link">ADR-012 — Maintainer Deployment (First Iteration)</a>
+<a href="decisions/josyn-platform/decisions/ADR-013-job-dev-mode.html" class="nav-link">ADR-013 — Job Dev Mode: Running a Job Locally from the IDE</a>
+<a href="decisions/josyn-platform/decisions/ADR-014-cli-run-job-local-args.html" class="nav-link">ADR-014 — CLI `run-job` Command and Local Arguments Convention</a>
+<a href="decisions/josyn-platform/repos/josyn-backend/decisions/ADR-001-backend-building-block-model.html" class="nav-link">ADR-001 — Backend Building Block Model</a>
+<a href="decisions/josyn-platform/repos/josyn-backend/decisions/ADR-002-session-store.html" class="nav-link">ADR-002 — SessionStore</a>
+<a href="decisions/josyn-platform/repos/josyn-backend/decisions/ADR-003-global-config.html" class="nav-link">ADR-003 — GlobalConfig</a>
+<a href="decisions/josyn-platform/repos/josyn-backend/decisions/ADR-004-backend-restructuring.html" class="nav-link">ADR-004 — Backend Restructuring: Trigger Executables, ErrorHandler, and SessionStarter Fire-and-Forget Correction</a>
+<a href="decisions/josyn-platform/repos/josyn-backend/decisions/ADR-005-job-registry.html" class="nav-link">ADR-005 — JobRegistry</a>
+<a href="decisions/josyn-platform/repos/josyn-backend/decisions/ADR-006-error-handler.html" class="nav-link">ADR-006 — ErrorHandler</a>
+<div class="nav-section">Guides</div>
+<a href="guides/josyn-platform/sanity/index.html" class="nav-link">Overview</a>
+<a href="guides/josyn-platform/sanity/criteria-review.html" class="nav-link">Sanity Criteria — Decision-Maker Review</a>
+<a href="guides/josyn-platform/sanity/overview.html" class="nav-link">Sanity Check — Platform Overview</a>
+<a href="guides/josyn-platform/temp/arggen-inspection-guide.html" class="nav-link">ArgGen — Inspection &amp; Smoke-Test Guide</a>
+<a href="guides/josyn-toolbox/deploy/index.html" class="nav-link">deploy</a>
+<a href="guides/josyn-toolbox/git-tools/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="guides/josyn-toolbox/site-builder/index.html" class="nav-link">site-builder — JOSYN Documentation Pipeline</a>
+<a href="guides/josyn-toolbox/site-builder/site-builder-assembler/index.html" class="nav-link">site-builder-assembler</a>
+<a href="guides/josyn-toolbox/site-builder/site-builder-indexer/index.html" class="nav-link">site-builder-indexer</a>
+<a href="guides/josyn-toolbox/site-builder/site-builder-renderer/index.html" class="nav-link">site-builder-renderer</a>
+<a href="guides/index.html" class="nav-link">Guides</a>
+<div class="nav-section">Notes</div>
+<a href="notes/index.html" class="nav-link">Overview</a>
+<a href="notes/josyn-platform/plans/sessionstore-poc-roadmap.html" class="nav-link">SessionStore -&gt; josyn-backend PoC Roadmap</a>
+<a href="notes/josyn-platform/ROADMAP.html" class="nav-link">JOSYN Platform — Roadmap &amp; Status</a>
+<a href="notes/josyn-platform/temp/poc-phases-2-5-notes.html" class="nav-link">PoC Phases 2–5 — Inspection &amp; Runtime Notes</a>
+<a href="notes/josyn-platform/thinking/documentation-taxonomy.html" class="nav-link">Documentation Taxonomy — Working Note</a>
+<div class="nav-section">Reference</div>
+<a href="reference/index.html" class="nav-link">Overview</a>
+<a href="reference/josyn-backend/db/error-report.html" class="nav-link">JOSYN Error Report</a>
+<a href="reference/josyn-backend/db/session-report.html" class="nav-link">JOSYN Session Report</a>
+<a href="reference/josyn-commons/MAINTAINERS.html" class="nav-link">Advice for Maintainers of josyn-commons</a>
+<a href="reference/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="reference/josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="reference/josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="reference/josyn-platform/architecture/coding-standards.html" class="nav-link">Coding Standards — Functional-First C#</a>
+<a href="reference/josyn-platform/architecture/docs-index-vocabulary.html" class="nav-link">docs-index Vocabulary</a>
+<a href="reference/josyn-platform/architecture/local-build.html" class="nav-link">`.local-build` — Local Developer Tooling</a>
+<a href="reference/josyn-platform/architecture/naming-conventions.html" class="nav-link">Naming Conventions</a>
+<a href="reference/josyn-platform/architecture/repo-structure-conventions.html" class="nav-link">Repo Structure Conventions</a>
+<a href="reference/josyn-platform/MAINTAINERS.html" class="nav-link">JOSYN Platform — Maintainer&#39;s Guide</a>
+<a href="reference/josyn-platform/sanity/criteria/architecture.html" class="nav-link">Sanity Criteria — architecture</a>
+<a href="reference/josyn-platform/sanity/criteria/docs.html" class="nav-link">Sanity Criteria — docs</a>
+<a href="reference/josyn-platform/sanity/criteria/principles.html" class="nav-link">Sanity Criteria — principles</a>
+<a href="reference/josyn-platform/sanity/criteria/standards.html" class="nav-link">Sanity Criteria — standards</a>
+<a href="reference/josyn-platform/sanity/criteria/tests.html" class="nav-link">Sanity Criteria — tests</a>
+<a href="reference/josyn-platform/sanity/current-state/josyn-backend.html" class="nav-link">Sanity State — josyn-backend</a>
+<a href="reference/josyn-platform/sanity/current-state/josyn-commons.html" class="nav-link">Sanity State — josyn-commons</a>
+<a href="reference/josyn-platform/sanity/current-state/josyn-foundation.html" class="nav-link">Sanity State — josyn-foundation</a>
+<a href="reference/josyn-platform/sanity/current-state/josyn-jap.html" class="nav-link">Sanity State — josyn-jap</a>
+<a href="reference/josyn-platform/sanity/current-state/josyn-job-host.html" class="nav-link">Sanity State — josyn-job-host</a>
+<a href="reference/josyn-platform/sanity/triggers.html" class="nav-link">Sanity — Trigger Table</a>
+<div class="nav-section">Repos</div>
+<a href="repos/josyn-backend/index.html" class="nav-link">Overview</a>
+<a href="repos/josyn-commons/index.html" class="nav-link">josyn-commons</a>
+<a href="repos/josyn-contoso/index.html" class="nav-link">josyn-contoso</a>
+<a href="repos/josyn-foundation/josyn-foundation-jip/index.html" class="nav-link">josyn-foundation-jip</a>
+<a href="repos/josyn-foundation/josyn-foundation-property-bag/index.html" class="nav-link">josyn-foundation-property-bag</a>
+<a href="repos/josyn-foundation/josyn-foundation-result-pattern/index.html" class="nav-link">josyn-foundation-result-pattern</a>
+<a href="repos/josyn-foundation/index.html" class="nav-link">josyn-foundation</a>
+<a href="repos/josyn-jap/josyn-jap-shared/index.html" class="nav-link">JOSYN.Jap.Shared</a>
+<a href="repos/josyn-jap/index.html" class="nav-link">josyn-jap</a>
+<a href="repos/josyn-platform/index.html" class="nav-link">JOSYN Platform</a>
+<a href="repos/josyn-platform/repos/josyn-backend/overview.html" class="nav-link">josyn-backend</a>
+<a href="repos/josyn-platform/repos/josyn-commons.html" class="nav-link">josyn-commons</a>
+<a href="repos/josyn-platform/repos/josyn-foundation.html" class="nav-link">josyn-foundation</a>
+<a href="repos/josyn-platform/repos/josyn-jap.html" class="nav-link">josyn-jap</a>
+<a href="repos/josyn-platform/repos/josyn-job-host.html" class="nav-link">josyn-job-host</a>
+<a href="repos/josyn-toolbox/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="repos/index.html" class="nav-link">Repos</a>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="search">Search</h1>
+<p><input type="text" id="doc-search"
+placeholder="Filter by title, summary, or repo…"
+style="width:100%;padding:8px;font-size:1rem;margin-bottom:1.5rem;border:1px solid #ccc;border-radius:4px" /></p>
+<table>
+<thead>
+<tr>
+<th>Document</th>
+<th>Repo</th>
+<th>Type</th>
+<th>Summary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="reference/josyn-platform/architecture/local-build.html"><code>.local-build</code> — Local Developer Tooling</a></td>
+<td>josyn-platform</td>
+<td>reference</td>
+<td>Defines the purpose and conventions of the local build wrapper scripts.</td>
+</tr>
+<tr>
+<td><a href="decisions/josyn-platform/repos/josyn-backend/decisions/ADR-001-backend-building-block-model.html">ADR-001 — Backend Building Block Model</a></td>
+<td>josyn-platform</td>
+<td>decision</td>
+<td>Defines the building block model used inside josyn-backend.</td>
+</tr>
+<tr>
+<td><a href="decisions/josyn-platform/decisions/ADR-001-platform-naming.html">ADR-001 — Platform Naming Vocabulary</a></td>
+<td>josyn-platform</td>
+<td>decision</td>
+<td>Establishes the platform naming vocabulary and repo naming boundaries.</td>
+</tr>
+<tr>
+<td><a href="decisions/josyn-platform/decisions/ADR-002-josyn-backend.html">ADR-002 — Introducing <code>josyn-backend</code> as a Separate Layer</a></td>
+<td>josyn-platform</td>
+<td>decision</td>
+<td>Introduces josyn-backend as a separate platform layer.</td>
+</tr>
+<tr>
+<td><a href="decisions/josyn-platform/repos/josyn-backend/decisions/ADR-002-session-store.html">ADR-002 — SessionStore</a></td>
+<td>josyn-platform</td>
+<td>decision</td>
+<td>Introduces SessionStore as a Category A backend component.</td>
+</tr>
+<tr>
+<td><a href="decisions/josyn-platform/repos/josyn-backend/decisions/ADR-003-global-config.html">ADR-003 — GlobalConfig</a></td>
+<td>josyn-platform</td>
+<td>decision</td>
+<td>Introduces GlobalConfig as a separate backend building block.</td>
+</tr>
+<tr>
+<td><a href="decisions/josyn-platform/decisions/ADR-003-josyn-commons.html">ADR-003 — josyn-commons: A Generic Utility Layer</a></td>
+<td>josyn-platform</td>
+<td>decision</td>
+<td>Creates josyn-commons as the generic utility layer outside foundation.</td>
+</tr>
+<tr>
+<td><a href="decisions/josyn-platform/repos/josyn-backend/decisions/ADR-004-backend-restructuring.html">ADR-004 — Backend Restructuring: Trigger Executables, ErrorHandler, and SessionStarter Fire-and-Forget Correction</a></td>
+<td>josyn-platform</td>
+<td>decision</td>
+<td>Proposes backend restructuring and corrected fire-and-forget session startup.</td>
+</tr>
+<tr>
+<td><a href="decisions/josyn-platform/decisions/ADR-004-japserver-relocation.html">ADR-004 — JAPServer Relocation into josyn-backend</a></td>
+<td>josyn-platform</td>
+<td>decision</td>
+<td>Moves JAPServer implementation from josyn-jap into josyn-backend.</td>
+</tr>
+<tr>
+<td><a href="decisions/josyn-platform/decisions/ADR-005-documentation-governance.html">ADR-005 — Documentation Governance and Agentic Way of Work</a></td>
+<td>josyn-platform</td>
+<td>decision</td>
+<td>Makes josyn-platform the authoritative home for documentation and agent guidance.</td>
+</tr>
+<tr>
+<td><a href="decisions/josyn-platform/repos/josyn-backend/decisions/ADR-005-job-registry.html">ADR-005 — JobRegistry</a></td>
+<td>josyn-platform</td>
+<td>decision</td>
+<td>Introduces JobRegistry as the authoritative record of runnable jobs.</td>
+</tr>
+<tr>
+<td><a href="decisions/josyn-platform/repos/josyn-backend/decisions/ADR-006-error-handler.html">ADR-006 — ErrorHandler</a></td>
+<td>josyn-platform</td>
+<td>decision</td>
+<td>Proposes a backend-wide error reporting component and contract.</td>
+</tr>
+<tr>
+<td><a href="decisions/josyn-platform/decisions/ADR-006-instance-types-for-dependency-holding-services.html">ADR-006 — Instance Types for Dependency-Holding Services</a></td>
+<td>josyn-platform</td>
+<td>decision</td>
+<td>Defines instance-type rules for services that hold runtime dependencies.</td>
+</tr>
+<tr>
+<td><a href="decisions/josyn-platform/decisions/ADR-007-storage-realm.html">ADR-007 — The JOSYN Storage Realm</a></td>
+<td>josyn-platform</td>
+<td>decision</td>
+<td>Establishes the governed storage realm for durable platform state.</td>
+</tr>
+<tr>
+<td><a href="decisions/josyn-platform/decisions/ADR-008-locallog-relocation.html">ADR-008 — LocalLog Relocation to josyn-commons</a></td>
+<td>josyn-platform</td>
+<td>decision</td>
+<td>Proposes moving LocalLog into josyn-commons as shared logging infrastructure.</td>
+</tr>
+<tr>
+<td><a href="decisions/josyn-platform/decisions/ADR-009-runtime-context-provider-pattern.html">ADR-009 — Runtime Context Provider Pattern for External Integrations</a></td>
+<td>josyn-platform</td>
+<td>decision</td>
+<td>Defines runtime context providers for external integration and environment-specific data.</td>
+</tr>
+<tr>
+<td><a href="decisions/josyn-platform/decisions/ADR-010-environment-separation.html">ADR-010 — Environment Separation and Installation Model</a></td>
+<td>josyn-platform</td>
+<td>decision</td>
+<td>Explores the installation and separation model for DEV, INT, and PROD environments.</td>
+</tr>
+<tr>
+<td><a href="decisions/josyn-platform/decisions/ADR-011-jip-enum-support.html">ADR-011 — JIP Wire-Type Extension: Enum Support in JipDispatcher</a></td>
+<td>josyn-platform</td>
+<td>decision</td>
+<td>Adds enum wire-type support to JIP dispatcher registration.</td>
+</tr>
+<tr>
+<td><a href="decisions/josyn-platform/decisions/ADR-012-maintainer-deployment.html">ADR-012 — Maintainer Deployment (First Iteration)</a></td>
+<td>josyn-platform</td>
+<td>decision</td>
+<td>Outlines the first deployment model for maintainers during the PoC phase.</td>
+</tr>
+<tr>
+<td><a href="decisions/josyn-platform/decisions/ADR-013-job-dev-mode.html">ADR-013 — Job Dev Mode: Running a Job Locally from the IDE</a></td>
+<td>josyn-platform</td>
+<td>decision</td>
+<td>Defines a local IDE workflow for running jobs during development.</td>
+</tr>
+<tr>
+<td><a href="decisions/josyn-platform/decisions/ADR-014-cli-run-job-local-args.html">ADR-014 — CLI <code>run-job</code> Command and Local Arguments Convention</a></td>
+<td>josyn-platform</td>
+<td>decision</td>
+<td>Defines the run-job CLI command and local argument conventions.</td>
+</tr>
+<tr>
+<td><a href="reference/josyn-commons/MAINTAINERS.html">Advice for Maintainers of josyn-commons</a></td>
+<td>josyn-commons</td>
+<td>reference</td>
+<td>Gives repo-specific maintainer guidance for josyn-commons.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/architecture/overview.html">Architecture Overview</a></td>
+<td>josyn-platform</td>
+<td>architecture-overview</td>
+<td>Explains the platform structure, runtime flow, and dependency graph.</td>
+</tr>
+<tr>
+<td><a href="guides/josyn-platform/temp/arggen-inspection-guide.html">ArgGen — Inspection &amp; Smoke-Test Guide</a></td>
+<td>josyn-platform</td>
+<td>manual</td>
+<td>Provides a temporary inspection and smoke-test guide for ArgGen.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/06-company-fit/audit-and-session-record.html">Audit and the Session Record</a></td>
+<td>josyn-platform</td>
+<td>solution-architecture</td>
+<td>Explains how session records provide auditability for job executions.</td>
+</tr>
+<tr>
+<td><a href="reference/josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/CHANGELOG.html">Changelog</a></td>
+<td>josyn-foundation</td>
+<td>reference</td>
+<td>Records release history and notable changes for the PropertyBag package.</td>
+</tr>
+<tr>
+<td><a href="reference/josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/CHANGELOG.html">Changelog</a></td>
+<td>josyn-foundation</td>
+<td>reference</td>
+<td>Records release history and notable changes for the ResultPattern package.</td>
+</tr>
+<tr>
+<td><a href="reference/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/CHANGELOG.html">Changelog</a></td>
+<td>josyn-foundation</td>
+<td>reference</td>
+<td>Records release history and notable changes for the JIP package.</td>
+</tr>
+<tr>
+<td><a href="reference/josyn-platform/architecture/coding-standards.html">Coding Standards — Functional-First C#</a></td>
+<td>josyn-platform</td>
+<td>reference</td>
+<td>Defines JOSYN’s functional-first C# principles and coding rules.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/06-company-fit/coexistence-with-jobsystem.html">Coexistence with JobSystem</a></td>
+<td>josyn-platform</td>
+<td>solution-architecture</td>
+<td>Explains the planned parallel coexistence of JOSYN and the legacy JobSystem.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/06-company-fit/index.html">Company Fit</a></td>
+<td>josyn-platform</td>
+<td>overview</td>
+<td>Introduces the chapter about governance, compliance, and organisational fit.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/index.html">Constraints &amp; Settled Decisions</a></td>
+<td>josyn-platform</td>
+<td>overview</td>
+<td>Introduces the chapter covering fixed constraints and settled decisions.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/01-context/index.html">Context</a></td>
+<td>josyn-platform</td>
+<td>overview</td>
+<td>Introduces the context chapter of the solution architecture.</td>
+</tr>
+<tr>
+<td><a href="guides/josyn-toolbox/deploy/index.html">deploy</a></td>
+<td>josyn-toolbox</td>
+<td>manual</td>
+<td>Documents local deployment scripts used by maintainers during development.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/05-deployment-and-operations/index.html">Deployment &amp; Operations</a></td>
+<td>josyn-platform</td>
+<td>overview</td>
+<td>Introduces the chapter covering deployment, bootstrapping, and operations.</td>
+</tr>
+<tr>
+<td><a href="reference/josyn-platform/architecture/docs-index-vocabulary.html">docs-index Vocabulary</a></td>
+<td>josyn-platform</td>
+<td>reference</td>
+<td>Defines the closed vocabularies for docs-index semantic classification.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/08-documentation-and-training/index.html">Documentation &amp; Training</a></td>
+<td>josyn-platform</td>
+<td>overview</td>
+<td>Introduces the chapter covering documentation, onboarding, and training.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/08-documentation-and-training/overview.html">Documentation and Training — Overview</a></td>
+<td>josyn-platform</td>
+<td>solution-architecture</td>
+<td>Summarizes current documentation and training coverage across the platform.</td>
+</tr>
+<tr>
+<td><a href="notes/josyn-platform/thinking/documentation-taxonomy.html">Documentation Taxonomy — Working Note</a></td>
+<td>josyn-platform</td>
+<td>working-note</td>
+<td>Brainstorms a future taxonomy for classifying documentation across JOSYN repos.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/index.html">Evolution &amp; Lifecycle</a></td>
+<td>josyn-platform</td>
+<td>overview</td>
+<td>Introduces the chapter covering future evolution and lifecycle boundaries.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/evolution-horizon.html">Evolution Horizon</a></td>
+<td>josyn-platform</td>
+<td>solution-architecture</td>
+<td>Outlines realistic future evolution paths beyond the current Windows-only solution.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/03-physical-architecture/folder-layout.html">Folder Layout</a></td>
+<td>josyn-platform</td>
+<td>solution-architecture</td>
+<td>Defines the fixed machine folder layout used by JOSYN.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/04-identity-and-security/index.html">Identity &amp; Security</a></td>
+<td>josyn-platform</td>
+<td>overview</td>
+<td>Introduces the chapter covering identity and security concerns.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/04-identity-and-security/identity-and-impersonation.html">Identity and Impersonation</a></td>
+<td>josyn-platform</td>
+<td>solution-architecture</td>
+<td>Explains service identities, permissions, and job impersonation requirements.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/06-company-fit/isolation-vs-integration.html">Isolation vs. Integration</a></td>
+<td>josyn-platform</td>
+<td>solution-architecture</td>
+<td>Explains JOSYN’s portability and its fit within company-specific infrastructure.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/05-deployment-and-operations/job-deployment.html">Job Deployment</a></td>
+<td>josyn-platform</td>
+<td>solution-architecture</td>
+<td>Describes how a job is deployed into the JobRepository.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/03-physical-architecture/job-registry.html">Job Registry</a></td>
+<td>josyn-platform</td>
+<td>solution-architecture</td>
+<td>Explains how jobs are registered before JOSYN can execute them.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/01-context/josyn-and-jobsystem.html">JOSYN and its Predecessor</a></td>
+<td>josyn-platform</td>
+<td>solution-architecture</td>
+<td>Explains JOSYN’s purpose and its relationship to the legacy JobSystem.</td>
+</tr>
+<tr>
+<td><a href="reference/josyn-backend/db/error-report.html">JOSYN Error Report</a></td>
+<td>josyn-backend</td>
+<td>reference</td>
+<td>Lists recent persisted backend error reports from the database.</td>
+</tr>
+<tr>
+<td><a href="repos/josyn-platform/index.html">JOSYN Platform</a></td>
+<td>josyn-platform</td>
+<td>overview</td>
+<td>Introduces JOSYN, its repositories, architecture, and this repo’s authority.</td>
+</tr>
+<tr>
+<td><a href="reference/josyn-platform/MAINTAINERS.html">JOSYN Platform — Maintainer's Guide</a></td>
+<td>josyn-platform</td>
+<td>reference</td>
+<td>States the enduring architectural responsibilities and values for JOSYN maintainers.</td>
+</tr>
+<tr>
+<td><a href="notes/josyn-platform/ROADMAP.html">JOSYN Platform — Roadmap &amp; Status</a></td>
+<td>josyn-platform</td>
+<td>plan</td>
+<td>Tracks platform status, milestones, completed work, and likely next steps.</td>
+</tr>
+<tr>
+<td><a href="reference/josyn-backend/db/session-report.html">JOSYN Session Report</a></td>
+<td>josyn-backend</td>
+<td>reference</td>
+<td>Lists recent persisted job session records from the database.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/architecture/storage.html">JOSYN Storage Realm</a></td>
+<td>josyn-platform</td>
+<td>architecture-detail</td>
+<td>Details the storage realm, schema conventions, and development setup.</td>
+</tr>
+<tr>
+<td><a href="guides/josyn-toolbox/git-tools/index.html">JOSYN Toolbox</a></td>
+<td>josyn-toolbox</td>
+<td>manual</td>
+<td>Documents convenience scripts for machine bootstrap and Git remote synchronization.</td>
+</tr>
+<tr>
+<td><a href="repos/josyn-toolbox/index.html">JOSYN Toolbox</a></td>
+<td>josyn-toolbox</td>
+<td>overview</td>
+<td>Introduces the toolbox repo for maintainer scripts and utilities.</td>
+</tr>
+<tr>
+<td><a href="repos/josyn-platform/repos/josyn-backend/overview.html">josyn-backend</a></td>
+<td>josyn-platform</td>
+<td>repo-summary</td>
+<td>Summarizes josyn-backend responsibilities, building blocks, and current architecture.</td>
+</tr>
+<tr>
+<td><a href="repos/josyn-backend/index.html">josyn-backend</a></td>
+<td>josyn-backend</td>
+<td>overview</td>
+<td>Will introduce the backend scheduler layer when full documentation exists.</td>
+</tr>
+<tr>
+<td><a href="repos/josyn-platform/repos/josyn-commons.html">josyn-commons</a></td>
+<td>josyn-platform</td>
+<td>repo-summary</td>
+<td>Summarizes the role, boundaries, packages, and current state of josyn-commons.</td>
+</tr>
+<tr>
+<td><a href="repos/josyn-commons/index.html">josyn-commons</a></td>
+<td>josyn-commons</td>
+<td>overview</td>
+<td>Introduces josyn-commons as the domain-agnostic utility layer.</td>
+</tr>
+<tr>
+<td><a href="repos/josyn-contoso/index.html">josyn-contoso</a></td>
+<td>josyn-contoso</td>
+<td>overview</td>
+<td>Introduces the demo company adapter repo used for ADR-009.</td>
+</tr>
+<tr>
+<td><a href="repos/josyn-platform/repos/josyn-foundation.html">josyn-foundation</a></td>
+<td>josyn-platform</td>
+<td>repo-summary</td>
+<td>Summarizes the role, packages, and stability expectations of josyn-foundation.</td>
+</tr>
+<tr>
+<td><a href="repos/josyn-foundation/index.html">josyn-foundation</a></td>
+<td>josyn-foundation</td>
+<td>overview</td>
+<td>Introduces the foundation repo and its three core infrastructure packages.</td>
+</tr>
+<tr>
+<td><a href="repos/josyn-foundation/josyn-foundation-jip/index.html">josyn-foundation-jip</a></td>
+<td>josyn-foundation</td>
+<td>overview</td>
+<td>Introduces the JIP transport sub-repo and links to package documentation.</td>
+</tr>
+<tr>
+<td><a href="repos/josyn-foundation/josyn-foundation-property-bag/index.html">josyn-foundation-property-bag</a></td>
+<td>josyn-foundation</td>
+<td>overview</td>
+<td>Introduces the PropertyBag sub-repo and links to package documentation.</td>
+</tr>
+<tr>
+<td><a href="repos/josyn-foundation/josyn-foundation-result-pattern/index.html">josyn-foundation-result-pattern</a></td>
+<td>josyn-foundation</td>
+<td>overview</td>
+<td>Introduces the ResultPattern sub-repo and links to package documentation.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/Docs/josyn-ipc-protocol-draft-01.html">JOSYN-IPC-Protocol</a></td>
+<td>josyn-foundation</td>
+<td>architecture-detail</td>
+<td>Drafts the layered IPC protocol used between JOSYN processes.</td>
+</tr>
+<tr>
+<td><a href="repos/josyn-platform/repos/josyn-jap.html">josyn-jap</a></td>
+<td>josyn-platform</td>
+<td>repo-summary</td>
+<td>Summarizes the protocol-contract role and package contents of josyn-jap.</td>
+</tr>
+<tr>
+<td><a href="repos/josyn-jap/index.html">josyn-jap</a></td>
+<td>josyn-jap</td>
+<td>overview</td>
+<td>Introduces josyn-jap as the shared protocol-contract layer.</td>
+</tr>
+<tr>
+<td><a href="repos/josyn-platform/repos/josyn-job-host.html">josyn-job-host</a></td>
+<td>josyn-platform</td>
+<td>repo-summary</td>
+<td>Summarizes the job runtime library, responsibilities, and package surface.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-backend/josyn-backend-error-handler/JOSYN.Backend.ErrorHandler/index.html">JOSYN.Backend.ErrorHandler</a></td>
+<td>josyn-backend</td>
+<td>component-architecture</td>
+<td>Explains the backend-wide error reporting endpoint and contract.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-backend/josyn-backend-bootstrap-config/JOSYN.Backend.BootstrapConfig/index.html">JOSYN.Backend.GlobalConfig</a></td>
+<td>josyn-backend</td>
+<td>component-architecture</td>
+<td>Explains the runtime configuration contract used by backend components.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-backend/josyn-backend-job-registry/JOSYN.Backend.JobRegistry/index.html">JOSYN.Backend.JobRegistry</a></td>
+<td>josyn-backend</td>
+<td>component-architecture</td>
+<td>Explains the storage-backed registry of runnable jobs.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-backend/josyn-backend-session-starter/JOSYN.Backend.SessionStarter/index.html">JOSYN.Backend.SessionStarter</a></td>
+<td>josyn-backend</td>
+<td>component-architecture</td>
+<td>Explains the component that allocates sessions and spawns JAPServer.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-backend/josyn-backend-session-store/JOSYN.Backend.SessionStore/index.html">JOSYN.Backend.SessionStore</a></td>
+<td>josyn-backend</td>
+<td>component-architecture</td>
+<td>Explains the persistence component for JOSYN job sessions.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-commons/josyn-commons-log/JOSYN.Commons.Log/index.html">JOSYN.Commons.Log</a></td>
+<td>josyn-commons</td>
+<td>component-architecture</td>
+<td>Explains the process-local file logging component in josyn-commons.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/index.html">JOSYN.Foundation.JIP</a></td>
+<td>josyn-foundation</td>
+<td>component-architecture</td>
+<td>Explains the named-pipe transport component used for JOSYN IPC.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/index.html">JOSYN.Foundation.PropertyBag</a></td>
+<td>josyn-foundation</td>
+<td>component-architecture</td>
+<td>Explains the flat record serialization component used in JOSYN IPC.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/index.html">JOSYN.Foundation.ResultPattern</a></td>
+<td>josyn-foundation</td>
+<td>component-architecture</td>
+<td>Explains the result-based error handling component for JOSYN.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-backend/josyn-backend-jap-server/JOSYN.Jap.JAPServer/index.html">JOSYN.Jap.JAPServer</a></td>
+<td>josyn-backend</td>
+<td>component-architecture</td>
+<td>Explains the backend server executable for JAP sessions.</td>
+</tr>
+<tr>
+<td><a href="repos/josyn-jap/josyn-jap-shared/index.html">JOSYN.Jap.Shared</a></td>
+<td>josyn-jap</td>
+<td>overview</td>
+<td>Introduces the shared JAP libraries used by both session parties.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-jap/josyn-jap-shared/JOSYN.Jap.Shared.Contract/index.html">JOSYN.Jap.Shared.Contract</a></td>
+<td>josyn-jap</td>
+<td>component-architecture</td>
+<td>Explains the shared application contract between JobHost and JAPServer.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-job-host/JOSYN.JobHost/index.html">JOSYN.JobHost</a></td>
+<td>josyn-job-host</td>
+<td>component-architecture</td>
+<td>Explains the job runtime library used by JOSYN job executables.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/03-physical-architecture/machine-topology.html">Machine Topology</a></td>
+<td>josyn-platform</td>
+<td>solution-architecture</td>
+<td>Describes the single-machine deployment topology assumed by JOSYN.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/06-company-fit/maintainability-and-knowledge-transfer.html">Maintainability and Knowledge Transfer</a></td>
+<td>josyn-platform</td>
+<td>solution-architecture</td>
+<td>Explains how JOSYN is designed for maintainability and knowledge transfer.</td>
+</tr>
+<tr>
+<td><a href="reference/josyn-platform/architecture/naming-conventions.html">Naming Conventions</a></td>
+<td>josyn-platform</td>
+<td>reference</td>
+<td>Defines naming, namespace, and vocabulary rules across the platform.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/03-physical-architecture/index.html">Physical Architecture</a></td>
+<td>josyn-platform</td>
+<td>overview</td>
+<td>Introduces the chapter describing JOSYN’s physical deployment structure.</td>
+</tr>
+<tr>
+<td><a href="notes/josyn-platform/temp/poc-phases-2-5-notes.html">PoC Phases 2–5 — Inspection &amp; Runtime Notes</a></td>
+<td>josyn-platform</td>
+<td>working-note</td>
+<td>Captures temporary inspection and runtime notes from SessionStore PoC work.</td>
+</tr>
+<tr>
+<td><a href="reference/josyn-platform/architecture/repo-structure-conventions.html">Repo Structure Conventions</a></td>
+<td>josyn-platform</td>
+<td>reference</td>
+<td>Defines the allowed repository structure patterns used across JOSYN.</td>
+</tr>
+<tr>
+<td><a href="reference/josyn-platform/sanity/triggers.html">Sanity — Trigger Table</a></td>
+<td>josyn-platform</td>
+<td>reference</td>
+<td>Maps changed file paths to sanity categories for smart-mode runs.</td>
+</tr>
+<tr>
+<td><a href="guides/josyn-platform/sanity/index.html">Sanity Check — Method and Manual</a></td>
+<td>josyn-platform</td>
+<td>manual</td>
+<td>Defines the sanity check method, profiles, workflow, and safety rules.</td>
+</tr>
+<tr>
+<td><a href="guides/josyn-platform/sanity/overview.html">Sanity Check — Platform Overview</a></td>
+<td>josyn-platform</td>
+<td>overview</td>
+<td>Shows the aggregated sanity status across platform repositories.</td>
+</tr>
+<tr>
+<td><a href="reference/josyn-platform/sanity/criteria/architecture.html">Sanity Criteria — architecture</a></td>
+<td>josyn-platform</td>
+<td>reference</td>
+<td>Defines architecture criteria used during sanity checks.</td>
+</tr>
+<tr>
+<td><a href="guides/josyn-platform/sanity/criteria-review.html">Sanity Criteria — Decision-Maker Review</a></td>
+<td>josyn-platform</td>
+<td>manual</td>
+<td>Guides periodic review of sanity criteria quality, coverage, and noise.</td>
+</tr>
+<tr>
+<td><a href="reference/josyn-platform/sanity/criteria/docs.html">Sanity Criteria — docs</a></td>
+<td>josyn-platform</td>
+<td>reference</td>
+<td>Defines documentation completeness and quality criteria for sanity checks.</td>
+</tr>
+<tr>
+<td><a href="reference/josyn-platform/sanity/criteria/principles.html">Sanity Criteria — principles</a></td>
+<td>josyn-platform</td>
+<td>reference</td>
+<td>Defines principle-based coding criteria for sanity checks.</td>
+</tr>
+<tr>
+<td><a href="reference/josyn-platform/sanity/criteria/standards.html">Sanity Criteria — standards</a></td>
+<td>josyn-platform</td>
+<td>reference</td>
+<td>Defines naming and structural standards checked by sanity runs.</td>
+</tr>
+<tr>
+<td><a href="reference/josyn-platform/sanity/criteria/tests.html">Sanity Criteria — tests</a></td>
+<td>josyn-platform</td>
+<td>reference</td>
+<td>Defines test coverage, quality, and passing criteria for sanity checks.</td>
+</tr>
+<tr>
+<td><a href="reference/josyn-platform/sanity/current-state/josyn-backend.html">Sanity State — josyn-backend</a></td>
+<td>josyn-platform</td>
+<td>reference</td>
+<td>Will report the current sanity status of josyn-backend once checked.</td>
+</tr>
+<tr>
+<td><a href="reference/josyn-platform/sanity/current-state/josyn-commons.html">Sanity State — josyn-commons</a></td>
+<td>josyn-platform</td>
+<td>reference</td>
+<td>Will report the current sanity status of josyn-commons once checked.</td>
+</tr>
+<tr>
+<td><a href="reference/josyn-platform/sanity/current-state/josyn-foundation.html">Sanity State — josyn-foundation</a></td>
+<td>josyn-platform</td>
+<td>reference</td>
+<td>Records the latest sanity findings and fixes for josyn-foundation.</td>
+</tr>
+<tr>
+<td><a href="reference/josyn-platform/sanity/current-state/josyn-jap.html">Sanity State — josyn-jap</a></td>
+<td>josyn-platform</td>
+<td>reference</td>
+<td>Records the latest sanity findings and scope for josyn-jap.</td>
+</tr>
+<tr>
+<td><a href="reference/josyn-platform/sanity/current-state/josyn-job-host.html">Sanity State — josyn-job-host</a></td>
+<td>josyn-platform</td>
+<td>reference</td>
+<td>Will report the current sanity status of josyn-job-host once checked.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/03-physical-architecture/services-and-executables.html">Services and Executables</a></td>
+<td>josyn-platform</td>
+<td>solution-architecture</td>
+<td>Describes the executables and service roles in the backend runtime.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/03-physical-architecture/session-store.html">Session Store</a></td>
+<td>josyn-platform</td>
+<td>solution-architecture</td>
+<td>Explains the session store’s runtime roles within the deployed solution.</td>
+</tr>
+<tr>
+<td><a href="notes/josyn-platform/plans/sessionstore-poc-roadmap.html">SessionStore -&gt; josyn-backend PoC Roadmap</a></td>
+<td>josyn-platform</td>
+<td>plan</td>
+<td>Plans the migration of the SessionStore prototype into josyn-backend.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/settled-decisions.html">Settled Decisions</a></td>
+<td>josyn-platform</td>
+<td>solution-architecture</td>
+<td>Lists the non-negotiable baseline decisions of the JOSYN solution.</td>
+</tr>
+<tr>
+<td><a href="guides/josyn-toolbox/site-builder/index.html">site-builder — JOSYN Documentation Pipeline</a></td>
+<td>josyn-toolbox</td>
+<td>manual</td>
+<td>Introduces the site-builder pipeline: a three-part toolchain (indexer, assembler, renderer) that assembles scattered JOSYN markdown documentation into a navigable HTML site, with source location and site structure kept as separate concerns.</td>
+</tr>
+<tr>
+<td><a href="guides/josyn-toolbox/site-builder/site-builder-assembler/index.html">site-builder-assembler</a></td>
+<td>josyn-toolbox</td>
+<td>manual</td>
+<td>Documents the site-builder-assembler tool that reads docs-index.json and site-map.yaml, stages files into a logical folder structure, generates landing and search pages, and optionally invokes the renderer.</td>
+</tr>
+<tr>
+<td><a href="guides/josyn-toolbox/site-builder/site-builder-indexer/index.html">site-builder-indexer</a></td>
+<td>josyn-toolbox</td>
+<td>manual</td>
+<td>Documents the site-builder-indexer tool that scans all JOSYN repos for markdown files and produces the docs-index.json catalogue consumed by the rest of the pipeline.</td>
+</tr>
+<tr>
+<td><a href="guides/josyn-toolbox/site-builder/site-builder-renderer/index.html">site-builder-renderer</a></td>
+<td>josyn-toolbox</td>
+<td>manual</td>
+<td>Documents the site-builder-renderer C# tool that converts a staged folder of markdown files into a self-contained static HTML site with sidebar navigation and responsive design.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/index.html">Solution Architecture</a></td>
+<td>josyn-platform</td>
+<td>overview</td>
+<td>Introduces the solution architecture view of JOSYN in real deployment context.</td>
+</tr>
+<tr>
+<td><a href="architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/yagni-decisions.html">YAGNI Decisions</a></td>
+<td>josyn-platform</td>
+<td>solution-architecture</td>
+<td>Records capabilities deliberately deferred under YAGNI discipline.</td>
+</tr>
+</tbody>
+</table>
+<script>
+document.getElementById('doc-search').addEventListener('input', function() {
+  var q = this.value.toLowerCase();
+  document.querySelectorAll('table tbody tr').forEach(function(r) {
+    r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+});
+</script>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+</body>
+</html>

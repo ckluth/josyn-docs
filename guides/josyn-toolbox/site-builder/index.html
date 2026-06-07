@@ -1,0 +1,364 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>site-builder — JOSYN Documentation Pipeline — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../index.html" class="nav-home">JOSYN Documentation</a>
+<div class="nav-section">Architecture</div>
+<a href="../../../architecture/josyn-backend/josyn-backend-bootstrap-config/JOSYN.Backend.BootstrapConfig/index.html" class="nav-link">Overview</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-error-handler/JOSYN.Backend.ErrorHandler/index.html" class="nav-link">JOSYN.Backend.ErrorHandler</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-jap-server/JOSYN.Jap.JAPServer/index.html" class="nav-link">JOSYN.Jap.JAPServer</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-job-registry/JOSYN.Backend.JobRegistry/index.html" class="nav-link">JOSYN.Backend.JobRegistry</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-session-starter/JOSYN.Backend.SessionStarter/index.html" class="nav-link">JOSYN.Backend.SessionStarter</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-session-store/JOSYN.Backend.SessionStore/index.html" class="nav-link">JOSYN.Backend.SessionStore</a>
+<a href="../../../architecture/josyn-commons/josyn-commons-log/JOSYN.Commons.Log/index.html" class="nav-link">JOSYN.Commons.Log</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/Docs/josyn-ipc-protocol-draft-01.html" class="nav-link">JOSYN-IPC-Protocol</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/index.html" class="nav-link">JOSYN.Foundation.JIP</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/index.html" class="nav-link">JOSYN.Foundation.PropertyBag</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/index.html" class="nav-link">JOSYN.Foundation.ResultPattern</a>
+<a href="../../../architecture/josyn-jap/josyn-jap-shared/JOSYN.Jap.Shared.Contract/index.html" class="nav-link">JOSYN.Jap.Shared.Contract</a>
+<a href="../../../architecture/josyn-job-host/JOSYN.JobHost/index.html" class="nav-link">JOSYN.JobHost</a>
+<a href="../../../architecture/josyn-platform/architecture/overview.html" class="nav-link">Architecture Overview</a>
+<a href="../../../architecture/josyn-platform/architecture/storage.html" class="nav-link">JOSYN Storage Realm</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/01-context/josyn-and-jobsystem.html" class="nav-link">JOSYN and its Predecessor</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/01-context/index.html" class="nav-link">Context</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/index.html" class="nav-link">Constraints &amp; Settled Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/settled-decisions.html" class="nav-link">Settled Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/folder-layout.html" class="nav-link">Folder Layout</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/job-registry.html" class="nav-link">Job Registry</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/machine-topology.html" class="nav-link">Machine Topology</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/index.html" class="nav-link">Physical Architecture</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/services-and-executables.html" class="nav-link">Services and Executables</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/session-store.html" class="nav-link">Session Store</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/04-identity-and-security/identity-and-impersonation.html" class="nav-link">Identity and Impersonation</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/04-identity-and-security/index.html" class="nav-link">Identity &amp; Security</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/05-deployment-and-operations/job-deployment.html" class="nav-link">Job Deployment</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/05-deployment-and-operations/index.html" class="nav-link">Deployment &amp; Operations</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/audit-and-session-record.html" class="nav-link">Audit and the Session Record</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/coexistence-with-jobsystem.html" class="nav-link">Coexistence with JobSystem</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/isolation-vs-integration.html" class="nav-link">Isolation vs. Integration</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/maintainability-and-knowledge-transfer.html" class="nav-link">Maintainability and Knowledge Transfer</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/index.html" class="nav-link">Company Fit</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/evolution-horizon.html" class="nav-link">Evolution Horizon</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/index.html" class="nav-link">Evolution &amp; Lifecycle</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/yagni-decisions.html" class="nav-link">YAGNI Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/08-documentation-and-training/overview.html" class="nav-link">Documentation and Training — Overview</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/08-documentation-and-training/index.html" class="nav-link">Documentation &amp; Training</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/index.html" class="nav-link">Solution Architecture</a>
+<a href="../../../architecture/index.html" class="nav-link">Architecture</a>
+<div class="nav-section">Decisions</div>
+<a href="../../../decisions/index.html" class="nav-link">Overview</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-001-platform-naming.html" class="nav-link">ADR-001 — Platform Naming Vocabulary</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-002-josyn-backend.html" class="nav-link">ADR-002 — Introducing `josyn-backend` as a Separate Layer</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-003-josyn-commons.html" class="nav-link">ADR-003 — josyn-commons: A Generic Utility Layer</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-004-japserver-relocation.html" class="nav-link">ADR-004 — JAPServer Relocation into josyn-backend</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-005-documentation-governance.html" class="nav-link">ADR-005 — Documentation Governance and Agentic Way of Work</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-006-instance-types-for-dependency-holding-services.html" class="nav-link">ADR-006 — Instance Types for Dependency-Holding Services</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-007-storage-realm.html" class="nav-link">ADR-007 — The JOSYN Storage Realm</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-008-locallog-relocation.html" class="nav-link">ADR-008 — LocalLog Relocation to josyn-commons</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-009-runtime-context-provider-pattern.html" class="nav-link">ADR-009 — Runtime Context Provider Pattern for External Integrations</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-010-environment-separation.html" class="nav-link">ADR-010 — Environment Separation and Installation Model</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-011-jip-enum-support.html" class="nav-link">ADR-011 — JIP Wire-Type Extension: Enum Support in JipDispatcher</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-012-maintainer-deployment.html" class="nav-link">ADR-012 — Maintainer Deployment (First Iteration)</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-013-job-dev-mode.html" class="nav-link">ADR-013 — Job Dev Mode: Running a Job Locally from the IDE</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-014-cli-run-job-local-args.html" class="nav-link">ADR-014 — CLI `run-job` Command and Local Arguments Convention</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-001-backend-building-block-model.html" class="nav-link">ADR-001 — Backend Building Block Model</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-002-session-store.html" class="nav-link">ADR-002 — SessionStore</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-003-global-config.html" class="nav-link">ADR-003 — GlobalConfig</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-004-backend-restructuring.html" class="nav-link">ADR-004 — Backend Restructuring: Trigger Executables, ErrorHandler, and SessionStarter Fire-and-Forget Correction</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-005-job-registry.html" class="nav-link">ADR-005 — JobRegistry</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-006-error-handler.html" class="nav-link">ADR-006 — ErrorHandler</a>
+<div class="nav-section">Guides</div>
+<a href="../../josyn-platform/sanity/index.html" class="nav-link">Overview</a>
+<a href="../../josyn-platform/sanity/criteria-review.html" class="nav-link">Sanity Criteria — Decision-Maker Review</a>
+<a href="../../josyn-platform/sanity/overview.html" class="nav-link">Sanity Check — Platform Overview</a>
+<a href="../../josyn-platform/temp/arggen-inspection-guide.html" class="nav-link">ArgGen — Inspection &amp; Smoke-Test Guide</a>
+<a href="../deploy/index.html" class="nav-link">deploy</a>
+<a href="../git-tools/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="index.html" class="nav-link active">site-builder — JOSYN Documentation Pipeline</a>
+<a href="site-builder-assembler/index.html" class="nav-link">site-builder-assembler</a>
+<a href="site-builder-indexer/index.html" class="nav-link">site-builder-indexer</a>
+<a href="site-builder-renderer/index.html" class="nav-link">site-builder-renderer</a>
+<a href="../../index.html" class="nav-link">Guides</a>
+<div class="nav-section">Notes</div>
+<a href="../../../notes/index.html" class="nav-link">Overview</a>
+<a href="../../../notes/josyn-platform/plans/sessionstore-poc-roadmap.html" class="nav-link">SessionStore -&gt; josyn-backend PoC Roadmap</a>
+<a href="../../../notes/josyn-platform/ROADMAP.html" class="nav-link">JOSYN Platform — Roadmap &amp; Status</a>
+<a href="../../../notes/josyn-platform/temp/poc-phases-2-5-notes.html" class="nav-link">PoC Phases 2–5 — Inspection &amp; Runtime Notes</a>
+<a href="../../../notes/josyn-platform/thinking/documentation-taxonomy.html" class="nav-link">Documentation Taxonomy — Working Note</a>
+<div class="nav-section">Reference</div>
+<a href="../../../reference/index.html" class="nav-link">Overview</a>
+<a href="../../../reference/josyn-backend/db/error-report.html" class="nav-link">JOSYN Error Report</a>
+<a href="../../../reference/josyn-backend/db/session-report.html" class="nav-link">JOSYN Session Report</a>
+<a href="../../../reference/josyn-commons/MAINTAINERS.html" class="nav-link">Advice for Maintainers of josyn-commons</a>
+<a href="../../../reference/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../reference/josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../reference/josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../reference/josyn-platform/architecture/coding-standards.html" class="nav-link">Coding Standards — Functional-First C#</a>
+<a href="../../../reference/josyn-platform/architecture/docs-index-vocabulary.html" class="nav-link">docs-index Vocabulary</a>
+<a href="../../../reference/josyn-platform/architecture/local-build.html" class="nav-link">`.local-build` — Local Developer Tooling</a>
+<a href="../../../reference/josyn-platform/architecture/naming-conventions.html" class="nav-link">Naming Conventions</a>
+<a href="../../../reference/josyn-platform/architecture/repo-structure-conventions.html" class="nav-link">Repo Structure Conventions</a>
+<a href="../../../reference/josyn-platform/MAINTAINERS.html" class="nav-link">JOSYN Platform — Maintainer&#39;s Guide</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/architecture.html" class="nav-link">Sanity Criteria — architecture</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/docs.html" class="nav-link">Sanity Criteria — docs</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/principles.html" class="nav-link">Sanity Criteria — principles</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/standards.html" class="nav-link">Sanity Criteria — standards</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/tests.html" class="nav-link">Sanity Criteria — tests</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-backend.html" class="nav-link">Sanity State — josyn-backend</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-commons.html" class="nav-link">Sanity State — josyn-commons</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-foundation.html" class="nav-link">Sanity State — josyn-foundation</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-jap.html" class="nav-link">Sanity State — josyn-jap</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-job-host.html" class="nav-link">Sanity State — josyn-job-host</a>
+<a href="../../../reference/josyn-platform/sanity/triggers.html" class="nav-link">Sanity — Trigger Table</a>
+<div class="nav-section">Repos</div>
+<a href="../../../repos/josyn-backend/index.html" class="nav-link">Overview</a>
+<a href="../../../repos/josyn-commons/index.html" class="nav-link">josyn-commons</a>
+<a href="../../../repos/josyn-contoso/index.html" class="nav-link">josyn-contoso</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-jip/index.html" class="nav-link">josyn-foundation-jip</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-property-bag/index.html" class="nav-link">josyn-foundation-property-bag</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-result-pattern/index.html" class="nav-link">josyn-foundation-result-pattern</a>
+<a href="../../../repos/josyn-foundation/index.html" class="nav-link">josyn-foundation</a>
+<a href="../../../repos/josyn-jap/josyn-jap-shared/index.html" class="nav-link">JOSYN.Jap.Shared</a>
+<a href="../../../repos/josyn-jap/index.html" class="nav-link">josyn-jap</a>
+<a href="../../../repos/josyn-platform/index.html" class="nav-link">JOSYN Platform</a>
+<a href="../../../repos/josyn-platform/repos/josyn-backend/overview.html" class="nav-link">josyn-backend</a>
+<a href="../../../repos/josyn-platform/repos/josyn-commons.html" class="nav-link">josyn-commons</a>
+<a href="../../../repos/josyn-platform/repos/josyn-foundation.html" class="nav-link">josyn-foundation</a>
+<a href="../../../repos/josyn-platform/repos/josyn-jap.html" class="nav-link">josyn-jap</a>
+<a href="../../../repos/josyn-platform/repos/josyn-job-host.html" class="nav-link">josyn-job-host</a>
+<a href="../../../repos/josyn-toolbox/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="../../../repos/index.html" class="nav-link">Repos</a>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="site-builder-josyn-documentation-pipeline">site-builder — JOSYN Documentation Pipeline</h1>
+<p>A three-part toolchain that assembles the scattered markdown documentation across all JOSYN
+repositories into a single, navigable HTML site.</p>
+<p>The central design idea: <strong>where a document lives and where it appears to readers are two
+separate concerns.</strong> Documents stay in their natural home — the repo and folder they belong
+to. The <code>site-map.yaml</code> defines the logical site structure independently: which sections
+exist, which documents belong to each, and which to skip. The assembler bridges the two.
+Reorganising the site never touches a source file. Adding a new repo's docs to the site
+is a one-line change in the YAML.</p>
+<p>A second separation runs across the toolchain itself: <strong>discovery, semantic enrichment,
+logical assembly, and HTML rendering are four distinct steps</strong>, each with its own cadence
+and ownership. The indexer knows about repos. The AI enrichment pass knows about meaning.
+The assembler knows about structure. The renderer knows about HTML. None reaches into the
+others' concerns.</p>
+<hr />
+<h2 id="the-pipeline">The pipeline</h2>
+<pre><code>Step 1 — Index                Step 2 — Assemble              Step 3 — Render
+─────────────────────         ──────────────────────         ─────────────────
+Walk all JOSYN repos          Read docs-index.json           Take the staged
+Find every *.md file          and site-map.yaml              markdown folder
+                              Apply skip / section /         Convert to HTML
+Produce:                      override rules                 site with nav,
+  docs-index.json      ──►    Copy files to staging    ──►   CSS, responsive
+  (with git dates,           Generate landing page           design
+  preserved semantic          Generate search page
+  fields)                                                    josyn-docs/
+</code></pre>
+<p><strong>Run order:</strong> indexer → (AI enrichment) → assembler → <em>(inspect staging)</em> → renderer.</p>
+<p>The assembler and renderer are <strong>deliberately separate steps</strong>: after assembling you can
+inspect the staging folder (<code>temp\josyn-site-staging</code>) before committing to the HTML
+output. Only run the renderer when the staged content looks right.</p>
+<hr />
+<h2 id="parts">Parts</h2>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Entry point</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="site-builder-indexer/index.html"><code>site-builder-indexer</code></a></td>
+<td><code>site-builder-indexer.cmd</code></td>
+<td>Scans repos → <code>docs-index.json</code></td>
+</tr>
+<tr>
+<td><a href="site-builder-assembler/index.html"><code>site-builder-assembler</code></a></td>
+<td><code>site-builder-assembler.cmd</code></td>
+<td>Stages files + calls renderer</td>
+</tr>
+<tr>
+<td><a href="site-builder-renderer/index.html"><code>site-builder-renderer</code></a></td>
+<td>Called by assembler; also standalone via <code>site-builder-renderer.cmd</code></td>
+<td>Markdown folder → HTML site</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="configuration-files">Configuration files</h2>
+<p>Both live in <code>josyn-platform/docs/</code> — they are editorial artefacts, not tools:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../josyn-platform/docs/docs-index.json"><code>docs-index.json</code></a></td>
+<td>Master index of all docs. Produced by the indexer, enriched by AI, consumed by the assembler.</td>
+</tr>
+<tr>
+<td><a href="../../josyn-platform/docs/site-map.yaml"><code>site-map.yaml</code></a></td>
+<td>Assembly rules: sections, skip lists, per-file overrides, reading paths. Hand-maintained.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="typical-workflow">Typical workflow</h2>
+<h3 id="full-rebuild-after-doc-changes">Full rebuild (after doc changes)</h3>
+<pre><code>1. site-builder-indexer.cmd      — update docs-index.json
+2. (AI enrichment pass if new docs were added — see enrich-docs-index-prompt.md)
+3. site-builder-assembler.cmd    — stage files → temp\josyn-site-staging\
+4. (inspect staging if needed)
+5. site-builder-renderer.cmd     — render staged folder → josyn-docs\
+6. git commit in josyn-docs       — publish
+</code></pre>
+<h3 id="first-time-setup">First-time setup</h3>
+<pre><code>1. site-builder-indexer.cmd
+2. Run AI enrichment (josyn-platform/docs/enrich-docs-index-prompt.md)
+3. Edit josyn-platform/docs/site-map.yaml — review sections, curate reading paths
+4. site-builder-assembler.cmd
+5. site-builder-renderer.cmd
+</code></pre>
+<h3 id="adjust-site-structure-no-doc-changes">Adjust site structure (no doc changes)</h3>
+<pre><code>1. Edit josyn-platform/docs/site-map.yaml
+2. site-builder-assembler.cmd
+3. site-builder-renderer.cmd
+</code></pre>
+<hr />
+<h2 id="dependencies">Dependencies</h2>
+<ul>
+<li><code>pwsh</code> (PowerShell 7+)</li>
+<li><code>dotnet</code> SDK — for running the renderer</li>
+<li>All JOSYN repos cloned as siblings under the same root directory (e.g. <code>C:\DevGit</code>)</li>
+<li><code>cfg/cfg-detect-root.cmd</code> — machine-specific root path resolution</li>
+</ul>
+<hr />
+<h2 id="output">Output</h2>
+<p>The site is written to <code>josyn-docs/</code> (defined in <code>site-map.yaml</code> under <code>site.output</code>).
+It is a self-contained static HTML site — no server required, browsable from <code>file://</code>.
+It is also published via GitHub Pages.</p>
+<hr />
+<h2 id="azure-devops-pipeline-readiness">Azure DevOps pipeline readiness</h2>
+<blockquote>
+<p><strong>Not yet done — future task.</strong></p>
+</blockquote>
+<p>The PS1 scripts are already CI-friendly (explicit path parameters, clean exit codes, no
+interactive elements). The <code>.cmd</code> wrappers and path detection are not. The following
+changes are needed before this pipeline can run unattended on an Azure DevOps agent.</p>
+<h3 id="remove-pause-from-all.cmd-wrappers">1. Remove <code>pause</code> from all <code>.cmd</code> wrappers</h3>
+<p>Every <code>.cmd</code> ends with <code>pause</code>, which hangs a CI agent indefinitely. Replace with a
+conditional that only pauses on a developer machine:</p>
+<pre><code class="language-cmd">IF &quot;%TF_BUILD%&quot;==&quot;&quot; pause
+</code></pre>
+<p>Affects: <code>site-builder-indexer.cmd</code>, <code>site-builder-assembler.cmd</code>, <code>site-builder-renderer.cmd</code>.</p>
+<h3 id="make-cfg-detect-root.cmd-ci-aware">2. Make <code>cfg-detect-root.cmd</code> CI-aware</h3>
+<p><code>cfg-detect-root.cmd</code> resolves the <code>ROOT</code> path by matching <code>COMPUTERNAME</code> against known
+machine name prefixes. An Azure DevOps agent has an unknown hostname and falls through to
+the hardcoded developer default (<code>C:\DevGit</code>), which will not exist on the agent.</p>
+<p>Fix: detect the <code>TF_BUILD</code> environment variable (set automatically by Azure DevOps) and
+derive <code>ROOT</code> from a pipeline variable or from <code>$(Build.SourcesDirectory)</code>:</p>
+<pre><code class="language-cmd">IF DEFINED TF_BUILD ( SET &quot;ROOT=$(Build.SourcesDirectory)&quot; &amp; GOTO :root_resolved )
+</code></pre>
+<p>Alternatively, bypass <code>cfg-detect-root.cmd</code> entirely in CI by calling the PS1 scripts
+directly with explicit <code>-ReposRoot</code> and <code>-StagingDir</code> arguments — which the scripts
+already support.</p>
+<h3 id="multi-repo-checkout-in-the-pipeline-yaml">3. Multi-repo checkout in the pipeline YAML</h3>
+<p>Azure DevOps does not automatically check out all JOSYN repositories. The pipeline YAML
+must declare each repo as a resource and check them all out into a common parent directory
+so that <code>repos-root</code> resolves correctly.</p>
+<pre><code class="language-yaml">resources:
+  repositories:
+    - repository: josyn-platform
+      type: git
+      name: josyn-platform
+    - repository: josyn-foundation
+      ...
+</code></pre>
+<p>Nine repos in total (see <code>cfg/cfg-docs-repos-list.cmd</code> for the full list).</p>
+<h3 id="commit-and-push-josyn-docs">4. Commit and push <code>josyn-docs</code></h3>
+<p>The pipeline must commit and push the generated HTML output to <code>josyn-docs</code>. This requires
+a service connection with write access to the repo, and a post-build step that runs:</p>
+<pre><code>git -C josyn-docs add .
+git -C josyn-docs commit -m &quot;docs: site rebuild [skip ci]&quot;
+git -C josyn-docs push
+</code></pre>
+<h3 id="net-sdk-version">5. .NET SDK version</h3>
+<p>The renderer (<code>site-builder-renderer</code>) targets .NET 8. Verify the Azure DevOps agent
+image includes .NET 8 SDK, or add a <code>UseDotNet</code> task to the pipeline YAML.</p>
+<h3 id="preferred-ci-approach">Preferred CI approach</h3>
+<p>Rather than calling the <code>.cmd</code> wrappers, a CI pipeline should call the PS1 scripts
+directly with fully explicit paths. The assembler and renderer are two separate tasks,
+matching the two-step design:</p>
+<pre><code class="language-yaml">- task: PowerShell@2
+  displayName: Assemble staging folder
+  inputs:
+    filePath: site-builder/site-builder-assembler/.internal/site-builder-assembler.ps1
+    arguments: &gt;
+      -SiteMap &quot;$(Build.SourcesDirectory)/josyn-platform/docs/site-map.yaml&quot;
+      -ReposRoot &quot;$(Build.SourcesDirectory)&quot;
+      -StagingDir &quot;$(Agent.TempDirectory)/josyn-site-staging&quot;
+      -NoBuild
+
+- task: CmdLine@2
+  displayName: Render staged folder to josyn-docs
+  inputs:
+    script: &gt;
+      dotnet run --project
+      site-builder/site-builder-renderer/DocGenerator.csproj --
+      &quot;$(Agent.TempDirectory)/josyn-site-staging&quot;
+      &quot;$(Build.SourcesDirectory)/josyn-docs&quot;
+      &quot;JOSYN Documentation&quot;
+</code></pre>
+<p>This bypasses all <code>.cmd</code> / <code>cfg-detect-root</code> concerns entirely, and makes the
+assemble-then-render split explicit in the pipeline log.</p>
+<hr />
+<h2 id="design-notes">Design notes</h2>
+<p><strong>Why a centralised index instead of frontmatter?</strong></p>
+<p>Most JOSYN docs are <code>README.md</code> files shown on GitHub repo landing pages. YAML frontmatter
+is not hidden by GitHub's markdown renderer — it would degrade every repo homepage.
+The centralised index keeps metadata separate from content, with the indexer as the
+synchronisation bridge.</p>
+<p><strong>Why separate indexer, assembler, and renderer?</strong></p>
+<p>Each step has a different run cadence:</p>
+<ul>
+<li>Index: run when files are added or changed in source repos</li>
+<li>Enrichment: run (AI-assisted) when new docs have no semantic metadata</li>
+<li>Assemble+render: run whenever the site needs to be published</li>
+</ul>
+<p>The separation lets you rerun only what changed.</p>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+</body>
+</html>

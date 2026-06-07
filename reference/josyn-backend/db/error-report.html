@@ -1,0 +1,867 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JOSYN Error Report — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../index.html" class="nav-home">JOSYN Documentation</a>
+<div class="nav-section">Architecture</div>
+<a href="../../../architecture/josyn-backend/josyn-backend-bootstrap-config/JOSYN.Backend.BootstrapConfig/index.html" class="nav-link">Overview</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-error-handler/JOSYN.Backend.ErrorHandler/index.html" class="nav-link">JOSYN.Backend.ErrorHandler</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-jap-server/JOSYN.Jap.JAPServer/index.html" class="nav-link">JOSYN.Jap.JAPServer</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-job-registry/JOSYN.Backend.JobRegistry/index.html" class="nav-link">JOSYN.Backend.JobRegistry</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-session-starter/JOSYN.Backend.SessionStarter/index.html" class="nav-link">JOSYN.Backend.SessionStarter</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-session-store/JOSYN.Backend.SessionStore/index.html" class="nav-link">JOSYN.Backend.SessionStore</a>
+<a href="../../../architecture/josyn-commons/josyn-commons-log/JOSYN.Commons.Log/index.html" class="nav-link">JOSYN.Commons.Log</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/Docs/josyn-ipc-protocol-draft-01.html" class="nav-link">JOSYN-IPC-Protocol</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/index.html" class="nav-link">JOSYN.Foundation.JIP</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/index.html" class="nav-link">JOSYN.Foundation.PropertyBag</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/index.html" class="nav-link">JOSYN.Foundation.ResultPattern</a>
+<a href="../../../architecture/josyn-jap/josyn-jap-shared/JOSYN.Jap.Shared.Contract/index.html" class="nav-link">JOSYN.Jap.Shared.Contract</a>
+<a href="../../../architecture/josyn-job-host/JOSYN.JobHost/index.html" class="nav-link">JOSYN.JobHost</a>
+<a href="../../../architecture/josyn-platform/architecture/overview.html" class="nav-link">Architecture Overview</a>
+<a href="../../../architecture/josyn-platform/architecture/storage.html" class="nav-link">JOSYN Storage Realm</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/01-context/josyn-and-jobsystem.html" class="nav-link">JOSYN and its Predecessor</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/01-context/index.html" class="nav-link">Context</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/index.html" class="nav-link">Constraints &amp; Settled Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/settled-decisions.html" class="nav-link">Settled Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/folder-layout.html" class="nav-link">Folder Layout</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/job-registry.html" class="nav-link">Job Registry</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/machine-topology.html" class="nav-link">Machine Topology</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/index.html" class="nav-link">Physical Architecture</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/services-and-executables.html" class="nav-link">Services and Executables</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/session-store.html" class="nav-link">Session Store</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/04-identity-and-security/identity-and-impersonation.html" class="nav-link">Identity and Impersonation</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/04-identity-and-security/index.html" class="nav-link">Identity &amp; Security</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/05-deployment-and-operations/job-deployment.html" class="nav-link">Job Deployment</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/05-deployment-and-operations/index.html" class="nav-link">Deployment &amp; Operations</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/audit-and-session-record.html" class="nav-link">Audit and the Session Record</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/coexistence-with-jobsystem.html" class="nav-link">Coexistence with JobSystem</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/isolation-vs-integration.html" class="nav-link">Isolation vs. Integration</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/maintainability-and-knowledge-transfer.html" class="nav-link">Maintainability and Knowledge Transfer</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/index.html" class="nav-link">Company Fit</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/evolution-horizon.html" class="nav-link">Evolution Horizon</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/index.html" class="nav-link">Evolution &amp; Lifecycle</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/yagni-decisions.html" class="nav-link">YAGNI Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/08-documentation-and-training/overview.html" class="nav-link">Documentation and Training — Overview</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/08-documentation-and-training/index.html" class="nav-link">Documentation &amp; Training</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/index.html" class="nav-link">Solution Architecture</a>
+<a href="../../../architecture/index.html" class="nav-link">Architecture</a>
+<div class="nav-section">Decisions</div>
+<a href="../../../decisions/index.html" class="nav-link">Overview</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-001-platform-naming.html" class="nav-link">ADR-001 — Platform Naming Vocabulary</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-002-josyn-backend.html" class="nav-link">ADR-002 — Introducing `josyn-backend` as a Separate Layer</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-003-josyn-commons.html" class="nav-link">ADR-003 — josyn-commons: A Generic Utility Layer</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-004-japserver-relocation.html" class="nav-link">ADR-004 — JAPServer Relocation into josyn-backend</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-005-documentation-governance.html" class="nav-link">ADR-005 — Documentation Governance and Agentic Way of Work</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-006-instance-types-for-dependency-holding-services.html" class="nav-link">ADR-006 — Instance Types for Dependency-Holding Services</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-007-storage-realm.html" class="nav-link">ADR-007 — The JOSYN Storage Realm</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-008-locallog-relocation.html" class="nav-link">ADR-008 — LocalLog Relocation to josyn-commons</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-009-runtime-context-provider-pattern.html" class="nav-link">ADR-009 — Runtime Context Provider Pattern for External Integrations</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-010-environment-separation.html" class="nav-link">ADR-010 — Environment Separation and Installation Model</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-011-jip-enum-support.html" class="nav-link">ADR-011 — JIP Wire-Type Extension: Enum Support in JipDispatcher</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-012-maintainer-deployment.html" class="nav-link">ADR-012 — Maintainer Deployment (First Iteration)</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-013-job-dev-mode.html" class="nav-link">ADR-013 — Job Dev Mode: Running a Job Locally from the IDE</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-014-cli-run-job-local-args.html" class="nav-link">ADR-014 — CLI `run-job` Command and Local Arguments Convention</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-001-backend-building-block-model.html" class="nav-link">ADR-001 — Backend Building Block Model</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-002-session-store.html" class="nav-link">ADR-002 — SessionStore</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-003-global-config.html" class="nav-link">ADR-003 — GlobalConfig</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-004-backend-restructuring.html" class="nav-link">ADR-004 — Backend Restructuring: Trigger Executables, ErrorHandler, and SessionStarter Fire-and-Forget Correction</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-005-job-registry.html" class="nav-link">ADR-005 — JobRegistry</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-006-error-handler.html" class="nav-link">ADR-006 — ErrorHandler</a>
+<div class="nav-section">Guides</div>
+<a href="../../../guides/josyn-platform/sanity/index.html" class="nav-link">Overview</a>
+<a href="../../../guides/josyn-platform/sanity/criteria-review.html" class="nav-link">Sanity Criteria — Decision-Maker Review</a>
+<a href="../../../guides/josyn-platform/sanity/overview.html" class="nav-link">Sanity Check — Platform Overview</a>
+<a href="../../../guides/josyn-platform/temp/arggen-inspection-guide.html" class="nav-link">ArgGen — Inspection &amp; Smoke-Test Guide</a>
+<a href="../../../guides/josyn-toolbox/deploy/index.html" class="nav-link">deploy</a>
+<a href="../../../guides/josyn-toolbox/git-tools/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="../../../guides/josyn-toolbox/site-builder/index.html" class="nav-link">site-builder — JOSYN Documentation Pipeline</a>
+<a href="../../../guides/josyn-toolbox/site-builder/site-builder-assembler/index.html" class="nav-link">site-builder-assembler</a>
+<a href="../../../guides/josyn-toolbox/site-builder/site-builder-indexer/index.html" class="nav-link">site-builder-indexer</a>
+<a href="../../../guides/josyn-toolbox/site-builder/site-builder-renderer/index.html" class="nav-link">site-builder-renderer</a>
+<a href="../../../guides/index.html" class="nav-link">Guides</a>
+<div class="nav-section">Notes</div>
+<a href="../../../notes/index.html" class="nav-link">Overview</a>
+<a href="../../../notes/josyn-platform/plans/sessionstore-poc-roadmap.html" class="nav-link">SessionStore -&gt; josyn-backend PoC Roadmap</a>
+<a href="../../../notes/josyn-platform/ROADMAP.html" class="nav-link">JOSYN Platform — Roadmap &amp; Status</a>
+<a href="../../../notes/josyn-platform/temp/poc-phases-2-5-notes.html" class="nav-link">PoC Phases 2–5 — Inspection &amp; Runtime Notes</a>
+<a href="../../../notes/josyn-platform/thinking/documentation-taxonomy.html" class="nav-link">Documentation Taxonomy — Working Note</a>
+<div class="nav-section">Reference</div>
+<a href="../../index.html" class="nav-link">Overview</a>
+<a href="error-report.html" class="nav-link active">JOSYN Error Report</a>
+<a href="session-report.html" class="nav-link">JOSYN Session Report</a>
+<a href="../../josyn-commons/MAINTAINERS.html" class="nav-link">Advice for Maintainers of josyn-commons</a>
+<a href="../../josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../josyn-platform/architecture/coding-standards.html" class="nav-link">Coding Standards — Functional-First C#</a>
+<a href="../../josyn-platform/architecture/docs-index-vocabulary.html" class="nav-link">docs-index Vocabulary</a>
+<a href="../../josyn-platform/architecture/local-build.html" class="nav-link">`.local-build` — Local Developer Tooling</a>
+<a href="../../josyn-platform/architecture/naming-conventions.html" class="nav-link">Naming Conventions</a>
+<a href="../../josyn-platform/architecture/repo-structure-conventions.html" class="nav-link">Repo Structure Conventions</a>
+<a href="../../josyn-platform/MAINTAINERS.html" class="nav-link">JOSYN Platform — Maintainer&#39;s Guide</a>
+<a href="../../josyn-platform/sanity/criteria/architecture.html" class="nav-link">Sanity Criteria — architecture</a>
+<a href="../../josyn-platform/sanity/criteria/docs.html" class="nav-link">Sanity Criteria — docs</a>
+<a href="../../josyn-platform/sanity/criteria/principles.html" class="nav-link">Sanity Criteria — principles</a>
+<a href="../../josyn-platform/sanity/criteria/standards.html" class="nav-link">Sanity Criteria — standards</a>
+<a href="../../josyn-platform/sanity/criteria/tests.html" class="nav-link">Sanity Criteria — tests</a>
+<a href="../../josyn-platform/sanity/current-state/josyn-backend.html" class="nav-link">Sanity State — josyn-backend</a>
+<a href="../../josyn-platform/sanity/current-state/josyn-commons.html" class="nav-link">Sanity State — josyn-commons</a>
+<a href="../../josyn-platform/sanity/current-state/josyn-foundation.html" class="nav-link">Sanity State — josyn-foundation</a>
+<a href="../../josyn-platform/sanity/current-state/josyn-jap.html" class="nav-link">Sanity State — josyn-jap</a>
+<a href="../../josyn-platform/sanity/current-state/josyn-job-host.html" class="nav-link">Sanity State — josyn-job-host</a>
+<a href="../../josyn-platform/sanity/triggers.html" class="nav-link">Sanity — Trigger Table</a>
+<div class="nav-section">Repos</div>
+<a href="../../../repos/josyn-backend/index.html" class="nav-link">Overview</a>
+<a href="../../../repos/josyn-commons/index.html" class="nav-link">josyn-commons</a>
+<a href="../../../repos/josyn-contoso/index.html" class="nav-link">josyn-contoso</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-jip/index.html" class="nav-link">josyn-foundation-jip</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-property-bag/index.html" class="nav-link">josyn-foundation-property-bag</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-result-pattern/index.html" class="nav-link">josyn-foundation-result-pattern</a>
+<a href="../../../repos/josyn-foundation/index.html" class="nav-link">josyn-foundation</a>
+<a href="../../../repos/josyn-jap/josyn-jap-shared/index.html" class="nav-link">JOSYN.Jap.Shared</a>
+<a href="../../../repos/josyn-jap/index.html" class="nav-link">josyn-jap</a>
+<a href="../../../repos/josyn-platform/index.html" class="nav-link">JOSYN Platform</a>
+<a href="../../../repos/josyn-platform/repos/josyn-backend/overview.html" class="nav-link">josyn-backend</a>
+<a href="../../../repos/josyn-platform/repos/josyn-commons.html" class="nav-link">josyn-commons</a>
+<a href="../../../repos/josyn-platform/repos/josyn-foundation.html" class="nav-link">josyn-foundation</a>
+<a href="../../../repos/josyn-platform/repos/josyn-jap.html" class="nav-link">josyn-jap</a>
+<a href="../../../repos/josyn-platform/repos/josyn-job-host.html" class="nav-link">josyn-job-host</a>
+<a href="../../../repos/josyn-toolbox/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="../../../repos/index.html" class="nav-link">Repos</a>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="josyn-error-report">JOSYN Error Report</h1>
+<p>Generated: 2026-06-06 12:40:19  |  Showing last <strong>50</strong> entries  |  Found: <strong>14</strong></p>
+<h2 id="uebersicht">Uebersicht</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>OccurredAt</th>
+<th>Causer</th>
+<th>JobName</th>
+<th>SessionGuid</th>
+<th>Message</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#error-1">1</a></td>
+<td>2026-06-06 11:56:04</td>
+<td>JOSYN.Jap.JAPServer.Host.RunServer</td>
+<td>Contoso.DemoProduct.DemoJob</td>
+<td>feb09a53-50e5-4151-b5a8-c4e41d9a2b7b</td>
+<td>Client-Exe not found: C:\ProgramData\JOSYN\JobRepository\Contoso.DemoProduct.DemoJob.exe</td>
+</tr>
+<tr>
+<td><a href="#error-2">2</a></td>
+<td>2026-06-06 11:13:43</td>
+<td>RunServer</td>
+<td>Contoso.DemoProduct.DemoJob</td>
+<td>59ff1f8b-7965-438b-bc64-c7d3c1bb6a45</td>
+<td>Client-Exe not found: C:\ProgramData\JOSYN\JobRepository\Contoso.DemoProduct.DemoJob.exe</td>
+</tr>
+<tr>
+<td><a href="#error-3">3</a></td>
+<td>2026-06-06 11:13:03</td>
+<td>RunServer</td>
+<td>Contoso.DemoProduct.DemoJob</td>
+<td>d8d4148c-a17f-4e5b-b43a-e9150487b4aa</td>
+<td>Client-Exe not found: C:\ProgramData\JOSYN\JobRepository\Contoso.DemoProduct.DemoJob.exe</td>
+</tr>
+<tr>
+<td><a href="#error-4">4</a></td>
+<td>2026-06-06 00:57:28</td>
+<td><Main>$</td>
+<td>-</td>
+<td>-</td>
+<td>Job nicht registriert: 'Contoso.DemoProduct.DemoJob'. Bitte zuerst in josyn.JobRegistry eintragen.</td>
+</tr>
+<tr>
+<td><a href="#error-5">5</a></td>
+<td>2026-06-06 00:57:11</td>
+<td><Main>$</td>
+<td>-</td>
+<td>-</td>
+<td>Job nicht registriert: 'Contoso.DemoProduct.DemoJob'. Bitte zuerst in josyn.JobRegistry eintragen.</td>
+</tr>
+<tr>
+<td><a href="#error-6">6</a></td>
+<td>2026-06-05 23:42:31</td>
+<td>HandleHandlerError</td>
+<td>MyDemoCompany.MyDemoProduct.MyDemoJob</td>
+<td>264569b6-05b3-4372-844f-50b6ffcaf61f</td>
+<td>Fehler beim Verarbeiten der Anfrage: {&quot;What&quot;:&quot;GetEnvironment&quot;,&quot;Data&quot;:null}</td>
+</tr>
+<tr>
+<td><a href="#error-7">7</a></td>
+<td>2026-06-05 23:38:32</td>
+<td>HandleHandlerError</td>
+<td>MyDemoCompany.MyDemoProduct.MyDemoJob</td>
+<td>74ac1f2c-272e-42f9-8354-19b1bb63d7cf</td>
+<td>Fehler beim Verarbeiten der Anfrage: {&quot;What&quot;:&quot;GetEnvironment&quot;,&quot;Data&quot;:null}</td>
+</tr>
+<tr>
+<td><a href="#error-8">8</a></td>
+<td>2026-06-05 16:26:13</td>
+<td>RunServer</td>
+<td>MyDemoCompany.MyDemoProduct.MyDemoJob</td>
+<td>bef44539-bda6-4ee7-b8e2-2703c2f5fdd7</td>
+<td>Methode 'IJosynApplicationProtocol.GetEnvironment' hat eine nicht unterstützte Signatur für RegisterAll. Unterstützt: Ta ...</td>
+</tr>
+<tr>
+<td><a href="#error-9">9</a></td>
+<td>2026-06-05 16:21:23</td>
+<td>RunServer</td>
+<td>MyDemoCompany.MyDemoProduct.MyDemoJob</td>
+<td>2dd50f74-912e-4d31-8e64-b23d098e47d3</td>
+<td>Methode 'IJosynApplicationProtocol.GetEnvironment' hat eine nicht unterstützte Signatur für RegisterAll. Unterstützt: Ta ...</td>
+</tr>
+<tr>
+<td><a href="#error-10">10</a></td>
+<td>2026-06-05 16:17:06</td>
+<td>RunServer</td>
+<td>MyDemoCompany.MyDemoProduct.MyDemoJob</td>
+<td>07ac267c-0df9-4238-9757-b021630f82aa</td>
+<td>Methode 'IJosynApplicationProtocol.GetEnvironment' hat eine nicht unterstützte Signatur für RegisterAll. Unterstützt: Ta ...</td>
+</tr>
+<tr>
+<td><a href="#error-11">11</a></td>
+<td>2026-06-05 16:03:54</td>
+<td>RunServer</td>
+<td>MyDemoCompany.MyDemoProduct.MyDemoJob</td>
+<td>d59ac543-5a86-442c-bf20-face9eed08fa</td>
+<td>Methode 'IJosynApplicationProtocol.GetEnvironment' hat eine nicht unterstützte Signatur für RegisterAll. Unterstützt: Ta ...</td>
+</tr>
+<tr>
+<td><a href="#error-12">12</a></td>
+<td>2026-06-05 16:02:06</td>
+<td>RunServer</td>
+<td>MyDemoCompany.MyDemoProduct.MyDemoJob</td>
+<td>6fbdc7ce-6e51-4f07-9fff-49f1a6fab95b</td>
+<td>Methode 'IJosynApplicationProtocol.GetEnvironment' hat eine nicht unterstützte Signatur für RegisterAll. Unterstützt: Ta ...</td>
+</tr>
+<tr>
+<td><a href="#error-13">13</a></td>
+<td>2026-06-05 16:01:39</td>
+<td><Main>$</td>
+<td>-</td>
+<td>-</td>
+<td>JAPServer-Executable nicht gefunden: 'C:\Temp\VS.OUT\JOSYN\JOSYN.Jap.JAPServer\bin\Release\JOSYN.Jap.JAPServer.exe'</td>
+</tr>
+<tr>
+<td><a href="#error-14">14</a></td>
+<td>2026-06-05 16:00:23</td>
+<td><Main>$</td>
+<td>-</td>
+<td>-</td>
+<td>JAPServer-Executable nicht gefunden: 'C:\Temp\VS.OUT\JOSYN\JOSYN.Jap.JAPServer\bin\Release\JOSYN.Jap.JAPServer.exe'</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="details">Details</h2>
+<h3 id="error-1">Error #1</h3>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Wert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UID</td>
+<td>702208f6-60ae-4b48-879d-2beff6ff0e2c</td>
+</tr>
+<tr>
+<td>OccurredAt</td>
+<td>2026-06-06 11:56:04</td>
+</tr>
+<tr>
+<td>Causer</td>
+<td>JOSYN.Jap.JAPServer.Host.RunServer</td>
+</tr>
+<tr>
+<td>JobName</td>
+<td>Contoso.DemoProduct.DemoJob</td>
+</tr>
+<tr>
+<td>SessionGuid</td>
+<td>feb09a53-50e5-4151-b5a8-c4e41d9a2b7b</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Message</strong></p>
+<pre><code>Client-Exe not found: C:\ProgramData\JOSYN\JobRepository\Contoso.DemoProduct.DemoJob.exe
+</code></pre>
+<p><strong>CallStack</strong></p>
+<pre><code>  at PipesServer.StartClientExe()
+  at &lt;RunAsyncInternal&gt;d__1.RunAsyncInternal() in PipesServer.cs:53
+  at &lt;RunAsync&gt;d__0.RunAsync() in PipesServer.cs:39
+</code></pre>
+<hr />
+<h3 id="error-2">Error #2</h3>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Wert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UID</td>
+<td>569cc0e8-ec86-478c-bef7-9279f9ff2fab</td>
+</tr>
+<tr>
+<td>OccurredAt</td>
+<td>2026-06-06 11:13:43</td>
+</tr>
+<tr>
+<td>Causer</td>
+<td>RunServer</td>
+</tr>
+<tr>
+<td>JobName</td>
+<td>Contoso.DemoProduct.DemoJob</td>
+</tr>
+<tr>
+<td>SessionGuid</td>
+<td>59ff1f8b-7965-438b-bc64-c7d3c1bb6a45</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Message</strong></p>
+<pre><code>Client-Exe not found: C:\ProgramData\JOSYN\JobRepository\Contoso.DemoProduct.DemoJob.exe
+</code></pre>
+<p><strong>CallStack</strong></p>
+<pre><code>  at PipesServer.StartClientExe()
+  at &lt;RunAsyncInternal&gt;d__1.RunAsyncInternal() in PipesServer.cs:53
+  at &lt;RunAsync&gt;d__0.RunAsync() in PipesServer.cs:39
+</code></pre>
+<hr />
+<h3 id="error-3">Error #3</h3>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Wert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UID</td>
+<td>18cefcb6-99fb-4ffb-b477-0b51b6809f66</td>
+</tr>
+<tr>
+<td>OccurredAt</td>
+<td>2026-06-06 11:13:03</td>
+</tr>
+<tr>
+<td>Causer</td>
+<td>RunServer</td>
+</tr>
+<tr>
+<td>JobName</td>
+<td>Contoso.DemoProduct.DemoJob</td>
+</tr>
+<tr>
+<td>SessionGuid</td>
+<td>d8d4148c-a17f-4e5b-b43a-e9150487b4aa</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Message</strong></p>
+<pre><code>Client-Exe not found: C:\ProgramData\JOSYN\JobRepository\Contoso.DemoProduct.DemoJob.exe
+</code></pre>
+<p><strong>CallStack</strong></p>
+<pre><code>  at PipesServer.StartClientExe()
+  at &lt;RunAsyncInternal&gt;d__1.RunAsyncInternal() in PipesServer.cs:53
+  at &lt;RunAsync&gt;d__0.RunAsync() in PipesServer.cs:39
+</code></pre>
+<hr />
+<h3 id="error-4">Error #4</h3>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Wert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UID</td>
+<td>b18eb81d-ff66-46ef-b8d7-7725c6c01551</td>
+</tr>
+<tr>
+<td>OccurredAt</td>
+<td>2026-06-06 00:57:28</td>
+</tr>
+<tr>
+<td>Causer</td>
+<td><Main>$</td>
+</tr>
+<tr>
+<td>JobName</td>
+<td>-</td>
+</tr>
+<tr>
+<td>SessionGuid</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Message</strong></p>
+<pre><code>Job nicht registriert: 'Contoso.DemoProduct.DemoJob'. Bitte zuerst in josyn.JobRegistry eintragen.
+</code></pre>
+<p><strong>CallStack</strong></p>
+<pre><code>  at SessionStarter.StartSession()
+</code></pre>
+<hr />
+<h3 id="error-5">Error #5</h3>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Wert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UID</td>
+<td>64849289-244a-47ec-8f47-2be0eda39235</td>
+</tr>
+<tr>
+<td>OccurredAt</td>
+<td>2026-06-06 00:57:11</td>
+</tr>
+<tr>
+<td>Causer</td>
+<td><Main>$</td>
+</tr>
+<tr>
+<td>JobName</td>
+<td>-</td>
+</tr>
+<tr>
+<td>SessionGuid</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Message</strong></p>
+<pre><code>Job nicht registriert: 'Contoso.DemoProduct.DemoJob'. Bitte zuerst in josyn.JobRegistry eintragen.
+</code></pre>
+<p><strong>CallStack</strong></p>
+<pre><code>  at SessionStarter.StartSession()
+</code></pre>
+<hr />
+<h3 id="error-6">Error #6</h3>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Wert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UID</td>
+<td>0daf4352-8ea3-46a0-bacb-cafede233b10</td>
+</tr>
+<tr>
+<td>OccurredAt</td>
+<td>2026-06-05 23:42:31</td>
+</tr>
+<tr>
+<td>Causer</td>
+<td>HandleHandlerError</td>
+</tr>
+<tr>
+<td>JobName</td>
+<td>MyDemoCompany.MyDemoProduct.MyDemoJob</td>
+</tr>
+<tr>
+<td>SessionGuid</td>
+<td>264569b6-05b3-4372-844f-50b6ffcaf61f</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Message</strong></p>
+<pre><code>Fehler beim Verarbeiten der Anfrage: {&quot;What&quot;:&quot;GetEnvironment&quot;,&quot;Data&quot;:null}
+</code></pre>
+<p><strong>ExceptionDetails</strong></p>
+<pre><code>System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---&gt; System.MissingMethodException: Method not found: 'JOSYN.Foundation.ResultPattern.Error JOSYN.Foundation.ResultPattern.Error.op_Implicit(System.String)'.
+   at Contoso.Josyn.Adapter.ContosoConfigSource.GetValue(String key)
+   at Contoso.Josyn.Adapter.ContosoConfigSource.GetValue(String key)
+   at JOSYN.Backend.ConfigStore.ConfigStore.GetValue(String key)
+   at JOSYN.Jap.JAPServer.JAPServer.JOSYN.Jap.Shared.Contract.IJosynApplicationProtocol.GetEnvironment() in C:\Users\chris\OneDrive\DevGit\josyn-backend\josyn-backend-jap-server\JOSYN.Jap.JAPServer\JAPServer.cs:line 75
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+   --- End of inner exception stack trace ---
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+   at JOSYN.Foundation.JIP.JipDispatcher.&lt;&gt;c__DisplayClass12_0`1.&lt;&lt;WrapEnumHandler&gt;b__0&gt;d.MoveNext()
+--- End of stack trace from previous location ---
+   at JOSYN.Foundation.JIP.JipDispatcher.&lt;.ctor&gt;b__4_0(Request req)
+   at JOSYN.Foundation.JIP.JipServer.&lt;&gt;c__DisplayClass1_0.&lt;&lt;WrapHandler&gt;b__0&gt;d.MoveNext()
+--- End of stack trace from previous location ---
+   at JOSYN.Jap.JAPServer.Host.HandleRequest(IJipDispatcher dispatcher, String requestStr) in C:\Users\chris\OneDrive\DevGit\josyn-backend\josyn-backend-jap-server\JOSYN.Jap.JAPServer\Host.cs:line 193
+   at JOSYN.Foundation.JIP.PipesServer.RawRequestHandler.ProcessRawRequest(Byte[] requestBytes)
+   at JOSYN.Foundation.JIP.PipesServer.RequestLoopAsync(NamedPipeServerStream reqPipe, NamedPipeServerStream resPipe, Func`2 processRequest, Func`3 onError, CancellationToken cancellationToken)
+</code></pre>
+<hr />
+<h3 id="error-7">Error #7</h3>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Wert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UID</td>
+<td>c36334e7-ed4f-4a85-b809-47fbb1522bc4</td>
+</tr>
+<tr>
+<td>OccurredAt</td>
+<td>2026-06-05 23:38:32</td>
+</tr>
+<tr>
+<td>Causer</td>
+<td>HandleHandlerError</td>
+</tr>
+<tr>
+<td>JobName</td>
+<td>MyDemoCompany.MyDemoProduct.MyDemoJob</td>
+</tr>
+<tr>
+<td>SessionGuid</td>
+<td>74ac1f2c-272e-42f9-8354-19b1bb63d7cf</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Message</strong></p>
+<pre><code>Fehler beim Verarbeiten der Anfrage: {&quot;What&quot;:&quot;GetEnvironment&quot;,&quot;Data&quot;:null}
+</code></pre>
+<p><strong>ExceptionDetails</strong></p>
+<pre><code>System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---&gt; System.MissingMethodException: Method not found: 'JOSYN.Foundation.ResultPattern.Error JOSYN.Foundation.ResultPattern.Error.op_Implicit(System.String)'.
+   at Contoso.Josyn.Adapter.ContosoConfigSource.GetValue(String key)
+   at Contoso.Josyn.Adapter.ContosoConfigSource.GetValue(String key)
+   at JOSYN.Backend.ConfigStore.ConfigStore.GetValue(String key)
+   at JOSYN.Jap.JAPServer.JAPServer.JOSYN.Jap.Shared.Contract.IJosynApplicationProtocol.GetEnvironment() in C:\Users\chris\OneDrive\DevGit\josyn-backend\josyn-backend-jap-server\JOSYN.Jap.JAPServer\JAPServer.cs:line 75
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+   --- End of inner exception stack trace ---
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+   at JOSYN.Foundation.JIP.JipDispatcher.&lt;&gt;c__DisplayClass12_0`1.&lt;&lt;WrapEnumHandler&gt;b__0&gt;d.MoveNext()
+--- End of stack trace from previous location ---
+   at JOSYN.Foundation.JIP.JipDispatcher.&lt;.ctor&gt;b__4_0(Request req)
+   at JOSYN.Foundation.JIP.JipServer.&lt;&gt;c__DisplayClass1_0.&lt;&lt;WrapHandler&gt;b__0&gt;d.MoveNext()
+--- End of stack trace from previous location ---
+   at JOSYN.Jap.JAPServer.Host.HandleRequest(IJipDispatcher dispatcher, String requestStr) in C:\Users\chris\OneDrive\DevGit\josyn-backend\josyn-backend-jap-server\JOSYN.Jap.JAPServer\Host.cs:line 193
+   at JOSYN.Foundation.JIP.PipesServer.RawRequestHandler.ProcessRawRequest(Byte[] requestBytes)
+   at JOSYN.Foundation.JIP.PipesServer.RequestLoopAsync(NamedPipeServerStream reqPipe, NamedPipeServerStream resPipe, Func`2 processRequest, Func`3 onError, CancellationToken cancellationToken)
+</code></pre>
+<hr />
+<h3 id="error-8">Error #8</h3>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Wert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UID</td>
+<td>96d82564-eb8c-4a7a-9b1a-2f524887b19e</td>
+</tr>
+<tr>
+<td>OccurredAt</td>
+<td>2026-06-05 16:26:13</td>
+</tr>
+<tr>
+<td>Causer</td>
+<td>RunServer</td>
+</tr>
+<tr>
+<td>JobName</td>
+<td>MyDemoCompany.MyDemoProduct.MyDemoJob</td>
+</tr>
+<tr>
+<td>SessionGuid</td>
+<td>bef44539-bda6-4ee7-b8e2-2703c2f5fdd7</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Message</strong></p>
+<pre><code>Methode 'IJosynApplicationProtocol.GetEnvironment' hat eine nicht unterstützte Signatur für RegisterAll. Unterstützt: Task&lt;Result&lt;string&gt;&gt; Method() oder Task&lt;Result&gt; Method(string).
+</code></pre>
+<p><strong>CallStack</strong></p>
+<pre><code>  at JipDispatcher.RegisterAll() in JipDispatcher.cs:89
+</code></pre>
+<hr />
+<h3 id="error-9">Error #9</h3>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Wert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UID</td>
+<td>f8086b33-05ed-4c61-873b-079a9a06f5fc</td>
+</tr>
+<tr>
+<td>OccurredAt</td>
+<td>2026-06-05 16:21:23</td>
+</tr>
+<tr>
+<td>Causer</td>
+<td>RunServer</td>
+</tr>
+<tr>
+<td>JobName</td>
+<td>MyDemoCompany.MyDemoProduct.MyDemoJob</td>
+</tr>
+<tr>
+<td>SessionGuid</td>
+<td>2dd50f74-912e-4d31-8e64-b23d098e47d3</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Message</strong></p>
+<pre><code>Methode 'IJosynApplicationProtocol.GetEnvironment' hat eine nicht unterstützte Signatur für RegisterAll. Unterstützt: Task&lt;Result&lt;string&gt;&gt; Method() oder Task&lt;Result&gt; Method(string).
+</code></pre>
+<p><strong>CallStack</strong></p>
+<pre><code>  at JipDispatcher.RegisterAll() in JipDispatcher.cs:89
+</code></pre>
+<hr />
+<h3 id="error-10">Error #10</h3>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Wert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UID</td>
+<td>61d73052-af02-4103-ab4e-824de6e20aa5</td>
+</tr>
+<tr>
+<td>OccurredAt</td>
+<td>2026-06-05 16:17:06</td>
+</tr>
+<tr>
+<td>Causer</td>
+<td>RunServer</td>
+</tr>
+<tr>
+<td>JobName</td>
+<td>MyDemoCompany.MyDemoProduct.MyDemoJob</td>
+</tr>
+<tr>
+<td>SessionGuid</td>
+<td>07ac267c-0df9-4238-9757-b021630f82aa</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Message</strong></p>
+<pre><code>Methode 'IJosynApplicationProtocol.GetEnvironment' hat eine nicht unterstützte Signatur für RegisterAll. Unterstützt: Task&lt;Result&lt;string&gt;&gt; Method() oder Task&lt;Result&gt; Method(string).
+</code></pre>
+<p><strong>CallStack</strong></p>
+<pre><code>  at JipDispatcher.RegisterAll() in JipDispatcher.cs:89
+</code></pre>
+<hr />
+<h3 id="error-11">Error #11</h3>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Wert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UID</td>
+<td>9bcf7e74-9766-45d1-be98-ddd003e8fa06</td>
+</tr>
+<tr>
+<td>OccurredAt</td>
+<td>2026-06-05 16:03:54</td>
+</tr>
+<tr>
+<td>Causer</td>
+<td>RunServer</td>
+</tr>
+<tr>
+<td>JobName</td>
+<td>MyDemoCompany.MyDemoProduct.MyDemoJob</td>
+</tr>
+<tr>
+<td>SessionGuid</td>
+<td>d59ac543-5a86-442c-bf20-face9eed08fa</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Message</strong></p>
+<pre><code>Methode 'IJosynApplicationProtocol.GetEnvironment' hat eine nicht unterstützte Signatur für RegisterAll. Unterstützt: Task&lt;Result&lt;string&gt;&gt; Method() oder Task&lt;Result&gt; Method(string).
+</code></pre>
+<p><strong>CallStack</strong></p>
+<pre><code>  at JipDispatcher.RegisterAll() in JipDispatcher.cs:89
+</code></pre>
+<hr />
+<h3 id="error-12">Error #12</h3>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Wert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UID</td>
+<td>8132d2b5-f53d-4d60-bbc1-020ddda009b5</td>
+</tr>
+<tr>
+<td>OccurredAt</td>
+<td>2026-06-05 16:02:06</td>
+</tr>
+<tr>
+<td>Causer</td>
+<td>RunServer</td>
+</tr>
+<tr>
+<td>JobName</td>
+<td>MyDemoCompany.MyDemoProduct.MyDemoJob</td>
+</tr>
+<tr>
+<td>SessionGuid</td>
+<td>6fbdc7ce-6e51-4f07-9fff-49f1a6fab95b</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Message</strong></p>
+<pre><code>Methode 'IJosynApplicationProtocol.GetEnvironment' hat eine nicht unterstützte Signatur für RegisterAll. Unterstützt: Task&lt;Result&lt;string&gt;&gt; Method() oder Task&lt;Result&gt; Method(string).
+</code></pre>
+<p><strong>CallStack</strong></p>
+<pre><code>  at JipDispatcher.RegisterAll() in JipDispatcher.cs:89
+</code></pre>
+<hr />
+<h3 id="error-13">Error #13</h3>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Wert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UID</td>
+<td>7487a4bf-51f2-4a68-bfba-b909709a059c</td>
+</tr>
+<tr>
+<td>OccurredAt</td>
+<td>2026-06-05 16:01:39</td>
+</tr>
+<tr>
+<td>Causer</td>
+<td><Main>$</td>
+</tr>
+<tr>
+<td>JobName</td>
+<td>-</td>
+</tr>
+<tr>
+<td>SessionGuid</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Message</strong></p>
+<pre><code>JAPServer-Executable nicht gefunden: 'C:\Temp\VS.OUT\JOSYN\JOSYN.Jap.JAPServer\bin\Release\JOSYN.Jap.JAPServer.exe'
+</code></pre>
+<p><strong>CallStack</strong></p>
+<pre><code>  at SessionStarter.StartSession()
+</code></pre>
+<hr />
+<h3 id="error-14">Error #14</h3>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Wert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UID</td>
+<td>031232c1-d495-4b87-b25a-b2e215545535</td>
+</tr>
+<tr>
+<td>OccurredAt</td>
+<td>2026-06-05 16:00:23</td>
+</tr>
+<tr>
+<td>Causer</td>
+<td><Main>$</td>
+</tr>
+<tr>
+<td>JobName</td>
+<td>-</td>
+</tr>
+<tr>
+<td>SessionGuid</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Message</strong></p>
+<pre><code>JAPServer-Executable nicht gefunden: 'C:\Temp\VS.OUT\JOSYN\JOSYN.Jap.JAPServer\bin\Release\JOSYN.Jap.JAPServer.exe'
+</code></pre>
+<p><strong>CallStack</strong></p>
+<pre><code>  at SessionStarter.StartSession()
+</code></pre>
+<hr />
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+</body>
+</html>

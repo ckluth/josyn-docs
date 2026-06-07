@@ -1,0 +1,598 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sanity Check — Method and Manual — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../index.html" class="nav-home">JOSYN Documentation</a>
+<div class="nav-section">Architecture</div>
+<a href="../../../architecture/josyn-backend/josyn-backend-bootstrap-config/JOSYN.Backend.BootstrapConfig/index.html" class="nav-link">Overview</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-error-handler/JOSYN.Backend.ErrorHandler/index.html" class="nav-link">JOSYN.Backend.ErrorHandler</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-jap-server/JOSYN.Jap.JAPServer/index.html" class="nav-link">JOSYN.Jap.JAPServer</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-job-registry/JOSYN.Backend.JobRegistry/index.html" class="nav-link">JOSYN.Backend.JobRegistry</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-session-starter/JOSYN.Backend.SessionStarter/index.html" class="nav-link">JOSYN.Backend.SessionStarter</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-session-store/JOSYN.Backend.SessionStore/index.html" class="nav-link">JOSYN.Backend.SessionStore</a>
+<a href="../../../architecture/josyn-commons/josyn-commons-log/JOSYN.Commons.Log/index.html" class="nav-link">JOSYN.Commons.Log</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/Docs/josyn-ipc-protocol-draft-01.html" class="nav-link">JOSYN-IPC-Protocol</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/index.html" class="nav-link">JOSYN.Foundation.JIP</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/index.html" class="nav-link">JOSYN.Foundation.PropertyBag</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/index.html" class="nav-link">JOSYN.Foundation.ResultPattern</a>
+<a href="../../../architecture/josyn-jap/josyn-jap-shared/JOSYN.Jap.Shared.Contract/index.html" class="nav-link">JOSYN.Jap.Shared.Contract</a>
+<a href="../../../architecture/josyn-job-host/JOSYN.JobHost/index.html" class="nav-link">JOSYN.JobHost</a>
+<a href="../../../architecture/josyn-platform/architecture/overview.html" class="nav-link">Architecture Overview</a>
+<a href="../../../architecture/josyn-platform/architecture/storage.html" class="nav-link">JOSYN Storage Realm</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/01-context/josyn-and-jobsystem.html" class="nav-link">JOSYN and its Predecessor</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/01-context/index.html" class="nav-link">Context</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/index.html" class="nav-link">Constraints &amp; Settled Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/settled-decisions.html" class="nav-link">Settled Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/folder-layout.html" class="nav-link">Folder Layout</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/job-registry.html" class="nav-link">Job Registry</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/machine-topology.html" class="nav-link">Machine Topology</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/index.html" class="nav-link">Physical Architecture</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/services-and-executables.html" class="nav-link">Services and Executables</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/session-store.html" class="nav-link">Session Store</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/04-identity-and-security/identity-and-impersonation.html" class="nav-link">Identity and Impersonation</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/04-identity-and-security/index.html" class="nav-link">Identity &amp; Security</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/05-deployment-and-operations/job-deployment.html" class="nav-link">Job Deployment</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/05-deployment-and-operations/index.html" class="nav-link">Deployment &amp; Operations</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/audit-and-session-record.html" class="nav-link">Audit and the Session Record</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/coexistence-with-jobsystem.html" class="nav-link">Coexistence with JobSystem</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/isolation-vs-integration.html" class="nav-link">Isolation vs. Integration</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/maintainability-and-knowledge-transfer.html" class="nav-link">Maintainability and Knowledge Transfer</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/index.html" class="nav-link">Company Fit</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/evolution-horizon.html" class="nav-link">Evolution Horizon</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/index.html" class="nav-link">Evolution &amp; Lifecycle</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/yagni-decisions.html" class="nav-link">YAGNI Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/08-documentation-and-training/overview.html" class="nav-link">Documentation and Training — Overview</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/08-documentation-and-training/index.html" class="nav-link">Documentation &amp; Training</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/index.html" class="nav-link">Solution Architecture</a>
+<a href="../../../architecture/index.html" class="nav-link">Architecture</a>
+<div class="nav-section">Decisions</div>
+<a href="../../../decisions/index.html" class="nav-link">Overview</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-001-platform-naming.html" class="nav-link">ADR-001 — Platform Naming Vocabulary</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-002-josyn-backend.html" class="nav-link">ADR-002 — Introducing `josyn-backend` as a Separate Layer</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-003-josyn-commons.html" class="nav-link">ADR-003 — josyn-commons: A Generic Utility Layer</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-004-japserver-relocation.html" class="nav-link">ADR-004 — JAPServer Relocation into josyn-backend</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-005-documentation-governance.html" class="nav-link">ADR-005 — Documentation Governance and Agentic Way of Work</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-006-instance-types-for-dependency-holding-services.html" class="nav-link">ADR-006 — Instance Types for Dependency-Holding Services</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-007-storage-realm.html" class="nav-link">ADR-007 — The JOSYN Storage Realm</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-008-locallog-relocation.html" class="nav-link">ADR-008 — LocalLog Relocation to josyn-commons</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-009-runtime-context-provider-pattern.html" class="nav-link">ADR-009 — Runtime Context Provider Pattern for External Integrations</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-010-environment-separation.html" class="nav-link">ADR-010 — Environment Separation and Installation Model</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-011-jip-enum-support.html" class="nav-link">ADR-011 — JIP Wire-Type Extension: Enum Support in JipDispatcher</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-012-maintainer-deployment.html" class="nav-link">ADR-012 — Maintainer Deployment (First Iteration)</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-013-job-dev-mode.html" class="nav-link">ADR-013 — Job Dev Mode: Running a Job Locally from the IDE</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-014-cli-run-job-local-args.html" class="nav-link">ADR-014 — CLI `run-job` Command and Local Arguments Convention</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-001-backend-building-block-model.html" class="nav-link">ADR-001 — Backend Building Block Model</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-002-session-store.html" class="nav-link">ADR-002 — SessionStore</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-003-global-config.html" class="nav-link">ADR-003 — GlobalConfig</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-004-backend-restructuring.html" class="nav-link">ADR-004 — Backend Restructuring: Trigger Executables, ErrorHandler, and SessionStarter Fire-and-Forget Correction</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-005-job-registry.html" class="nav-link">ADR-005 — JobRegistry</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-006-error-handler.html" class="nav-link">ADR-006 — ErrorHandler</a>
+<div class="nav-section">Guides</div>
+<a href="index.html" class="nav-link active">Overview</a>
+<a href="criteria-review.html" class="nav-link">Sanity Criteria — Decision-Maker Review</a>
+<a href="overview.html" class="nav-link">Sanity Check — Platform Overview</a>
+<a href="../temp/arggen-inspection-guide.html" class="nav-link">ArgGen — Inspection &amp; Smoke-Test Guide</a>
+<a href="../../josyn-toolbox/deploy/index.html" class="nav-link">deploy</a>
+<a href="../../josyn-toolbox/git-tools/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="../../josyn-toolbox/site-builder/index.html" class="nav-link">site-builder — JOSYN Documentation Pipeline</a>
+<a href="../../josyn-toolbox/site-builder/site-builder-assembler/index.html" class="nav-link">site-builder-assembler</a>
+<a href="../../josyn-toolbox/site-builder/site-builder-indexer/index.html" class="nav-link">site-builder-indexer</a>
+<a href="../../josyn-toolbox/site-builder/site-builder-renderer/index.html" class="nav-link">site-builder-renderer</a>
+<a href="../../index.html" class="nav-link">Guides</a>
+<div class="nav-section">Notes</div>
+<a href="../../../notes/index.html" class="nav-link">Overview</a>
+<a href="../../../notes/josyn-platform/plans/sessionstore-poc-roadmap.html" class="nav-link">SessionStore -&gt; josyn-backend PoC Roadmap</a>
+<a href="../../../notes/josyn-platform/ROADMAP.html" class="nav-link">JOSYN Platform — Roadmap &amp; Status</a>
+<a href="../../../notes/josyn-platform/temp/poc-phases-2-5-notes.html" class="nav-link">PoC Phases 2–5 — Inspection &amp; Runtime Notes</a>
+<a href="../../../notes/josyn-platform/thinking/documentation-taxonomy.html" class="nav-link">Documentation Taxonomy — Working Note</a>
+<div class="nav-section">Reference</div>
+<a href="../../../reference/index.html" class="nav-link">Overview</a>
+<a href="../../../reference/josyn-backend/db/error-report.html" class="nav-link">JOSYN Error Report</a>
+<a href="../../../reference/josyn-backend/db/session-report.html" class="nav-link">JOSYN Session Report</a>
+<a href="../../../reference/josyn-commons/MAINTAINERS.html" class="nav-link">Advice for Maintainers of josyn-commons</a>
+<a href="../../../reference/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../reference/josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../reference/josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../reference/josyn-platform/architecture/coding-standards.html" class="nav-link">Coding Standards — Functional-First C#</a>
+<a href="../../../reference/josyn-platform/architecture/docs-index-vocabulary.html" class="nav-link">docs-index Vocabulary</a>
+<a href="../../../reference/josyn-platform/architecture/local-build.html" class="nav-link">`.local-build` — Local Developer Tooling</a>
+<a href="../../../reference/josyn-platform/architecture/naming-conventions.html" class="nav-link">Naming Conventions</a>
+<a href="../../../reference/josyn-platform/architecture/repo-structure-conventions.html" class="nav-link">Repo Structure Conventions</a>
+<a href="../../../reference/josyn-platform/MAINTAINERS.html" class="nav-link">JOSYN Platform — Maintainer&#39;s Guide</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/architecture.html" class="nav-link">Sanity Criteria — architecture</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/docs.html" class="nav-link">Sanity Criteria — docs</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/principles.html" class="nav-link">Sanity Criteria — principles</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/standards.html" class="nav-link">Sanity Criteria — standards</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/tests.html" class="nav-link">Sanity Criteria — tests</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-backend.html" class="nav-link">Sanity State — josyn-backend</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-commons.html" class="nav-link">Sanity State — josyn-commons</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-foundation.html" class="nav-link">Sanity State — josyn-foundation</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-jap.html" class="nav-link">Sanity State — josyn-jap</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-job-host.html" class="nav-link">Sanity State — josyn-job-host</a>
+<a href="../../../reference/josyn-platform/sanity/triggers.html" class="nav-link">Sanity — Trigger Table</a>
+<div class="nav-section">Repos</div>
+<a href="../../../repos/josyn-backend/index.html" class="nav-link">Overview</a>
+<a href="../../../repos/josyn-commons/index.html" class="nav-link">josyn-commons</a>
+<a href="../../../repos/josyn-contoso/index.html" class="nav-link">josyn-contoso</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-jip/index.html" class="nav-link">josyn-foundation-jip</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-property-bag/index.html" class="nav-link">josyn-foundation-property-bag</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-result-pattern/index.html" class="nav-link">josyn-foundation-result-pattern</a>
+<a href="../../../repos/josyn-foundation/index.html" class="nav-link">josyn-foundation</a>
+<a href="../../../repos/josyn-jap/josyn-jap-shared/index.html" class="nav-link">JOSYN.Jap.Shared</a>
+<a href="../../../repos/josyn-jap/index.html" class="nav-link">josyn-jap</a>
+<a href="../../../repos/josyn-platform/index.html" class="nav-link">JOSYN Platform</a>
+<a href="../../../repos/josyn-platform/repos/josyn-backend/overview.html" class="nav-link">josyn-backend</a>
+<a href="../../../repos/josyn-platform/repos/josyn-commons.html" class="nav-link">josyn-commons</a>
+<a href="../../../repos/josyn-platform/repos/josyn-foundation.html" class="nav-link">josyn-foundation</a>
+<a href="../../../repos/josyn-platform/repos/josyn-jap.html" class="nav-link">josyn-jap</a>
+<a href="../../../repos/josyn-platform/repos/josyn-job-host.html" class="nav-link">josyn-job-host</a>
+<a href="../../../repos/josyn-toolbox/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="../../../repos/index.html" class="nav-link">Repos</a>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="sanity-check-method-and-manual">Sanity Check — Method and Manual</h1>
+<p>The sanity check is a structured, agent-driven review of the JOSYN platform codebase.
+It is defined and owned by <code>josyn-platform</code>. All other repos are subjects of the check.</p>
+<hr />
+<h2 id="what-it-checks">What it checks</h2>
+<p>Five orthogonal categories, each with its own criteria file:</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>File</th>
+<th>What it covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docs</code></td>
+<td><code>criteria/docs.md</code></td>
+<td>XML documentation comments and markdown documentation currency</td>
+</tr>
+<tr>
+<td><code>tests</code></td>
+<td><code>criteria/tests.md</code></td>
+<td>Unit test existence, naming, structure, coverage, and passing state</td>
+</tr>
+<tr>
+<td><code>principles</code></td>
+<td><code>criteria/principles.md</code></td>
+<td>Functional-first C# coding rules — Result pattern, static-first, immutability, no-throw</td>
+</tr>
+<tr>
+<td><code>architecture</code></td>
+<td><code>criteria/architecture.md</code></td>
+<td>NuGet dependency chain integrity and forbidden cross-repo references</td>
+</tr>
+<tr>
+<td><code>standards</code></td>
+<td><code>criteria/standards.md</code></td>
+<td>Project file conventions, naming rules, and directory structure</td>
+</tr>
+</tbody>
+</table>
+<p>Per-repo specifics (known exceptions, baseline expectations, repo-specific constraints) are in
+<code>../repos/&lt;repo-name&gt;.md</code> under the <code>## Sanity Notes</code> section of each file.</p>
+<p>The meta-quality of the criteria themselves is tracked in <a href="criteria-review.html"><code>criteria-review.md</code></a> —
+a living document to be revisited periodically by the platform maintainer.</p>
+<hr />
+<h2 id="cost-overview">Cost overview</h2>
+<p>Not all checks are equal in effort. Use this table to choose the right scope:</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>1 repo</th>
+<th>n repos</th>
+<th>all repos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>architecture</code></td>
+<td>⚡ quick</td>
+<td>⚡ quick</td>
+<td>⏱ takes a while</td>
+</tr>
+<tr>
+<td><code>standards</code></td>
+<td>⚡ quick</td>
+<td>⏱ takes a while</td>
+<td>⏱ takes a while</td>
+</tr>
+<tr>
+<td><code>docs</code></td>
+<td>⏱ takes a while</td>
+<td>⏱ takes a while</td>
+<td>🐢 long runner</td>
+</tr>
+<tr>
+<td><code>tests</code></td>
+<td>⏱ takes a while</td>
+<td>🐢 long runner</td>
+<td>🐢 long runner</td>
+</tr>
+<tr>
+<td><code>principles</code></td>
+<td>🐢 long runner</td>
+<td>🐢 long runner</td>
+<td>🐢 long runner</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="profiles">Profiles</h2>
+<p>Named shortcuts for common category combinations:</p>
+<table>
+<thead>
+<tr>
+<th>Profile</th>
+<th>Expands to</th>
+<th>When to use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--profile quick</code></td>
+<td><code>--check architecture --check standards</code></td>
+<td>After any structural change — rename, move, new project</td>
+</tr>
+<tr>
+<td><code>--profile code</code></td>
+<td><code>--check principles --check docs</code></td>
+<td>After a coding session — did the code stay clean?</td>
+</tr>
+<tr>
+<td><code>--profile full</code></td>
+<td>all 5 categories</td>
+<td>Scheduled review, before a release, full platform sanity</td>
+</tr>
+</tbody>
+</table>
+<p>Profiles can be combined with <code>--repo</code> to scope them to a subset of repos:</p>
+<pre><code>run sanity-check --profile quick --repo josyn-backend
+run sanity-check --profile code --repo josyn-foundation --repo josyn-jap
+</code></pre>
+<hr />
+<h2 id="command-surface">Command surface</h2>
+<pre><code>run sanity-check [--profile &lt;name&gt;] [--check &lt;category&gt;] [--repo &lt;repo-name&gt;]
+run sanity-check --deep [--profile &lt;name&gt;] [--check &lt;category&gt;] [--repo &lt;repo-name&gt;]
+run sanity-check --force [--profile &lt;name&gt;] [--check &lt;category&gt;] [--repo &lt;repo-name&gt;]
+</code></pre>
+<p><code>--profile</code>, <code>--check</code>, and <code>--repo</code> are all <strong>optional</strong> and <strong>repeatable</strong>.
+<code>--profile</code> and <code>--check</code> can be combined — the union of categories is used as the filter.
+Omitting <code>--repo</code> means all repos.</p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>(none)</em></td>
+<td><strong>Smart default</strong> — trigger-table inference; proposes only what has changed</td>
+</tr>
+<tr>
+<td><code>--deep</code></td>
+<td><strong>Deep smart</strong> — full diff analysis, semantic inference; warns about extra cost</td>
+</tr>
+<tr>
+<td><code>--force</code></td>
+<td><strong>Forced</strong> — no inference; runs exactly what is specified</td>
+</tr>
+</tbody>
+</table>
+<p><code>--deep</code> and <code>--force</code> cannot be combined — rejected with a clear error message.</p>
+<h3 id="examples">Examples</h3>
+<pre><code>run sanity-check
+</code></pre>
+<p>Smart default — infers what changed since the last check across all repos. Proposes only the
+relevant repos and categories. If nothing has changed, reports that everything is up to date.</p>
+<pre><code>run sanity-check --repo josyn-foundation
+</code></pre>
+<p>Smart, scoped to one repo. Infers which categories need re-running based on its changes.</p>
+<pre><code>run sanity-check --check principles
+</code></pre>
+<p>Smart, <code>principles</code> only. Considers all repos — but only proposes a <code>principles</code> run for those
+where source code changes have been detected (intersection of inferred + requested).</p>
+<pre><code>run sanity-check --deep --repo josyn-jap
+</code></pre>
+<p>Deep analysis of <code>josyn-jap</code>. Reads actual diffs to determine which categories to run.</p>
+<pre><code>run sanity-check --force
+</code></pre>
+<p>Full forced run — all five categories across all five repos. No inference, no filtering.</p>
+<pre><code>run sanity-check --force --check docs --repo josyn-foundation
+</code></pre>
+<p>Forced <code>docs</code> check on <code>josyn-foundation</code>. Skips inference, runs exactly this scope.</p>
+<pre><code>run sanity-check --check docs --check tests --repo josyn-foundation --repo josyn-jap
+</code></pre>
+<p>Smart, two categories, two repos. Only runs where changes match either <code>docs</code> or <code>tests</code>.</p>
+<h3 id="valid-repo-names">Valid repo names</h3>
+<p><code>josyn-foundation</code> · <code>josyn-jap</code> · <code>josyn-job-host</code> · <code>josyn-backend</code> · <code>josyn-commons</code></p>
+<p><code>josyn-platform</code> is never a target — it is the owner of the check, not a subject.</p>
+<h3 id="valid-category-names">Valid category names</h3>
+<p><code>docs</code> · <code>tests</code> · <code>principles</code> · <code>architecture</code> · <code>standards</code></p>
+<hr />
+<h2 id="smart-inference">Smart inference</h2>
+<p>Before loading any criteria or opening subject repos, the agent runs a <strong>preflight inference phase</strong>
+to determine what actually needs to be checked.</p>
+<h3 id="smart-default-no-force-no-deep">Smart default (no <code>--force</code>, no <code>--deep</code>)</h3>
+<ol>
+<li>For each repo in scope: read <code>sanity/current-state/&lt;repo&gt;.md</code> — extract the <code>**Last checked:**</code>
+timestamp.
+<ul>
+<li>If <code>never</code>: skip inference for this repo; propose a full check (filtered by any
+<code>--check</code>/<code>--profile</code> intersection in effect).</li>
+</ul>
+</li>
+<li>Collect changed file paths in the subject repo since that timestamp:
+<ul>
+<li><code>git log --since=&lt;timestamp&gt; --name-only --pretty=format:</code> for committed changes</li>
+<li><code>git status --short</code> for staged, unstaged, untracked, deleted, and renamed files</li>
+</ul>
+</li>
+<li>Apply the trigger table in <code>sanity/triggers.md</code> to derive which categories need re-checking.</li>
+<li>If <code>--check</code> or <code>--profile</code> flags were given, <strong>intersect</strong> the derived categories with the
+requested ones — only run categories that appear in both sets.</li>
+<li>If no changes are detected in a repo → skip it; note it as current in the proposal.</li>
+<li>If all repos are current → report that everything is up to date; no run is needed.</li>
+</ol>
+<h3 id="deep-inference-deep">Deep inference (<code>--deep</code>)</h3>
+<p>Identical to steps 1–2 above, then:</p>
+<ol start="3">
+<li>Read the actual diffs (<code>git diff</code> and <code>git diff --staged</code>) for each changed file.</li>
+<li>Reason semantically about the nature of each change — new public API, deleted tests,
+added <code>throw</code>, changed project reference, etc. — to derive categories.</li>
+<li>Apply <code>--check</code>/<code>--profile</code> intersection as above.</li>
+<li>At the confirmation gate, note: <em>&quot;Deep analysis read N diffs before this proposal.&quot;</em></li>
+</ol>
+<h3 id="force-execution-force">Force execution (<code>--force</code>)</h3>
+<p>No inference phase. Omitting <code>--check</code>/<code>--profile</code>/<code>--repo</code> means run all five categories
+across all five repos.</p>
+<hr />
+<h2 id="state-files">State files</h2>
+<p>Every run writes to two locations — both within <code>josyn-platform</code>, never in subject repos:</p>
+<ul>
+<li><code>sanity/current-state/&lt;repo&gt;.md</code> — one file per checked repo, overwritten with findings</li>
+<li><code>sanity/overview.md</code> — aggregated dashboard, regenerated from all five state files at end of run</li>
+</ul>
+<p><code>sanity/last-result.md</code> is retired. It contains a redirect notice only.</p>
+<h3 id="per-repo-state-file-format">Per-repo state file format</h3>
+<pre><code class="language-markdown"># Sanity State — &lt;repo-name&gt;
+
+**Last checked:** 2026-05-31T12:00:00Z
+
+## Summary
+
+| Category | Status |
+|----------|--------|
+| docs | ✅ |
+| tests | ✅ |
+| principles | ❌ 2 violations |
+| architecture | ✅ |
+| standards | ✅ |
+
+---
+
+## docs
+  ✅ All XML comments present and correct.
+
+## principles
+  ❌ &lt;file path&gt; — &lt;reason&gt;
+</code></pre>
+<h3 id="overview-file-format">Overview file format</h3>
+<pre><code class="language-markdown"># Sanity Check — Platform Overview
+
+**Generated:** 2026-05-31T12:00:00Z
+
+| Repo | docs | tests | principles | architecture | standards | Last checked |
+|------|------|-------|-----------|-------------|-----------|-------------|
+| josyn-foundation | ✅ | ✅ | ❌ | ✅ | ✅ | 2026-05-31T12:00:00Z |
+</code></pre>
+<h3 id="skipped-as-current-repos">Skipped-as-current repos</h3>
+<p>When a repo has no changes since its last check, do not re-run checks for it.
+Update its <code>**Last checked:**</code> field to:</p>
+<pre><code>2026-05-20T10:00:00Z (verified current at 2026-05-31T12:00:00Z)
+</code></pre>
+<p>Do not alter its findings.</p>
+<hr />
+<h2 id="safety-contract">Safety contract</h2>
+<p>A sanity check writes only to this repo, never to any subject repo:</p>
+<ul>
+<li><code>sanity/current-state/&lt;repo&gt;.md</code> for each checked repo</li>
+<li><code>sanity/overview.md</code> — regenerated at the end of every run</li>
+</ul>
+<p>No other files are created, edited, or deleted anywhere.</p>
+<hr />
+<h2 id="confirmation-gate">Confirmation gate</h2>
+<p><strong>After</strong> the inference phase (or immediately for <code>--force</code>), the agent must:</p>
+<ol>
+<li><strong>For <code>--force</code> runs:</strong> perform a quick change scan (git log + git status, no category inference)
+for each target repo. Include the result per repo in the gate message:
+<ul>
+<li>Repos with changes: list the count of changed files.</li>
+<li>Repos with <strong>no</strong> changes since last check: flag with ⚠️.</li>
+<li>Repos with <code>Last checked: never</code>: no flag (no baseline to compare against).</li>
+</ul>
+</li>
+<li><strong>State what will run</strong> — repos, categories, cost estimate, and which repos (if any) were
+skipped as current (smart/deep mode) or flagged as unchanged (force mode).</li>
+<li><strong>Ask for confirmation:</strong> <em>&quot;Really run this now?&quot;</em> — wait for an explicit yes before proceeding.</li>
+<li>If any 🐢 category is involved across more than one repo, also <strong>suggest autopilot:</strong>
+<em>&quot;This is a long runner — consider <code>/autopilot</code> so it runs unattended without further interruptions.&quot;</em></li>
+</ol>
+<p><strong>Exception:</strong> if autopilot is already active, skip confirmation entirely and proceed.</p>
+<hr />
+<h2 id="running-unattended-nap-mode">Running unattended (nap mode)</h2>
+<p>To run a full sanity check without any permission interruptions:</p>
+<pre><code>/autopilot
+run sanity-check --profile full
+</code></pre>
+<p><code>/autopilot</code> auto-approves all agent actions. The safety contract above guarantees no writes
+occur outside the two state files in this repo.</p>
+<hr />
+<h2 id="how-an-agent-executes-a-sanity-check">How an agent executes a sanity check</h2>
+<ol>
+<li><strong>Read <code>../AGENTS.md</code></strong> — orientation and repo paths. Read this file for the full execution protocol.</li>
+<li><strong>Run the inference phase</strong> — smart (trigger-table) or deep (diff analysis) before loading
+criteria or opening subject repos. Produce the proposed run scope.</li>
+<li><strong>Present the confirmation gate</strong> — state what will run and wait for approval.</li>
+<li><strong>Load criteria</strong> — for each requested category, read <code>criteria/&lt;category&gt;.md</code>.
+Some categories require additional context files (listed in AGENTS.md execution steps).</li>
+<li><strong>Load per-repo notes</strong> — for each requested repo, read <code>../repos/&lt;repo-name&gt;.md</code>,
+specifically the <code>## Sanity Notes</code> section.</li>
+<li><strong>Inspect each repo</strong> — apply the loaded criteria to the actual code in the repo at its
+relative path.</li>
+<li><strong>Write findings</strong> — overwrite <code>sanity/current-state/&lt;repo&gt;.md</code> for each checked repo.
+Set <code>**Last checked:**</code> to the current UTC timestamp. Grouped by category:
+<ul>
+<li>List every <strong>violation</strong> explicitly with file path and reason.</li>
+<li>Confirm every <strong>clean area</strong> explicitly — silence is not a pass.</li>
+<li>Note any area that <strong>could not be verified</strong> (e.g. repo not found, build broken) and why.</li>
+</ul>
+</li>
+<li><strong>Update skipped repos</strong> — for repos with no changes, update their <code>**Last checked:**</code> field
+with a <code>(verified current at &lt;now&gt;)</code> suffix. Do not alter findings.</li>
+<li><strong>Regenerate <code>sanity/overview.md</code></strong> — aggregate from all five state files.</li>
+</ol>
+<hr />
+<h2 id="reading-the-report">Reading the report</h2>
+<p>A compliant finding looks like:</p>
+<pre><code>josyn-foundation / principles
+  ✅ All public types are static or record — no unjustified instance classes found.
+  ✅ No throw statements outside lowest-layer catch boundaries.
+  ✅ All failure paths return Result or Result&lt;T&gt;.
+</code></pre>
+<p>A violation looks like:</p>
+<pre><code>josyn-jap / docs
+  ❌ JOSYN.Jap.Shared.Contract/IJosynApplicationProtocol.cs
+     GetRawArguments() — &lt;summary&gt; missing on interface method.
+  ❌ JOSYN.Jap.Shared.Log/LocalLog.cs
+     WriteError(string causer, string message) — implementation duplicates
+     interface doc text instead of using &lt;inheritdoc/&gt;.
+</code></pre>
+<p>An unverifiable area looks like:</p>
+<pre><code>josyn-backend / tests
+  ⚠️ No test project found. Known gap — PoC stub phase. See repos/josyn-backend/overview.md Sanity Notes.
+</code></pre>
+<hr />
+<h2 id="fixing-violations">Fixing violations</h2>
+<h3 id="command">Command</h3>
+<pre><code>fix violations [--repo &lt;repo-name&gt;] [--check &lt;category&gt;]
+</code></pre>
+<p>Both flags are optional. Omitting means all violations across all repos.
+Combine with <code>--repo</code> and <code>--check</code> to scope the fix session to a single area.</p>
+<h3 id="source-of-truth">Source of truth</h3>
+<p>Always fix from <code>sanity/current-state/&lt;repo&gt;.md</code> for the target repo.
+Never fix from <code>sanity/overview.md</code> (summary only) or from memory.
+If the state file is stale, run a fresh sanity check first.</p>
+<h3 id="interaction-rule-propose-before-every-fix">Interaction rule — propose before every fix</h3>
+<p>Fixing is always <strong>step-by-step and interactive</strong>. For each violation in the current-state file:</p>
+<ol>
+<li><strong>Propose</strong> — describe exactly what will be changed (file, line, before/after). Wait for explicit confirmation.</li>
+<li><strong>Execute</strong> — apply the fix only after the human confirms.</li>
+<li>Move to the next violation and repeat.</li>
+</ol>
+<p>Never batch multiple fixes before asking. Never apply a fix speculatively. Even if two violations look identical, each one gets its own proposal-and-confirm cycle.</p>
+<p>This rule applies regardless of how many violations are in scope and cannot be overridden by <code>/autopilot</code> or any other flag.</p>
+<h3 id="workflow-one-repocategory-pair-at-a-time">Workflow — one repo/category pair at a time</h3>
+<ol>
+<li><strong>Load violations</strong> — read <code>sanity/current-state/&lt;repo&gt;.md</code>, filter by requested scope.</li>
+<li><strong>Load context</strong> — read the relevant <code>sanity/criteria/&lt;category&gt;.md</code> criteria file and <code>repos/&lt;repo&gt;.md</code> Sanity Notes.</li>
+<li><strong>Check for known exceptions</strong> — if a violation is documented as expected state in Sanity Notes, skip it. Do not fix expected state.</li>
+<li><strong>For each violation — propose, confirm, execute</strong> — apply the interaction rule above.</li>
+<li><strong>Verify</strong> — re-run <code>run sanity-check --check &lt;category&gt; --repo &lt;repo&gt;</code> immediately after fixing.
+The fix is done only when the check reports ✅ for that area.</li>
+<li><strong>Commit</strong> — one commit per verified repo/category pair. Do not batch fixes across categories.</li>
+<li>Repeat for the next violation.</li>
+</ol>
+<h3 id="priority-order">Priority order</h3>
+<p>Fix in this order to avoid compounding issues:</p>
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Category</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1st</td>
+<td><code>architecture</code></td>
+<td>Broken dependency edges can prevent builds</td>
+</tr>
+<tr>
+<td>2nd</td>
+<td><code>standards</code></td>
+<td>Missing scaffolding and wrong project config affects all other checks</td>
+</tr>
+<tr>
+<td>3rd</td>
+<td><code>docs</code></td>
+<td>Mechanical — low risk, high clarity gain</td>
+</tr>
+<tr>
+<td>4th</td>
+<td><code>tests</code></td>
+<td>Requires judgment — discuss missing coverage before writing</td>
+</tr>
+<tr>
+<td>5th</td>
+<td><code>principles</code></td>
+<td>Highest reasoning required — never bulk-fix without human review</td>
+</tr>
+</tbody>
+</table>
+<h3 id="safety">Safety</h3>
+<p>Fixing is a <strong>write operation</strong>. Do not use <code>/autopilot</code> for a fix session.
+Every change must be reviewed by the human before committing.</p>
+<p><code>principles</code> violations in particular must be discussed before fixing — a refactor
+that looks mechanical (e.g. &quot;make this class static&quot;) may have non-obvious consequences.
+Stop and ask when in doubt.</p>
+<hr />
+<p>The criteria files in <code>criteria/</code> are the <strong>single source of truth</strong> for what &quot;correct&quot; means.
+When a platform rule changes:</p>
+<ol>
+<li>Update the relevant criteria file here.</li>
+<li>Update <code>../architecture/coding-standards.md</code> or <code>../architecture/naming-conventions.md</code> if the rule originates there.</li>
+<li>The change takes effect for all future sanity runs immediately — no other configuration needed.</li>
+</ol>
+<hr />
+<h2 id="scope-boundary-josyn-platform-is-not-a-subject">Scope boundary — josyn-platform is not a subject</h2>
+<p>The sanity check covers the five subject repos only. <code>josyn-platform</code> itself — its own markdown files,
+criteria files, and documentation — is never evaluated by a sanity run.</p>
+<p>This is a deliberate blind spot. The platform repo is the <em>owner</em> of the check, not a subject of it.
+Consistency and quality of the platform's own files is a human responsibility, maintained through
+normal code review when the repo is changed.</p>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+</body>
+</html>

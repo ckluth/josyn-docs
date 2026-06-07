@@ -1,0 +1,361 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>doc-generator — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../index.html" class="nav-home">JOSYN Documentation</a>
+<div class="nav-section">Architecture</div>
+<a href="../../../architecture/josyn-backend/josyn-backend-bootstrap-config/JOSYN.Backend.BootstrapConfig/index.html" class="nav-link">Overview</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-error-handler/JOSYN.Backend.ErrorHandler/index.html" class="nav-link">JOSYN.Backend.ErrorHandler</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-jap-server/JOSYN.Jap.JAPServer/index.html" class="nav-link">JOSYN.Jap.JAPServer</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-job-registry/JOSYN.Backend.JobRegistry/index.html" class="nav-link">JOSYN.Backend.JobRegistry</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-session-starter/JOSYN.Backend.SessionStarter/index.html" class="nav-link">JOSYN.Backend.SessionStarter</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-session-store/JOSYN.Backend.SessionStore/index.html" class="nav-link">JOSYN.Backend.SessionStore</a>
+<a href="../../../architecture/josyn-commons/josyn-commons-log/JOSYN.Commons.Log/index.html" class="nav-link">JOSYN.Commons.Log</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/Docs/josyn-ipc-protocol-draft-01.html" class="nav-link">JOSYN-IPC-Protocol</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/index.html" class="nav-link">JOSYN.Foundation.JIP</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/index.html" class="nav-link">JOSYN.Foundation.PropertyBag</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/index.html" class="nav-link">JOSYN.Foundation.ResultPattern</a>
+<a href="../../../architecture/josyn-jap/josyn-jap-shared/JOSYN.Jap.Shared.Contract/index.html" class="nav-link">JOSYN.Jap.Shared.Contract</a>
+<a href="../../../architecture/josyn-job-host/JOSYN.JobHost/index.html" class="nav-link">JOSYN.JobHost</a>
+<a href="../../../architecture/josyn-platform/architecture/overview.html" class="nav-link">Architecture Overview</a>
+<a href="../../../architecture/josyn-platform/architecture/storage.html" class="nav-link">JOSYN Storage Realm</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/01-context/josyn-and-jobsystem.html" class="nav-link">JOSYN and its Predecessor</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/01-context/index.html" class="nav-link">Context</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/index.html" class="nav-link">Constraints &amp; Settled Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/settled-decisions.html" class="nav-link">Settled Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/folder-layout.html" class="nav-link">Folder Layout</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/job-registry.html" class="nav-link">Job Registry</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/machine-topology.html" class="nav-link">Machine Topology</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/index.html" class="nav-link">Physical Architecture</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/services-and-executables.html" class="nav-link">Services and Executables</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/session-store.html" class="nav-link">Session Store</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/04-identity-and-security/identity-and-impersonation.html" class="nav-link">Identity and Impersonation</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/04-identity-and-security/index.html" class="nav-link">Identity &amp; Security</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/05-deployment-and-operations/job-deployment.html" class="nav-link">Job Deployment</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/05-deployment-and-operations/index.html" class="nav-link">Deployment &amp; Operations</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/audit-and-session-record.html" class="nav-link">Audit and the Session Record</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/coexistence-with-jobsystem.html" class="nav-link">Coexistence with JobSystem</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/isolation-vs-integration.html" class="nav-link">Isolation vs. Integration</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/maintainability-and-knowledge-transfer.html" class="nav-link">Maintainability and Knowledge Transfer</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/index.html" class="nav-link">Company Fit</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/evolution-horizon.html" class="nav-link">Evolution Horizon</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/index.html" class="nav-link">Evolution &amp; Lifecycle</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/yagni-decisions.html" class="nav-link">YAGNI Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/08-documentation-and-training/overview.html" class="nav-link">Documentation and Training — Overview</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/08-documentation-and-training/index.html" class="nav-link">Documentation &amp; Training</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/index.html" class="nav-link">Solution Architecture</a>
+<a href="../../../architecture/index.html" class="nav-link">Architecture</a>
+<div class="nav-section">Decisions</div>
+<a href="../../../decisions/index.html" class="nav-link">Overview</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-001-platform-naming.html" class="nav-link">ADR-001 — Platform Naming Vocabulary</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-002-josyn-backend.html" class="nav-link">ADR-002 — Introducing `josyn-backend` as a Separate Layer</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-003-josyn-commons.html" class="nav-link">ADR-003 — josyn-commons: A Generic Utility Layer</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-004-japserver-relocation.html" class="nav-link">ADR-004 — JAPServer Relocation into josyn-backend</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-005-documentation-governance.html" class="nav-link">ADR-005 — Documentation Governance and Agentic Way of Work</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-006-instance-types-for-dependency-holding-services.html" class="nav-link">ADR-006 — Instance Types for Dependency-Holding Services</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-007-storage-realm.html" class="nav-link">ADR-007 — The JOSYN Storage Realm</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-008-locallog-relocation.html" class="nav-link">ADR-008 — LocalLog Relocation to josyn-commons</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-009-runtime-context-provider-pattern.html" class="nav-link">ADR-009 — Runtime Context Provider Pattern for External Integrations</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-010-environment-separation.html" class="nav-link">ADR-010 — Environment Separation and Installation Model</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-011-jip-enum-support.html" class="nav-link">ADR-011 — JIP Wire-Type Extension: Enum Support in JipDispatcher</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-012-maintainer-deployment.html" class="nav-link">ADR-012 — Maintainer Deployment (First Iteration)</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-013-job-dev-mode.html" class="nav-link">ADR-013 — Job Dev Mode: Running a Job Locally from the IDE</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-014-cli-run-job-local-args.html" class="nav-link">ADR-014 — CLI `run-job` Command and Local Arguments Convention</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-001-backend-building-block-model.html" class="nav-link">ADR-001 — Backend Building Block Model</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-002-session-store.html" class="nav-link">ADR-002 — SessionStore</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-003-global-config.html" class="nav-link">ADR-003 — GlobalConfig</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-004-backend-restructuring.html" class="nav-link">ADR-004 — Backend Restructuring: Trigger Executables, ErrorHandler, and SessionStarter Fire-and-Forget Correction</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-005-job-registry.html" class="nav-link">ADR-005 — JobRegistry</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-006-error-handler.html" class="nav-link">ADR-006 — ErrorHandler</a>
+<div class="nav-section">Guides</div>
+<a href="../../josyn-platform/sanity/index.html" class="nav-link">Overview</a>
+<a href="../../josyn-platform/sanity/criteria-review.html" class="nav-link">Sanity Criteria — Decision-Maker Review</a>
+<a href="../../josyn-platform/sanity/overview.html" class="nav-link">Sanity Check — Platform Overview</a>
+<a href="../../josyn-platform/temp/arggen-inspection-guide.html" class="nav-link">ArgGen — Inspection &amp; Smoke-Test Guide</a>
+<a href="../deploy/index.html" class="nav-link">deploy</a>
+<a href="index.html" class="nav-link active">doc-generator</a>
+<a href="../docs-index-builder/index.html" class="nav-link">docs-index-builder</a>
+<a href="../git-tools/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="../../index.html" class="nav-link">Guides</a>
+<div class="nav-section">Notes</div>
+<a href="../../../notes/index.html" class="nav-link">Overview</a>
+<a href="../../../notes/josyn-platform/plans/sessionstore-poc-roadmap.html" class="nav-link">SessionStore -&gt; josyn-backend PoC Roadmap</a>
+<a href="../../../notes/josyn-platform/ROADMAP.html" class="nav-link">JOSYN Platform — Roadmap &amp; Status</a>
+<a href="../../../notes/josyn-platform/temp/poc-phases-2-5-notes.html" class="nav-link">PoC Phases 2–5 — Inspection &amp; Runtime Notes</a>
+<a href="../../../notes/josyn-platform/thinking/documentation-taxonomy.html" class="nav-link">Documentation Taxonomy — Working Note</a>
+<div class="nav-section">Reference</div>
+<a href="../../../reference/index.html" class="nav-link">Overview</a>
+<a href="../../../reference/josyn-backend/db/error-report.html" class="nav-link">JOSYN Error Report</a>
+<a href="../../../reference/josyn-backend/db/session-report.html" class="nav-link">JOSYN Session Report</a>
+<a href="../../../reference/josyn-commons/MAINTAINERS.html" class="nav-link">Advice for Maintainers of josyn-commons</a>
+<a href="../../../reference/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../reference/josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../reference/josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../reference/josyn-platform/architecture/coding-standards.html" class="nav-link">Coding Standards — Functional-First C#</a>
+<a href="../../../reference/josyn-platform/architecture/docs-index-vocabulary.html" class="nav-link">docs-index Vocabulary</a>
+<a href="../../../reference/josyn-platform/architecture/local-build.html" class="nav-link">`.local-build` — Local Developer Tooling</a>
+<a href="../../../reference/josyn-platform/architecture/naming-conventions.html" class="nav-link">Naming Conventions</a>
+<a href="../../../reference/josyn-platform/architecture/repo-structure-conventions.html" class="nav-link">Repo Structure Conventions</a>
+<a href="../../../reference/josyn-platform/MAINTAINERS.html" class="nav-link">JOSYN Platform — Maintainer&#39;s Guide</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/architecture.html" class="nav-link">Sanity Criteria — architecture</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/docs.html" class="nav-link">Sanity Criteria — docs</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/principles.html" class="nav-link">Sanity Criteria — principles</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/standards.html" class="nav-link">Sanity Criteria — standards</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/tests.html" class="nav-link">Sanity Criteria — tests</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-backend.html" class="nav-link">Sanity State — josyn-backend</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-commons.html" class="nav-link">Sanity State — josyn-commons</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-foundation.html" class="nav-link">Sanity State — josyn-foundation</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-jap.html" class="nav-link">Sanity State — josyn-jap</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-job-host.html" class="nav-link">Sanity State — josyn-job-host</a>
+<a href="../../../reference/josyn-platform/sanity/triggers.html" class="nav-link">Sanity — Trigger Table</a>
+<div class="nav-section">Repos</div>
+<a href="../../../repos/josyn-backend/index.html" class="nav-link">Overview</a>
+<a href="../../../repos/josyn-commons/index.html" class="nav-link">josyn-commons</a>
+<a href="../../../repos/josyn-contoso/index.html" class="nav-link">josyn-contoso</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-jip/index.html" class="nav-link">josyn-foundation-jip</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-property-bag/index.html" class="nav-link">josyn-foundation-property-bag</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-result-pattern/index.html" class="nav-link">josyn-foundation-result-pattern</a>
+<a href="../../../repos/josyn-foundation/index.html" class="nav-link">josyn-foundation</a>
+<a href="../../../repos/josyn-jap/josyn-jap-shared/index.html" class="nav-link">JOSYN.Jap.Shared</a>
+<a href="../../../repos/josyn-jap/index.html" class="nav-link">josyn-jap</a>
+<a href="../../../repos/josyn-platform/index.html" class="nav-link">JOSYN Platform</a>
+<a href="../../../repos/josyn-platform/repos/josyn-backend/overview.html" class="nav-link">josyn-backend</a>
+<a href="../../../repos/josyn-platform/repos/josyn-commons.html" class="nav-link">josyn-commons</a>
+<a href="../../../repos/josyn-platform/repos/josyn-foundation.html" class="nav-link">josyn-foundation</a>
+<a href="../../../repos/josyn-platform/repos/josyn-jap.html" class="nav-link">josyn-jap</a>
+<a href="../../../repos/josyn-platform/repos/josyn-job-host.html" class="nav-link">josyn-job-host</a>
+<a href="../../../repos/josyn-toolbox/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="../../../repos/index.html" class="nav-link">Repos</a>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="doc-generator">doc-generator</h1>
+<p>A .NET 10 console tool that converts any well-structured markdown documentation tree
+into a self-contained, browsable static HTML site. No server required — open
+<code>index.html</code> directly from the file system.</p>
+<p>Originally built for the JOSYN <code>solution-architecture</code> tree, but intentionally generic:
+it works for any markdown tree that follows the conventions below.</p>
+<hr />
+<h2 id="usage">Usage</h2>
+<pre><code>dotnet run --project tools/doc-generator -- &lt;source-dir&gt; &lt;output-dir&gt; [&lt;site-title&gt;]
+</code></pre>
+<p>All arguments are positional. <code>&lt;site-title&gt;</code> is optional.</p>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;source-dir&gt;</code></td>
+<td>Root of the markdown tree to export. Scanned recursively for <code>*.md</code> files.</td>
+</tr>
+<tr>
+<td><code>&lt;output-dir&gt;</code></td>
+<td>Destination folder for the generated site. Created if it does not exist. <strong>Not a source repo folder</strong> — point it anywhere (e.g. <code>C:\Temp\my-docs</code>).</td>
+</tr>
+<tr>
+<td><code>&lt;site-title&gt;</code></td>
+<td><em>(Optional)</em> Title shown in the browser tab and sidebar header. If omitted, derived from the source directory name (e.g. <code>solution-architecture</code> → <strong>Solution Architecture</strong>).</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example</strong> (from the <code>josyn-sandbox</code> root):</p>
+<pre><code>dotnet run --project tools/doc-generator -- ..\josyn-platform\solution-architecture C:\Temp\josyn-docs &quot;JOSYN Architecture&quot;
+</code></pre>
+<p>Then open <code>C:\Temp\josyn-docs\index.html</code> in any browser.</p>
+<p><strong>Note:</strong> because the CSS is compiled into the binary (not a loose file), any change to
+<code>HtmlTemplate.cs</code> requires a rebuild. <code>dotnet run</code> (without <code>--no-build</code>) handles this
+automatically. Use <code>--no-build</code> only when you have not changed any C# source.</p>
+<hr />
+<h2 id="source-structure-requirements">Source structure requirements</h2>
+<p>The tool makes these assumptions about the source tree:</p>
+<h3 id="a-root-readme.md-exists">1. A root <code>README.md</code> exists</h3>
+<p>It becomes <code>index.html</code> — the site's home page. Its first <code># Heading</code> is used as the
+page title.</p>
+<h3 id="top-level-numbered-subdirectories-form-the-nav-sections">2. Top-level numbered subdirectories form the nav sections</h3>
+<p>Directories whose names start with digits (e.g. <code>01-context</code>, <code>02-constraints-...</code>)
+are treated as nav sections and sorted numerically. The number prefix is stripped for
+display: <code>03-physical-architecture</code> → <strong>Physical Architecture</strong>.</p>
+<p>Directories that do not start with digits are silently included but appear at the end
+of the nav, unsorted.</p>
+<h3 id="each-section-directory-contains-a-readme.md">3. Each section directory contains a <code>README.md</code></h3>
+<p>This becomes <code>&lt;section&gt;/index.html</code> and is shown as the <strong>Overview</strong> link for that section.
+Sections without a <code>README.md</code> still work — they just have no overview link.</p>
+<h3 id="all-other.md-files-are-content-pages">4. All other <code>*.md</code> files are content pages</h3>
+<p>They are converted to <code>.html</code> alongside their <code>README.md</code>. Their first <code># Heading</code> is
+used as the nav label and page title.</p>
+<h3 id="only-one-level-of-subdirectories-is-navigated">5. Only one level of subdirectories is navigated</h3>
+<p>The sidebar shows sections → pages. Nested sub-subdirectories are converted to HTML but
+are not represented in the nav — they are only reachable via internal links.</p>
+<h3 id="what-you-do-not-need">What you do NOT need</h3>
+<ul>
+<li>No <code>mkdocs.yml</code>, no <code>_config.yml</code>, no front-matter, no special metadata.</li>
+<li>No particular file naming beyond <code>README.md</code> for section landing pages.</li>
+<li>No assets — images and other binary files are not copied (markdown-only source).</li>
+</ul>
+<hr />
+<h2 id="output">Output</h2>
+<p>The output folder is fully self-contained:</p>
+<pre><code>&lt;output-dir&gt;/
+  site.css               ← single shared stylesheet
+  index.html             ← home page (root README.md)
+  01-context/
+    index.html           ← section overview (README.md)
+    josyn-and-jobsystem.html
+  02-constraints.../
+    index.html
+    settled-decisions.html
+  ...
+</code></pre>
+<p>All internal links (including cross-section <code>.md</code> links and directory-style links
+ending in <code>/</code>) are rewritten to their HTML counterparts with correct relative paths.
+No root-relative URLs are used, so the site works from <code>file://</code> without a web server.</p>
+<hr />
+<h2 id="how-it-works-brief">How it works (brief)</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Program.cs</code></td>
+<td>Arg validation and entry point</td>
+</tr>
+<tr>
+<td><code>SiteBuilder.cs</code></td>
+<td>File discovery, nav tree construction, orchestration</td>
+</tr>
+<tr>
+<td><code>PageRenderer.cs</code></td>
+<td>Markdig AST parsing, link rewriting, per-page HTML assembly</td>
+</tr>
+<tr>
+<td><code>HtmlTemplate.cs</code></td>
+<td>HTML page template and CSS — the only file you need to touch for visual changes</td>
+</tr>
+</tbody>
+</table>
+<p>The pipeline per page:</p>
+<ol>
+<li>Parse markdown to a Markdig AST.</li>
+<li>Walk <code>LinkInline</code> nodes and rewrite local <code>.md</code> and directory-style (<code>/</code>) links
+to their output <code>.html</code> equivalents, computing relative paths from the current
+page's location.</li>
+<li>Render the AST to an HTML fragment.</li>
+<li>Wrap in the shared template with the page-specific nav sidebar.</li>
+</ol>
+<hr />
+<h2 id="tweaking-and-improving">Tweaking and improving</h2>
+<h3 id="changing-the-visual-design">Changing the visual design</h3>
+<p><strong>All CSS lives in <code>HtmlTemplate.Css</code></strong> (a <code>const string</code> at the bottom of <code>HtmlTemplate.cs</code>).
+Edit it freely — it is plain CSS, no preprocessor. The site uses:</p>
+<ul>
+<li>A fixed 280 px dark sidebar (<code>nav</code>)</li>
+<li>A content area with <code>max-width: 820px</code> (<code>article</code>)</li>
+<li>System font stack — no external font CDN</li>
+</ul>
+<p><strong>The HTML template is <code>HtmlTemplate.Render()</code></strong> — a C# raw string literal at the top of
+the same file. Add a <code>&lt;footer&gt;</code>, a breadcrumb, a header bar, or anything else here.</p>
+<p>Placeholders injected into the template:</p>
+<table>
+<thead>
+<tr>
+<th>Placeholder</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{title}</code></td>
+<td>Page title (first H1, HTML-encoded)</td>
+</tr>
+<tr>
+<td><code>{cssPath}</code></td>
+<td>Relative path to <code>site.css</code> from the current page</td>
+</tr>
+<tr>
+<td><code>{navHtml}</code></td>
+<td>Pre-rendered sidebar nav HTML</td>
+</tr>
+<tr>
+<td><code>{contentHtml}</code></td>
+<td>Rendered markdown body HTML</td>
+</tr>
+</tbody>
+</table>
+<h3 id="changing-the-nav-structure">Changing the nav structure</h3>
+<p>Nav tree construction is in <strong><code>SiteBuilder.BuildNav()</code></strong>. Adjust:</p>
+<ul>
+<li>Section ordering (currently alphabetical within the <code>OrderBy(g =&gt; g.Key)</code> call)</li>
+<li>The label for the section landing page (currently hardcoded as <code>&quot;Overview&quot;</code> in
+<code>PageRenderer.BuildNavHtml()</code>)</li>
+<li>Support for nested sub-sections (requires adding a second tier to <code>NavSection</code>)</li>
+</ul>
+<h3 id="changing-link-rewriting-behaviour">Changing link rewriting behaviour</h3>
+<p><strong><code>PageRenderer.RewriteLinks()</code></strong> walks the Markdig AST and rewrites <code>LinkInline.Url</code>
+values in-place before rendering. Add cases here for:</p>
+<ul>
+<li>Rewriting anchor-only links (<code>#fragment</code>)</li>
+<li>Validating that rewritten targets actually exist in the output</li>
+<li>Handling image links (<code>link.IsImage</code>) — currently images are not rewritten or copied</li>
+</ul>
+<h3 id="adding-a-second-markdig-extension">Adding a second Markdig extension</h3>
+<p>The pipeline is built once in <code>SiteBuilder</code>:</p>
+<pre><code class="language-csharp">internal static readonly MarkdownPipeline Pipeline = new MarkdownPipelineBuilder()
+    .UseAdvancedExtensions()
+    .Build();
+</code></pre>
+<p><code>UseAdvancedExtensions()</code> already includes tables, task lists, footnotes, and
+auto-identifiers. Add further extensions (e.g. <code>UseDiagrams()</code>) here.</p>
+<h3 id="supporting-image-assets">Supporting image assets</h3>
+<p>The tool currently ignores non-markdown files. To copy referenced images through:</p>
+<ol>
+<li>Collect all <code>ImageInline</code> URLs in the AST before rendering.</li>
+<li>Copy the referenced files from <code>sourceDir</code> to <code>outputDir</code> preserving relative paths.</li>
+<li>No URL rewriting is needed since the output folder structure mirrors the source.</li>
+</ol>
+<hr />
+<h2 id="re-running-after-source-changes">Re-running after source changes</h2>
+<p>The tool is stateless — every run regenerates the entire output from scratch. There is
+no incremental build. For a ~25-page tree, a full run completes in under one second.</p>
+<p>To set up a fast edit–preview loop:</p>
+<ol>
+<li>Edit a <code>.md</code> file.</li>
+<li>Run <code>dotnet run --project tools/doc-generator --no-build -- &lt;src&gt; &lt;out&gt;</code>.</li>
+<li>Refresh the browser.</li>
+</ol>
+<p>No watch mode is provided, but nothing prevents wrapping this in a <code>while ($true)</code> loop
+or a filesystem watcher script if you want automatic regeneration.</p>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+</body>
+</html>

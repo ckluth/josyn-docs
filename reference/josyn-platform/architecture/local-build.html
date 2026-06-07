@@ -1,0 +1,360 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> — Local Developer Tooling — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../index.html" class="nav-home">JOSYN Documentation</a>
+<div class="nav-section">Architecture</div>
+<a href="../../../architecture/josyn-backend/josyn-backend-bootstrap-config/JOSYN.Backend.BootstrapConfig/index.html" class="nav-link">Overview</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-error-handler/JOSYN.Backend.ErrorHandler/index.html" class="nav-link">JOSYN.Backend.ErrorHandler</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-jap-server/JOSYN.Jap.JAPServer/index.html" class="nav-link">JOSYN.Jap.JAPServer</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-job-registry/JOSYN.Backend.JobRegistry/index.html" class="nav-link">JOSYN.Backend.JobRegistry</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-session-starter/JOSYN.Backend.SessionStarter/index.html" class="nav-link">JOSYN.Backend.SessionStarter</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-session-store/JOSYN.Backend.SessionStore/index.html" class="nav-link">JOSYN.Backend.SessionStore</a>
+<a href="../../../architecture/josyn-commons/josyn-commons-log/JOSYN.Commons.Log/index.html" class="nav-link">JOSYN.Commons.Log</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/Docs/josyn-ipc-protocol-draft-01.html" class="nav-link">JOSYN-IPC-Protocol</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/index.html" class="nav-link">JOSYN.Foundation.JIP</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/index.html" class="nav-link">JOSYN.Foundation.PropertyBag</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/index.html" class="nav-link">JOSYN.Foundation.ResultPattern</a>
+<a href="../../../architecture/josyn-jap/josyn-jap-shared/JOSYN.Jap.Shared.Contract/index.html" class="nav-link">JOSYN.Jap.Shared.Contract</a>
+<a href="../../../architecture/josyn-job-host/JOSYN.JobHost/index.html" class="nav-link">JOSYN.JobHost</a>
+<a href="../../../architecture/josyn-platform/architecture/overview.html" class="nav-link">Architecture Overview</a>
+<a href="../../../architecture/josyn-platform/architecture/storage.html" class="nav-link">JOSYN Storage Realm</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/01-context/josyn-and-jobsystem.html" class="nav-link">JOSYN and its Predecessor</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/01-context/index.html" class="nav-link">Context</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/index.html" class="nav-link">Constraints &amp; Settled Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/settled-decisions.html" class="nav-link">Settled Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/folder-layout.html" class="nav-link">Folder Layout</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/job-registry.html" class="nav-link">Job Registry</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/machine-topology.html" class="nav-link">Machine Topology</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/index.html" class="nav-link">Physical Architecture</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/services-and-executables.html" class="nav-link">Services and Executables</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/session-store.html" class="nav-link">Session Store</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/04-identity-and-security/identity-and-impersonation.html" class="nav-link">Identity and Impersonation</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/04-identity-and-security/index.html" class="nav-link">Identity &amp; Security</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/05-deployment-and-operations/job-deployment.html" class="nav-link">Job Deployment</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/05-deployment-and-operations/index.html" class="nav-link">Deployment &amp; Operations</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/audit-and-session-record.html" class="nav-link">Audit and the Session Record</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/coexistence-with-jobsystem.html" class="nav-link">Coexistence with JobSystem</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/isolation-vs-integration.html" class="nav-link">Isolation vs. Integration</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/maintainability-and-knowledge-transfer.html" class="nav-link">Maintainability and Knowledge Transfer</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/index.html" class="nav-link">Company Fit</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/evolution-horizon.html" class="nav-link">Evolution Horizon</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/index.html" class="nav-link">Evolution &amp; Lifecycle</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/yagni-decisions.html" class="nav-link">YAGNI Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/08-documentation-and-training/overview.html" class="nav-link">Documentation and Training — Overview</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/08-documentation-and-training/index.html" class="nav-link">Documentation &amp; Training</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/index.html" class="nav-link">Solution Architecture</a>
+<a href="../../../architecture/index.html" class="nav-link">Architecture</a>
+<div class="nav-section">Decisions</div>
+<a href="../../../decisions/index.html" class="nav-link">Overview</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-001-platform-naming.html" class="nav-link">ADR-001 — Platform Naming Vocabulary</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-002-josyn-backend.html" class="nav-link">ADR-002 — Introducing `josyn-backend` as a Separate Layer</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-003-josyn-commons.html" class="nav-link">ADR-003 — josyn-commons: A Generic Utility Layer</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-004-japserver-relocation.html" class="nav-link">ADR-004 — JAPServer Relocation into josyn-backend</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-005-documentation-governance.html" class="nav-link">ADR-005 — Documentation Governance and Agentic Way of Work</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-006-instance-types-for-dependency-holding-services.html" class="nav-link">ADR-006 — Instance Types for Dependency-Holding Services</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-007-storage-realm.html" class="nav-link">ADR-007 — The JOSYN Storage Realm</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-008-locallog-relocation.html" class="nav-link">ADR-008 — LocalLog Relocation to josyn-commons</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-009-runtime-context-provider-pattern.html" class="nav-link">ADR-009 — Runtime Context Provider Pattern for External Integrations</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-010-environment-separation.html" class="nav-link">ADR-010 — Environment Separation and Installation Model</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-011-jip-enum-support.html" class="nav-link">ADR-011 — JIP Wire-Type Extension: Enum Support in JipDispatcher</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-012-maintainer-deployment.html" class="nav-link">ADR-012 — Maintainer Deployment (First Iteration)</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-013-job-dev-mode.html" class="nav-link">ADR-013 — Job Dev Mode: Running a Job Locally from the IDE</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-014-cli-run-job-local-args.html" class="nav-link">ADR-014 — CLI `run-job` Command and Local Arguments Convention</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-001-backend-building-block-model.html" class="nav-link">ADR-001 — Backend Building Block Model</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-002-session-store.html" class="nav-link">ADR-002 — SessionStore</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-003-global-config.html" class="nav-link">ADR-003 — GlobalConfig</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-004-backend-restructuring.html" class="nav-link">ADR-004 — Backend Restructuring: Trigger Executables, ErrorHandler, and SessionStarter Fire-and-Forget Correction</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-005-job-registry.html" class="nav-link">ADR-005 — JobRegistry</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-006-error-handler.html" class="nav-link">ADR-006 — ErrorHandler</a>
+<div class="nav-section">Guides</div>
+<a href="../../../guides/josyn-platform/sanity/index.html" class="nav-link">Overview</a>
+<a href="../../../guides/josyn-platform/sanity/criteria-review.html" class="nav-link">Sanity Criteria — Decision-Maker Review</a>
+<a href="../../../guides/josyn-platform/sanity/overview.html" class="nav-link">Sanity Check — Platform Overview</a>
+<a href="../../../guides/josyn-platform/temp/arggen-inspection-guide.html" class="nav-link">ArgGen — Inspection &amp; Smoke-Test Guide</a>
+<a href="../../../guides/josyn-toolbox/deploy/index.html" class="nav-link">deploy</a>
+<a href="../../../guides/josyn-toolbox/git-tools/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="../../../guides/josyn-toolbox/site-builder/index.html" class="nav-link">site-builder — JOSYN Documentation Pipeline</a>
+<a href="../../../guides/josyn-toolbox/site-builder/site-builder-assembler/index.html" class="nav-link">site-builder-assembler</a>
+<a href="../../../guides/josyn-toolbox/site-builder/site-builder-indexer/index.html" class="nav-link">site-builder-indexer</a>
+<a href="../../../guides/josyn-toolbox/site-builder/site-builder-renderer/index.html" class="nav-link">site-builder-renderer</a>
+<a href="../../../guides/index.html" class="nav-link">Guides</a>
+<div class="nav-section">Notes</div>
+<a href="../../../notes/index.html" class="nav-link">Overview</a>
+<a href="../../../notes/josyn-platform/plans/sessionstore-poc-roadmap.html" class="nav-link">SessionStore -&gt; josyn-backend PoC Roadmap</a>
+<a href="../../../notes/josyn-platform/ROADMAP.html" class="nav-link">JOSYN Platform — Roadmap &amp; Status</a>
+<a href="../../../notes/josyn-platform/temp/poc-phases-2-5-notes.html" class="nav-link">PoC Phases 2–5 — Inspection &amp; Runtime Notes</a>
+<a href="../../../notes/josyn-platform/thinking/documentation-taxonomy.html" class="nav-link">Documentation Taxonomy — Working Note</a>
+<div class="nav-section">Reference</div>
+<a href="../../index.html" class="nav-link">Overview</a>
+<a href="../../josyn-backend/db/error-report.html" class="nav-link">JOSYN Error Report</a>
+<a href="../../josyn-backend/db/session-report.html" class="nav-link">JOSYN Session Report</a>
+<a href="../../josyn-commons/MAINTAINERS.html" class="nav-link">Advice for Maintainers of josyn-commons</a>
+<a href="../../josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="coding-standards.html" class="nav-link">Coding Standards — Functional-First C#</a>
+<a href="docs-index-vocabulary.html" class="nav-link">docs-index Vocabulary</a>
+<a href="local-build.html" class="nav-link active">`.local-build` — Local Developer Tooling</a>
+<a href="naming-conventions.html" class="nav-link">Naming Conventions</a>
+<a href="repo-structure-conventions.html" class="nav-link">Repo Structure Conventions</a>
+<a href="../MAINTAINERS.html" class="nav-link">JOSYN Platform — Maintainer&#39;s Guide</a>
+<a href="../sanity/criteria/architecture.html" class="nav-link">Sanity Criteria — architecture</a>
+<a href="../sanity/criteria/docs.html" class="nav-link">Sanity Criteria — docs</a>
+<a href="../sanity/criteria/principles.html" class="nav-link">Sanity Criteria — principles</a>
+<a href="../sanity/criteria/standards.html" class="nav-link">Sanity Criteria — standards</a>
+<a href="../sanity/criteria/tests.html" class="nav-link">Sanity Criteria — tests</a>
+<a href="../sanity/current-state/josyn-backend.html" class="nav-link">Sanity State — josyn-backend</a>
+<a href="../sanity/current-state/josyn-commons.html" class="nav-link">Sanity State — josyn-commons</a>
+<a href="../sanity/current-state/josyn-foundation.html" class="nav-link">Sanity State — josyn-foundation</a>
+<a href="../sanity/current-state/josyn-jap.html" class="nav-link">Sanity State — josyn-jap</a>
+<a href="../sanity/current-state/josyn-job-host.html" class="nav-link">Sanity State — josyn-job-host</a>
+<a href="../sanity/triggers.html" class="nav-link">Sanity — Trigger Table</a>
+<div class="nav-section">Repos</div>
+<a href="../../../repos/josyn-backend/index.html" class="nav-link">Overview</a>
+<a href="../../../repos/josyn-commons/index.html" class="nav-link">josyn-commons</a>
+<a href="../../../repos/josyn-contoso/index.html" class="nav-link">josyn-contoso</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-jip/index.html" class="nav-link">josyn-foundation-jip</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-property-bag/index.html" class="nav-link">josyn-foundation-property-bag</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-result-pattern/index.html" class="nav-link">josyn-foundation-result-pattern</a>
+<a href="../../../repos/josyn-foundation/index.html" class="nav-link">josyn-foundation</a>
+<a href="../../../repos/josyn-jap/josyn-jap-shared/index.html" class="nav-link">JOSYN.Jap.Shared</a>
+<a href="../../../repos/josyn-jap/index.html" class="nav-link">josyn-jap</a>
+<a href="../../../repos/josyn-platform/index.html" class="nav-link">JOSYN Platform</a>
+<a href="../../../repos/josyn-platform/repos/josyn-backend/overview.html" class="nav-link">josyn-backend</a>
+<a href="../../../repos/josyn-platform/repos/josyn-commons.html" class="nav-link">josyn-commons</a>
+<a href="../../../repos/josyn-platform/repos/josyn-foundation.html" class="nav-link">josyn-foundation</a>
+<a href="../../../repos/josyn-platform/repos/josyn-jap.html" class="nav-link">josyn-jap</a>
+<a href="../../../repos/josyn-platform/repos/josyn-job-host.html" class="nav-link">josyn-job-host</a>
+<a href="../../../repos/josyn-toolbox/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="../../../repos/index.html" class="nav-link">Repos</a>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="local-build-local-developer-tooling"><code>.local-build</code> — Local Developer Tooling</h1>
+<p><code>.local-build</code> is a set of thin <code>.cmd</code> wrapper scripts that give a <strong>maintainer or platform
+developer</strong> fast, opinionated entry points into common build tasks — directly from a terminal,
+without IDE involvement.</p>
+<hr />
+<h2 id="purpose-and-audience">Purpose and Audience</h2>
+<p>These scripts exist because during active platform development the same sequence of commands
+is typed repeatedly: build in the right configuration, clear the cached NuGet package, pack,
+run tests. <code>.local-build</code> codifies those sequences once per solution (and once per repo for
+multi-solution repos) so they can be invoked with a single call.</p>
+<p><strong>Primary audience:</strong> maintainers and platform developers working locally.</p>
+<p><code>.local-build</code> scripts are <strong>not for automated pipelines</strong>. CI/CD workflows define their own
+build steps and must never delegate to these scripts. The assumptions baked in here — local
+NuGet cache paths, output directories under <code>C:\Temp</code>, hardcoded pipe arguments in launch
+scripts — are developer-machine assumptions that have no place in a pipeline.</p>
+<hr />
+<h2 id="non-scope">Non-Scope</h2>
+<table>
+<thead>
+<tr>
+<th>What <code>.local-build</code> is NOT</th>
+<th>What owns it instead</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A CI/CD build stage</td>
+<td>The pipeline definition in the CI system</td>
+</tr>
+<tr>
+<td>An SDK or toolchain installer</td>
+<td>Machine setup / provisioning scripts</td>
+</tr>
+<tr>
+<td>A NuGet feed publisher</td>
+<td>The CI release workflow</td>
+</tr>
+<tr>
+<td>An environment configuration tool</td>
+<td>Outside scope of this platform</td>
+</tr>
+<tr>
+<td>A deployment or launch orchestrator</td>
+<td>Production runtime tooling</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="two-characters">Two Characters</h2>
+<p><code>.local-build</code> appears at two structurally distinct levels and the two have different
+characters. Understanding which character a script set has tells you immediately what it can
+and cannot do.</p>
+<h3 id="single-target">Single-Target</h3>
+<p>Operates on <strong>exactly one solution</strong> (<code>.slnx</code>). The scripts locate their solution one level
+up from <code>%~dp0</code> and act on it exclusively. They know nothing about other solutions in the repo.</p>
+<p>This character is used:</p>
+<ul>
+<li>in <strong>Pattern A repos</strong> — the repo-root <code>.local-build/</code> is the only one; it is single-target</li>
+<li>in <strong>sub-solution folders inside Pattern B repos</strong> — each sub-solution has its own</li>
+</ul>
+<p><strong>Typical script surface:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>build.cmd [Release\|Debug]</code></td>
+<td>Builds the solution; defaults to Release</td>
+</tr>
+<tr>
+<td><code>build.release.cmd</code></td>
+<td>Shorthand — calls <code>build.cmd Release</code></td>
+</tr>
+<tr>
+<td><code>build.debug.cmd</code></td>
+<td>Shorthand — calls <code>build.cmd Debug</code></td>
+</tr>
+<tr>
+<td><code>test.cmd</code></td>
+<td>Runs all tests in the solution</td>
+</tr>
+<tr>
+<td><code>pack.cmd</code></td>
+<td>Packs the NuGet package to the local feed</td>
+</tr>
+<tr>
+<td><code>clean.cmd</code></td>
+<td>Removes this package's entry from the local NuGet cache</td>
+</tr>
+<tr>
+<td><code>all.cmd</code></td>
+<td>Chains: clean → build → test → pack</td>
+</tr>
+<tr>
+<td><code>launch.release.cmd</code></td>
+<td>Launches the executable with release output (executables only)</td>
+</tr>
+<tr>
+<td><code>launch.debug.cmd</code></td>
+<td>Launches the executable with debug output (executables only)</td>
+</tr>
+</tbody>
+</table>
+<p>Not every script is present in every <code>.local-build/</code>. Include only what applies to that
+solution: a library has no <code>launch.*.cmd</code>; a solution without tests omits <code>test.cmd</code>.</p>
+<p><strong><code>clean.cmd</code> note:</strong> at the single-target level, clean does <em>not</em> run <code>dotnet clean</code> on
+<code>bin/obj</code>. It removes the package from the local NuGet cache (<code>%USERPROFILE%\.nuget\packages\</code>).
+This is the developer-specific operation: it forces downstream projects to resolve a fresh
+copy of the package on the next build, which is the common need when iterating on a library
+that is consumed locally.</p>
+<p><strong><code>launch.*.cmd</code> note:</strong> launch scripts may contain hardcoded local paths (output directories,
+pipe names). This is acceptable — they are intentionally per-developer-machine scripts. Do not
+attempt to generalise them.</p>
+<hr />
+<h3 id="batch-orchestrator">Batch / Orchestrator</h3>
+<p>Operates on <strong>all sub-solutions in a Pattern B repo</strong>, in dependency order. It contains no
+build logic of its own — it delegates entirely to each sub-solution's single-target
+<code>.local-build/</code>. The dependency order is encoded directly in the script.</p>
+<p>This character is used <strong>exclusively at the repo root of Pattern B repos</strong>.</p>
+<p><strong>Typical script surface:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>build.cmd [Release\|Debug]</code></td>
+<td>Calls <code>build.cmd</code> in each sub-solution in dependency order</td>
+</tr>
+<tr>
+<td><code>test.cmd</code></td>
+<td>Calls <code>test.cmd</code> in each sub-solution in dependency order</td>
+</tr>
+<tr>
+<td><code>pack.cmd</code></td>
+<td>Calls <code>pack.cmd</code> in each sub-solution</td>
+</tr>
+<tr>
+<td><code>clean.cmd</code></td>
+<td>Calls <code>clean.cmd</code> in each sub-solution</td>
+</tr>
+<tr>
+<td><code>all.cmd</code></td>
+<td>Chains: clean → build → test → pack across all sub-solutions</td>
+</tr>
+</tbody>
+</table>
+<p><code>all.cmd</code> is the top-level <strong>&quot;build the whole repo&quot;</strong> entry point. It only exists at the
+batch level.</p>
+<hr />
+<h2 id="assignment-by-pattern">Assignment by Pattern</h2>
+<table>
+<thead>
+<tr>
+<th>Repo pattern</th>
+<th><code>.local-build</code> level</th>
+<th>Character</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Pattern A</strong></td>
+<td>Repo root</td>
+<td>Single-target</td>
+</tr>
+<tr>
+<td><strong>Pattern B</strong></td>
+<td>Repo root</td>
+<td>Batch / orchestrator</td>
+</tr>
+<tr>
+<td><strong>Pattern B</strong></td>
+<td>Sub-solution folder</td>
+<td>Single-target</td>
+</tr>
+</tbody>
+</table>
+<p>A Pattern B sub-solution may omit its own <code>.local-build/</code> only if it has no scripts at all
+(e.g., a sub-folder that is documentation only). For any sub-solution that is built, tested,
+or packed, the single-target <code>.local-build/</code> is required — the batch-level scripts delegate
+to it and will fail without it.</p>
+<hr />
+<h2 id="script-rules">Script Rules</h2>
+<ul>
+<li>All scripts start with <code>@echo off</code> and <code>CHCP 1252</code>.</li>
+<li><code>build.cmd</code> accepts an optional <code>[Release|Debug]</code> argument and defaults to <code>Release</code>.</li>
+<li>Errors propagate via <code>exit /b %ERRORLEVEL%</code>. No silent failures.</li>
+<li>Scripts do not <code>pause</code> in normal operation. Pauses are either removed or commented out.</li>
+<li>All paths are derived from <code>%~dp0</code>. No hardcoded absolute paths except in <code>launch.*.cmd</code>
+(see above).</li>
+<li>The <code>all.cmd</code> script at either level does <strong>not</strong> accept a configuration argument. It
+always builds Release. Debug builds are invoked explicitly via <code>build.debug.cmd</code>.</li>
+</ul>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+</body>
+</html>

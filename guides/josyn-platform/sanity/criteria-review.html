@@ -1,0 +1,1011 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sanity Criteria — Decision-Maker Review — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../index.html" class="nav-home">JOSYN Documentation</a>
+<div class="nav-section">Architecture</div>
+<a href="../../../architecture/josyn-backend/josyn-backend-bootstrap-config/JOSYN.Backend.BootstrapConfig/index.html" class="nav-link">Overview</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-error-handler/JOSYN.Backend.ErrorHandler/index.html" class="nav-link">JOSYN.Backend.ErrorHandler</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-jap-server/JOSYN.Jap.JAPServer/index.html" class="nav-link">JOSYN.Jap.JAPServer</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-job-registry/JOSYN.Backend.JobRegistry/index.html" class="nav-link">JOSYN.Backend.JobRegistry</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-session-starter/JOSYN.Backend.SessionStarter/index.html" class="nav-link">JOSYN.Backend.SessionStarter</a>
+<a href="../../../architecture/josyn-backend/josyn-backend-session-store/JOSYN.Backend.SessionStore/index.html" class="nav-link">JOSYN.Backend.SessionStore</a>
+<a href="../../../architecture/josyn-commons/josyn-commons-log/JOSYN.Commons.Log/index.html" class="nav-link">JOSYN.Commons.Log</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/Docs/josyn-ipc-protocol-draft-01.html" class="nav-link">JOSYN-IPC-Protocol</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/index.html" class="nav-link">JOSYN.Foundation.JIP</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/index.html" class="nav-link">JOSYN.Foundation.PropertyBag</a>
+<a href="../../../architecture/josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/index.html" class="nav-link">JOSYN.Foundation.ResultPattern</a>
+<a href="../../../architecture/josyn-jap/josyn-jap-shared/JOSYN.Jap.Shared.Contract/index.html" class="nav-link">JOSYN.Jap.Shared.Contract</a>
+<a href="../../../architecture/josyn-job-host/JOSYN.JobHost/index.html" class="nav-link">JOSYN.JobHost</a>
+<a href="../../../architecture/josyn-platform/architecture/overview.html" class="nav-link">Architecture Overview</a>
+<a href="../../../architecture/josyn-platform/architecture/storage.html" class="nav-link">JOSYN Storage Realm</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/01-context/josyn-and-jobsystem.html" class="nav-link">JOSYN and its Predecessor</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/01-context/index.html" class="nav-link">Context</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/index.html" class="nav-link">Constraints &amp; Settled Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/02-constraints-and-settled-decisions/settled-decisions.html" class="nav-link">Settled Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/folder-layout.html" class="nav-link">Folder Layout</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/job-registry.html" class="nav-link">Job Registry</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/machine-topology.html" class="nav-link">Machine Topology</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/index.html" class="nav-link">Physical Architecture</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/services-and-executables.html" class="nav-link">Services and Executables</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/03-physical-architecture/session-store.html" class="nav-link">Session Store</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/04-identity-and-security/identity-and-impersonation.html" class="nav-link">Identity and Impersonation</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/04-identity-and-security/index.html" class="nav-link">Identity &amp; Security</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/05-deployment-and-operations/job-deployment.html" class="nav-link">Job Deployment</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/05-deployment-and-operations/index.html" class="nav-link">Deployment &amp; Operations</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/audit-and-session-record.html" class="nav-link">Audit and the Session Record</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/coexistence-with-jobsystem.html" class="nav-link">Coexistence with JobSystem</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/isolation-vs-integration.html" class="nav-link">Isolation vs. Integration</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/maintainability-and-knowledge-transfer.html" class="nav-link">Maintainability and Knowledge Transfer</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/06-company-fit/index.html" class="nav-link">Company Fit</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/evolution-horizon.html" class="nav-link">Evolution Horizon</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/index.html" class="nav-link">Evolution &amp; Lifecycle</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/07-evolution-and-lifecycle/yagni-decisions.html" class="nav-link">YAGNI Decisions</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/08-documentation-and-training/overview.html" class="nav-link">Documentation and Training — Overview</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/08-documentation-and-training/index.html" class="nav-link">Documentation &amp; Training</a>
+<a href="../../../architecture/josyn-platform/solution-architecture/index.html" class="nav-link">Solution Architecture</a>
+<a href="../../../architecture/index.html" class="nav-link">Architecture</a>
+<div class="nav-section">Decisions</div>
+<a href="../../../decisions/index.html" class="nav-link">Overview</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-001-platform-naming.html" class="nav-link">ADR-001 — Platform Naming Vocabulary</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-002-josyn-backend.html" class="nav-link">ADR-002 — Introducing `josyn-backend` as a Separate Layer</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-003-josyn-commons.html" class="nav-link">ADR-003 — josyn-commons: A Generic Utility Layer</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-004-japserver-relocation.html" class="nav-link">ADR-004 — JAPServer Relocation into josyn-backend</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-005-documentation-governance.html" class="nav-link">ADR-005 — Documentation Governance and Agentic Way of Work</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-006-instance-types-for-dependency-holding-services.html" class="nav-link">ADR-006 — Instance Types for Dependency-Holding Services</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-007-storage-realm.html" class="nav-link">ADR-007 — The JOSYN Storage Realm</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-008-locallog-relocation.html" class="nav-link">ADR-008 — LocalLog Relocation to josyn-commons</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-009-runtime-context-provider-pattern.html" class="nav-link">ADR-009 — Runtime Context Provider Pattern for External Integrations</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-010-environment-separation.html" class="nav-link">ADR-010 — Environment Separation and Installation Model</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-011-jip-enum-support.html" class="nav-link">ADR-011 — JIP Wire-Type Extension: Enum Support in JipDispatcher</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-012-maintainer-deployment.html" class="nav-link">ADR-012 — Maintainer Deployment (First Iteration)</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-013-job-dev-mode.html" class="nav-link">ADR-013 — Job Dev Mode: Running a Job Locally from the IDE</a>
+<a href="../../../decisions/josyn-platform/decisions/ADR-014-cli-run-job-local-args.html" class="nav-link">ADR-014 — CLI `run-job` Command and Local Arguments Convention</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-001-backend-building-block-model.html" class="nav-link">ADR-001 — Backend Building Block Model</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-002-session-store.html" class="nav-link">ADR-002 — SessionStore</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-003-global-config.html" class="nav-link">ADR-003 — GlobalConfig</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-004-backend-restructuring.html" class="nav-link">ADR-004 — Backend Restructuring: Trigger Executables, ErrorHandler, and SessionStarter Fire-and-Forget Correction</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-005-job-registry.html" class="nav-link">ADR-005 — JobRegistry</a>
+<a href="../../../decisions/josyn-platform/repos/josyn-backend/decisions/ADR-006-error-handler.html" class="nav-link">ADR-006 — ErrorHandler</a>
+<div class="nav-section">Guides</div>
+<a href="index.html" class="nav-link">Overview</a>
+<a href="criteria-review.html" class="nav-link active">Sanity Criteria — Decision-Maker Review</a>
+<a href="overview.html" class="nav-link">Sanity Check — Platform Overview</a>
+<a href="../temp/arggen-inspection-guide.html" class="nav-link">ArgGen — Inspection &amp; Smoke-Test Guide</a>
+<a href="../../josyn-toolbox/deploy/index.html" class="nav-link">deploy</a>
+<a href="../../josyn-toolbox/git-tools/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="../../josyn-toolbox/site-builder/index.html" class="nav-link">site-builder — JOSYN Documentation Pipeline</a>
+<a href="../../josyn-toolbox/site-builder/site-builder-assembler/index.html" class="nav-link">site-builder-assembler</a>
+<a href="../../josyn-toolbox/site-builder/site-builder-indexer/index.html" class="nav-link">site-builder-indexer</a>
+<a href="../../josyn-toolbox/site-builder/site-builder-renderer/index.html" class="nav-link">site-builder-renderer</a>
+<a href="../../index.html" class="nav-link">Guides</a>
+<div class="nav-section">Notes</div>
+<a href="../../../notes/index.html" class="nav-link">Overview</a>
+<a href="../../../notes/josyn-platform/plans/sessionstore-poc-roadmap.html" class="nav-link">SessionStore -&gt; josyn-backend PoC Roadmap</a>
+<a href="../../../notes/josyn-platform/ROADMAP.html" class="nav-link">JOSYN Platform — Roadmap &amp; Status</a>
+<a href="../../../notes/josyn-platform/temp/poc-phases-2-5-notes.html" class="nav-link">PoC Phases 2–5 — Inspection &amp; Runtime Notes</a>
+<a href="../../../notes/josyn-platform/thinking/documentation-taxonomy.html" class="nav-link">Documentation Taxonomy — Working Note</a>
+<div class="nav-section">Reference</div>
+<a href="../../../reference/index.html" class="nav-link">Overview</a>
+<a href="../../../reference/josyn-backend/db/error-report.html" class="nav-link">JOSYN Error Report</a>
+<a href="../../../reference/josyn-backend/db/session-report.html" class="nav-link">JOSYN Session Report</a>
+<a href="../../../reference/josyn-commons/MAINTAINERS.html" class="nav-link">Advice for Maintainers of josyn-commons</a>
+<a href="../../../reference/josyn-foundation/josyn-foundation-jip/JOSYN.Foundation.JIP/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../reference/josyn-foundation/josyn-foundation-property-bag/JOSYN.Foundation.PropertyBag/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../reference/josyn-foundation/josyn-foundation-result-pattern/JOSYN.Foundation.ResultPattern/CHANGELOG.html" class="nav-link">Changelog</a>
+<a href="../../../reference/josyn-platform/architecture/coding-standards.html" class="nav-link">Coding Standards — Functional-First C#</a>
+<a href="../../../reference/josyn-platform/architecture/docs-index-vocabulary.html" class="nav-link">docs-index Vocabulary</a>
+<a href="../../../reference/josyn-platform/architecture/local-build.html" class="nav-link">`.local-build` — Local Developer Tooling</a>
+<a href="../../../reference/josyn-platform/architecture/naming-conventions.html" class="nav-link">Naming Conventions</a>
+<a href="../../../reference/josyn-platform/architecture/repo-structure-conventions.html" class="nav-link">Repo Structure Conventions</a>
+<a href="../../../reference/josyn-platform/MAINTAINERS.html" class="nav-link">JOSYN Platform — Maintainer&#39;s Guide</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/architecture.html" class="nav-link">Sanity Criteria — architecture</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/docs.html" class="nav-link">Sanity Criteria — docs</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/principles.html" class="nav-link">Sanity Criteria — principles</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/standards.html" class="nav-link">Sanity Criteria — standards</a>
+<a href="../../../reference/josyn-platform/sanity/criteria/tests.html" class="nav-link">Sanity Criteria — tests</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-backend.html" class="nav-link">Sanity State — josyn-backend</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-commons.html" class="nav-link">Sanity State — josyn-commons</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-foundation.html" class="nav-link">Sanity State — josyn-foundation</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-jap.html" class="nav-link">Sanity State — josyn-jap</a>
+<a href="../../../reference/josyn-platform/sanity/current-state/josyn-job-host.html" class="nav-link">Sanity State — josyn-job-host</a>
+<a href="../../../reference/josyn-platform/sanity/triggers.html" class="nav-link">Sanity — Trigger Table</a>
+<div class="nav-section">Repos</div>
+<a href="../../../repos/josyn-backend/index.html" class="nav-link">Overview</a>
+<a href="../../../repos/josyn-commons/index.html" class="nav-link">josyn-commons</a>
+<a href="../../../repos/josyn-contoso/index.html" class="nav-link">josyn-contoso</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-jip/index.html" class="nav-link">josyn-foundation-jip</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-property-bag/index.html" class="nav-link">josyn-foundation-property-bag</a>
+<a href="../../../repos/josyn-foundation/josyn-foundation-result-pattern/index.html" class="nav-link">josyn-foundation-result-pattern</a>
+<a href="../../../repos/josyn-foundation/index.html" class="nav-link">josyn-foundation</a>
+<a href="../../../repos/josyn-jap/josyn-jap-shared/index.html" class="nav-link">JOSYN.Jap.Shared</a>
+<a href="../../../repos/josyn-jap/index.html" class="nav-link">josyn-jap</a>
+<a href="../../../repos/josyn-platform/index.html" class="nav-link">JOSYN Platform</a>
+<a href="../../../repos/josyn-platform/repos/josyn-backend/overview.html" class="nav-link">josyn-backend</a>
+<a href="../../../repos/josyn-platform/repos/josyn-commons.html" class="nav-link">josyn-commons</a>
+<a href="../../../repos/josyn-platform/repos/josyn-foundation.html" class="nav-link">josyn-foundation</a>
+<a href="../../../repos/josyn-platform/repos/josyn-jap.html" class="nav-link">josyn-jap</a>
+<a href="../../../repos/josyn-platform/repos/josyn-job-host.html" class="nav-link">josyn-job-host</a>
+<a href="../../../repos/josyn-toolbox/index.html" class="nav-link">JOSYN Toolbox</a>
+<a href="../../../repos/index.html" class="nav-link">Repos</a>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="sanity-criteria-decision-maker-review">Sanity Criteria — Decision-Maker Review</h1>
+<blockquote>
+<p><strong>Living document.</strong> Revisit periodically — especially after adding new criteria, after a full
+sanity run uncovers surprising noise, or when the platform architecture evolves.</p>
+<p><strong>Purpose:</strong> Judge every criterion by its signal quality so the sanity check stays tight
+and high-value. Low-signal criteria erode trust in the whole check.</p>
+<p><strong>Workflow:</strong> Review the 🟡 and 🔴 items. For each, decide: Accept / Weaken / Drop.
+Then reconcile the source files (<code>architecture.md</code>, <code>standards.md</code>, <code>docs.md</code>, <code>tests.md</code>, <code>principles.md</code>).</p>
+<p><strong>Rating legend</strong></p>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🟢</td>
+<td>Indispensable — catches real problems, no false positives, keep as-is</td>
+</tr>
+<tr>
+<td>🟡</td>
+<td>Discussable — reasonable rule, but enforcement may be noisy or the value is limited</td>
+</tr>
+<tr>
+<td>🔴</td>
+<td>Not really necessary — nice-to-have at best; adds noise relative to signal</td>
+</tr>
+<tr>
+<td>⛔</td>
+<td>Bare mistake — actively wrong to check this, or rule itself is flawed</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<hr />
+<h2 id="architecture">1. Architecture</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Criterion</th>
+<th>Rating</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A1</td>
+<td>Permitted dependency edges (josyn-foundation → nothing, etc.)</td>
+<td>🟢</td>
+<td>Core architectural invariant. A wrong edge silently breaks the isolation model at runtime.</td>
+</tr>
+<tr>
+<td>A2</td>
+<td>Forbidden edge: backend → josyn-jap NuGet packages</td>
+<td>🟢</td>
+<td>If this edge forms, the process-isolation design collapses into tight coupling.</td>
+</tr>
+<tr>
+<td>A3</td>
+<td>Forbidden edge: foundation → anything</td>
+<td>🟢</td>
+<td>Foundation is the root of all trees; a cycle here is a structural catastrophe.</td>
+</tr>
+<tr>
+<td>A4</td>
+<td>Forbidden edge: jap ↔ job-host (symmetric peers, never reference each other)</td>
+<td>🟢</td>
+<td>They are equal participants in the IPC protocol, not layers. Coupling them breaks the model.</td>
+</tr>
+<tr>
+<td>A5</td>
+<td>Forbidden edge: any repo → josyn-platform</td>
+<td>🟢</td>
+<td>Platform is documentation only. A csproj reference to it would be meaningless and confusing.</td>
+</tr>
+<tr>
+<td>A6</td>
+<td>josyn-commons must not reference platform packages beyond ResultPattern</td>
+<td>🟢</td>
+<td>Commons is a utility satellite. Extra deps defeat its purpose.</td>
+</tr>
+<tr>
+<td>A7</td>
+<td>Backend spawns JAPServer.exe — session GUID is the only coupling</td>
+<td>🟢</td>
+<td>Verifies the IPC contract is not being bypassed by other shared state.</td>
+</tr>
+<tr>
+<td>A8</td>
+<td>Named pipe names follow <code>JOSYN-REQ-&lt;sessionGUID&gt;</code> / <code>JOSYN-RSP-&lt;sessionGUID&gt;</code></td>
+<td>🟡</td>
+<td><strong>Scoped:</strong> flag hardcoded strings that look like pipe names but deviate from the pattern. Dynamic construction via the session GUID is the expected path and needs no check.</td>
+</tr>
+<tr>
+<td>A9</td>
+<td>Assembly name = namespace root (with documented <code>JOSYN.JobHost</code> exception)</td>
+<td>🟢</td>
+<td>Fundamental .NET convention; violating it breaks tooling, IDE navigation, and build output.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="standards-project-file">2. Standards — Project File</h2>
+<h3 id="universal-all-project-types">Universal (all project types)</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Criterion</th>
+<th>Rating</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S1</td>
+<td><code>&lt;TargetFramework&gt;</code> = <code>net10.0</code></td>
+<td>🟢</td>
+<td>Mixed target frameworks across the platform will cause package incompatibilities.</td>
+</tr>
+<tr>
+<td>S2</td>
+<td><code>&lt;Nullable&gt;enable&lt;/Nullable&gt;</code></td>
+<td>🟢</td>
+<td>Disabling nullability breaks a key safety guarantee and creates noise for partial-enable edge cases.</td>
+</tr>
+<tr>
+<td>S5</td>
+<td><code>&lt;PlatformTarget&gt;AnyCPU&lt;/PlatformTarget&gt;</code></td>
+<td>🟢</td>
+<td>x86-specific builds break on ARM/Linux toolchains. Enforcing AnyCPU prevents silent platform lockout.</td>
+</tr>
+<tr>
+<td>S6</td>
+<td><code>&lt;AppendTargetFrameworkToOutputPath&gt;false&lt;/AppendTargetFrameworkToOutputPath&gt;</code></td>
+<td>🟢</td>
+<td><code>.local-build/</code> scripts assume a fixed output path. A wrong setting breaks every build script on a fresh clone.</td>
+</tr>
+<tr>
+<td>S7</td>
+<td><code>&lt;IncludeSourceRevisionInInformationalVersion&gt;false&lt;/IncludeSourceRevisionInInformationalVersion&gt;</code></td>
+<td>🟢</td>
+<td>Every commit produces a different informational version string. On the local feed this makes version comparisons unreliable. A clean version string is required.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="nuget-library-projects">NuGet library projects</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Criterion</th>
+<th>Rating</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S10</td>
+<td><code>&lt;OutputType&gt;Library&lt;/OutputType&gt;</code></td>
+<td>🟢</td>
+<td>Absence defaults to Exe for non-test projects — would accidentally produce an executable.</td>
+</tr>
+<tr>
+<td>S11</td>
+<td><code>&lt;GenerateDocumentationFile&gt;true&lt;/GenerateDocumentationFile&gt;</code></td>
+<td>🟢</td>
+<td>Without this, XML warnings are silenced, documentation is missing from the package, and the <code>docs</code> check has no baseline.</td>
+</tr>
+<tr>
+<td>S12</td>
+<td><code>&lt;PackageLicenseExpression&gt;MIT&lt;/PackageLicenseExpression&gt;</code></td>
+<td>🟢</td>
+<td>Missing license is a compliance issue for any published package.</td>
+</tr>
+<tr>
+<td>S13</td>
+<td><code>&lt;Copyright&gt;</code>, <code>&lt;Company&gt;</code>, <code>&lt;Authors&gt;</code></td>
+<td>🟢</td>
+<td>Complete metadata is required — even for internal packages, incomplete metadata signals an unfinished deliverable.</td>
+</tr>
+<tr>
+<td>N4</td>
+<td><code>&lt;Version&gt;</code> present</td>
+<td>🟢</td>
+<td>Absent → every <code>dotnet pack</code> silently overwrites version <code>1.0.0.0</code> on the local feed. Classic copy-paste omission that makes version tracking impossible.</td>
+</tr>
+<tr>
+<td>N5</td>
+<td><code>&lt;PackageId&gt;</code> matches <code>&lt;AssemblyName&gt;</code></td>
+<td>🟢</td>
+<td>Copy-paste trap: <code>AssemblyName</code> updated, <code>PackageId</code> forgotten (or vice versa). Package published under the wrong name — consumers reference a name that doesn't exist.</td>
+</tr>
+<tr>
+<td>S15</td>
+<td><code>&lt;PackageReadmeFile&gt;README.md&lt;/PackageReadmeFile&gt;</code> + file present</td>
+<td>🟢</td>
+<td>If declared but absent, <code>dotnet pack</code> fails. If absent and not declared, NuGet consumers see no description.</td>
+</tr>
+<tr>
+<td>S16</td>
+<td><code>&lt;PackageIcon&gt;icon.png&lt;/PackageIcon&gt;</code> + file present</td>
+<td>🟢</td>
+<td>Visual identity is a required deliverable for all packages.</td>
+</tr>
+<tr>
+<td>S18</td>
+<td><code>icon.png</code> co-located with <code>.csproj</code></td>
+<td>🟢</td>
+<td>Required for <code>dotnet pack</code> to succeed when <code>&lt;PackageIcon&gt;</code> is declared. S16 and S18 are a pair.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="exe-non-nuget-projects">Exe / non-NuGet projects</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Criterion</th>
+<th>Rating</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S19</td>
+<td><code>&lt;GenerateDocumentationFile&gt;</code> absent</td>
+<td>🟢</td>
+<td>Present on an exe project produces CS1591 warnings for undocumented members that will never be consumed via NuGet. Noise factory.</td>
+</tr>
+<tr>
+<td>S20</td>
+<td>NuGet metadata (<code>PackageId</code>, etc.) absent</td>
+<td>🟢</td>
+<td>Exe projects are not packages. Metadata here is misleading and can accidentally trigger <code>dotnet pack</code>.</td>
+</tr>
+<tr>
+<td>S21</td>
+<td><code>icon.ico</code> co-located</td>
+<td>🟢</td>
+<td>A required deliverable for all exe projects. Its absence at release time is immediately visible.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test-projects">Test projects</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Criterion</th>
+<th>Rating</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S22</td>
+<td><code>&lt;GenerateDocumentationFile&gt;</code> absent</td>
+<td>🟢</td>
+<td>Same reasoning as S19 — test code is not a public API.</td>
+</tr>
+<tr>
+<td>S23</td>
+<td>NuGet metadata absent</td>
+<td>🟢</td>
+<td>Test projects must never be accidentally published.</td>
+</tr>
+<tr>
+<td>S25</td>
+<td>Required test package refs: <code>Microsoft.NET.Test.Sdk</code>, <code>NUnit 4.x</code>, <code>NUnit3TestAdapter</code></td>
+<td>🟢</td>
+<td>Without these, <code>dotnet test</code> discovers nothing. A broken test project silently passes zero tests.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="standards-directory-structure">2. Standards — Directory Structure</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Criterion</th>
+<th>Rating</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S26</td>
+<td>Directory name = assembly name exactly</td>
+<td>🟢</td>
+<td>Navigation by convention. Deviations make the agent (and humans) hunt for files.</td>
+</tr>
+<tr>
+<td>S27</td>
+<td><code>Contracts/</code> folder present in any project with public static types</td>
+<td>🟢</td>
+<td>Enforces the companion-interface principle. No exceptions — every public static type requires a companion interface.</td>
+</tr>
+<tr>
+<td>S28</td>
+<td>Solution file at repo root</td>
+<td>🟢</td>
+<td>Nested solutions break CI and tooling that assumes root placement.</td>
+</tr>
+<tr>
+<td>S29</td>
+<td><code>nuget.config</code> present and pointing to <code>..\..\local-packages\</code></td>
+<td>🟢</td>
+<td>Without this, restores hit the internet and local packages are invisible. Build failure guaranteed on a fresh clone.</td>
+</tr>
+<tr>
+<td>S30</td>
+<td><code>.local-build/</code> scripts present (<code>build.cmd</code>, <code>test.cmd</code>, <code>pack.cmd</code>, etc.)</td>
+<td>🟢</td>
+<td>These are the developer workflow. Missing scripts on a fresh clone = broken onboarding.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="standards-naming-conventions">2. Standards — Naming Conventions</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Criterion</th>
+<th>Rating</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S31</td>
+<td>Repo name follows <code>josyn-&lt;layer&gt;</code> pattern</td>
+<td>🟢</td>
+<td>Consistency; also required by <code>architecture/overview.md</code> dependency map.</td>
+</tr>
+<tr>
+<td>S32</td>
+<td>Namespace follows <code>JOSYN.&lt;Layer&gt;.&lt;Component&gt;</code></td>
+<td>🟢</td>
+<td>Violations break the namespace tree that the whole platform depends on for discoverability.</td>
+</tr>
+<tr>
+<td>S33</td>
+<td>Assembly name = namespace root</td>
+<td>🟢</td>
+<td>Redundant with A9 but in the standards context. Same rationale.</td>
+</tr>
+<tr>
+<td>S34</td>
+<td>C# file name = type name</td>
+<td>🟢</td>
+<td>.NET convention; violation confuses every IDE and every human.</td>
+</tr>
+<tr>
+<td>S35</td>
+<td>Interface file prefixed with <code>I</code></td>
+<td>🟢</td>
+<td>Standard C# convention; violation is immediately visible and confusing.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="docs-xml-documentation">3. Docs — XML Documentation</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Criterion</th>
+<th>Rating</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D1</td>
+<td><code>&lt;summary&gt;</code> required on every documented member</td>
+<td>🟢</td>
+<td>The minimal contract. Without it, <code>GenerateDocumentationFile</code> produces no usable output.</td>
+</tr>
+<tr>
+<td>D2</td>
+<td><code>&lt;param&gt;</code> — omit when name+type are obvious</td>
+<td>🟡</td>
+<td>The &quot;when obvious&quot; clause makes this a judgment call, not a checkable rule. Difficult to enforce without subjective interpretation.</td>
+</tr>
+<tr>
+<td>D3</td>
+<td><code>&lt;returns&gt;</code> — omit for void / obvious</td>
+<td>🟡</td>
+<td>Same as D2.</td>
+</tr>
+<tr>
+<td>D4</td>
+<td><code>&lt;remarks&gt;</code> — only when genuinely helpful</td>
+<td>🟡</td>
+<td>The &quot;genuinely helpful&quot; qualifier makes this nearly impossible to check deterministically.</td>
+</tr>
+<tr>
+<td>D5</td>
+<td><code>&lt;exception&gt;</code> must never be used</td>
+<td>🟢</td>
+<td>Direct mirror of the Result pattern. If <code>&lt;exception&gt;</code> appears, the method is either throwing or the doc is wrong — both are violations.</td>
+</tr>
+<tr>
+<td>D6</td>
+<td><code>&lt;inheritdoc/&gt;</code> on implementations</td>
+<td>🟢</td>
+<td>Without this, doc duplication is inevitable — and duplicated docs drift.</td>
+</tr>
+<tr>
+<td>D7</td>
+<td>Interfaces carry the full XML docs</td>
+<td>🟢</td>
+<td>Contracts are the API surface. Undocumented interfaces are missing the most important docs.</td>
+</tr>
+<tr>
+<td>D8</td>
+<td>No duplication of interface doc text in implementations</td>
+<td>🟢</td>
+<td>Duplicated docs will rot at different rates.</td>
+</tr>
+<tr>
+<td>D9</td>
+<td><code>GenerateDocumentationFile=true</code> on NuGet projects</td>
+<td>🟢</td>
+<td>Checked in standards (S11), but confirming it from the docs side adds a meaningful cross-check.</td>
+</tr>
+<tr>
+<td>D10</td>
+<td><code>GenerateDocumentationFile</code> absent from exe/test</td>
+<td>🟢</td>
+<td>Same as S19/S22.</td>
+</tr>
+<tr>
+<td>D11</td>
+<td>Missing <code>&lt;summary&gt;</code> on documented member</td>
+<td>🟢</td>
+<td>Catches the case where a <code>///</code> block exists but is empty.</td>
+</tr>
+<tr>
+<td>D12</td>
+<td>Empty <code>&lt;summary/&gt;</code> or <code>// TODO</code> placeholder</td>
+<td>🟢</td>
+<td>Worse than no comment — actively misleading.</td>
+</tr>
+<tr>
+<td>D13</td>
+<td>Comment restates method name word-for-word</td>
+<td>🟡</td>
+<td>Bad practice but hard to detect automatically without NLP. An agent can catch obvious cases but will miss subtle ones and flag ambiguous ones.</td>
+</tr>
+<tr>
+<td>D14</td>
+<td>Comment references renamed type or old namespace</td>
+<td>🟢</td>
+<td>Stale docs are actively misleading and erode trust in all docs.</td>
+</tr>
+<tr>
+<td>D15</td>
+<td><code>&lt;remarks&gt;</code> with a single obvious sentence</td>
+<td>🟡</td>
+<td><strong>Scoped:</strong> flag only when <code>&lt;remarks&gt;</code> content is identical to <code>&lt;summary&gt;</code> content (exact duplication). Subjective &quot;obvious&quot; judgments are out of scope.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="docs-markdown-documentation">3. Docs — Markdown Documentation</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Criterion</th>
+<th>Rating</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D16</td>
+<td><code>README.md</code> at repo root</td>
+<td>🟢</td>
+<td>The minimal documentation contract. A fresh clone with no README is an onboarding black hole.</td>
+</tr>
+<tr>
+<td>D17</td>
+<td>README content accurately reflects current state</td>
+<td>🟡</td>
+<td>High value in principle; almost impossible to check automatically. Requires human judgment about what &quot;current&quot; means. An agent can only flag obvious contradictions.</td>
+</tr>
+<tr>
+<td>D18</td>
+<td>No stale type/namespace references</td>
+<td>🟢</td>
+<td>Stale references in markdown are directly misleading — a developer follows the README and hits <code>namespace not found</code>.</td>
+</tr>
+<tr>
+<td>D19</td>
+<td>Cross-repo links resolve to existing files</td>
+<td>🟢</td>
+<td>Broken links are a CI-level issue. An agent can follow paths.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="tests">4. Tests</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Criterion</th>
+<th>Rating</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T1</td>
+<td>Every public method with realistic failure paths has a test</td>
+<td>🟢</td>
+<td>Core coverage contract. An untested public method is undocumented behaviour.</td>
+</tr>
+<tr>
+<td>T2</td>
+<td>Positive, negative, edge cases, boundary values</td>
+<td>🟢</td>
+<td>Positive-only tests are systematically blind to failure modes.</td>
+</tr>
+<tr>
+<td>T3</td>
+<td>Tests verify meaningful behaviour, not line coverage</td>
+<td>🟢</td>
+<td>A test that asserts <code>Assert.That(true, Is.True)</code> inflates coverage without value. Flag tests that have no assertion or trivially pass.</td>
+</tr>
+<tr>
+<td>T4</td>
+<td>Test method naming: <code>Subject_Scenario_Expected</code></td>
+<td>🟢</td>
+<td>A test without a readable name is a test no one can understand when it fails.</td>
+</tr>
+<tr>
+<td>T5</td>
+<td>Test class/file naming: <code>&lt;Subject&gt;Tests.cs</code></td>
+<td>🟢</td>
+<td>Discoverability. Deviations make the test suite hard to navigate.</td>
+</tr>
+<tr>
+<td>T6</td>
+<td>Arrange-Act-Assert structure</td>
+<td>🟡</td>
+<td>Good practice but the blank-line separation rule is cosmetic. The structural pattern is what matters.</td>
+</tr>
+<tr>
+<td>T7</td>
+<td>Fluent assertions: <code>Assert.That(x, Is.EqualTo(y))</code> — not classic <code>Assert.AreEqual</code></td>
+<td>🟢</td>
+<td>Enforced as the project style. Old-style assertions indicate either copy-paste from legacy code or an unaware contributor.</td>
+</tr>
+<tr>
+<td>T8</td>
+<td>One observable outcome per test</td>
+<td>🟢</td>
+<td>Multiple independent assertions in one test make failures ambiguous and reduce information density.</td>
+</tr>
+<tr>
+<td>T9</td>
+<td>No flow control (if/loop) in test methods</td>
+<td>🟢</td>
+<td>A test with conditional logic can silently skip assertions. High-value rule.</td>
+</tr>
+<tr>
+<td>T10</td>
+<td>Tests are independent — no shared mutable state</td>
+<td>🟢</td>
+<td>Order-dependent tests are a reliability nightmare in CI.</td>
+</tr>
+<tr>
+<td>T11</td>
+<td><code>[TestCase]</code> for repeated patterns</td>
+<td>🟢</td>
+<td>Enforced. Copy-pasted test methods for the same behaviour are a maintenance liability and a readability violation.</td>
+</tr>
+<tr>
+<td>T12</td>
+<td><code>Assert.Throws&lt;T&gt;</code> / <code>Does.Throw</code> for exception testing</td>
+<td>🟢</td>
+<td>The alternative <code>[ExpectedException]</code> is removed in NUnit 3+; presence indicates stale code.</td>
+</tr>
+<tr>
+<td>T13</td>
+<td>No <code>[ExpectedException]</code> attribute</td>
+<td>🟢</td>
+<td>Outdated, removed API. Presence indicates unmaintained tests.</td>
+</tr>
+<tr>
+<td>T14</td>
+<td>Same result on every run (determinism)</td>
+<td>🟢</td>
+<td>Non-deterministic tests are worse than no tests — they destroy confidence in the suite.</td>
+</tr>
+<tr>
+<td>T15</td>
+<td>File system / clock / network tests in separate assembly or marked explicitly</td>
+<td>🟢</td>
+<td>An integration test disguised as a unit test is a CI time bomb.</td>
+</tr>
+<tr>
+<td>T16</td>
+<td>No <code>[Ignore]</code> without reason string</td>
+<td>🟢</td>
+<td>Undocumented ignore = silent dead test. Nobody knows why or for how long.</td>
+</tr>
+<tr>
+<td>T17</td>
+<td>No permanently ignored tests</td>
+<td>🟢</td>
+<td>A forever-ignored test is a lie in the test suite. Delete it or fix it.</td>
+</tr>
+<tr>
+<td>T18</td>
+<td>Test double guidance (stub before mock, no over-mocking)</td>
+<td>🟡</td>
+<td>Good advice. &quot;Over-mocked&quot; is a judgment call — hard to operationalise as a pass/fail check. Consider: flag tests where every collaborator is replaced with a mock.</td>
+</tr>
+<tr>
+<td>T19</td>
+<td>Committed test that fails</td>
+<td>🟢</td>
+<td>Non-negotiable. A failing test in the repository is a broken contract.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="principles">5. Principles</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Criterion</th>
+<th>Rating</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P1</td>
+<td>Instance class with no state and no polymorphism need → must be <code>static</code></td>
+<td>🟢</td>
+<td>Core philosophy. An unnecessary instance class is a design smell that misleads the reader about purpose.</td>
+</tr>
+<tr>
+<td>P2</td>
+<td><code>class</code> used where <code>record</code> would suffice for a data carrier</td>
+<td>🟢</td>
+<td>A mutable data class is an accidental mutation risk. The check enforces a concrete, checkable rule.</td>
+</tr>
+<tr>
+<td>P3</td>
+<td>Mutable property (<code>{ get; set; }</code>) without justification</td>
+<td>🟢</td>
+<td>Undocumented mutability is the most common source of subtle bugs in the codebase.</td>
+</tr>
+<tr>
+<td>P4</td>
+<td><code>throw</code> anywhere above the lowest-layer catch boundary</td>
+<td>🟢</td>
+<td>Any <code>throw</code> above the boundary breaks the Result contract. Straightforward to detect.</td>
+</tr>
+<tr>
+<td>P5</td>
+<td><code>catch</code> that swallows (no conversion to <code>Result</code>)</td>
+<td>🟢</td>
+<td>A swallowed exception is a hole in the error model — failures disappear silently.</td>
+</tr>
+<tr>
+<td>P6</td>
+<td>Method that can fail returns <code>void</code> or raw value instead of <code>Result</code>/<code>Result&lt;T&gt;</code></td>
+<td>🟢</td>
+<td>Same contract violation — just the return-site perspective of P4/P5.</td>
+</tr>
+<tr>
+<td>P7</td>
+<td>Manual re-wrap of <code>Result</code> instead of <code>Result.Propagate(inner)</code></td>
+<td>🟢</td>
+<td>Re-wrapping loses the call chain. Propagate preserves context — enforcing it is cheap and high-value.</td>
+</tr>
+<tr>
+<td>P8</td>
+<td>Public static type without companion interface in <code>Contracts/</code></td>
+<td>🟢</td>
+<td>No exceptions. Every public static type exposes a contract surface — the companion interface is mandatory.</td>
+</tr>
+<tr>
+<td>P9</td>
+<td>Interface used for polymorphism rather than as a shape contract</td>
+<td>🟡</td>
+<td><strong>Scoped:</strong> flag as a candidate for review any interface implemented by more than one non-test class. Intent is a judgment call — the agent surfaces it for human decision, not auto-fail.</td>
+</tr>
+<tr>
+<td>P10</td>
+<td>DI container wiring present</td>
+<td>🟢</td>
+<td>Any DI container reference is unambiguous and violates the explicit-over-magic principle directly. Easy to check (<code>IServiceCollection</code>, <code>IServiceProvider</code>, <code>AddSingleton</code>, etc.).</td>
+</tr>
+<tr>
+<td>P11</td>
+<td>Reflection-based wiring outside the designated <code>[JobEntryPoint]</code> dispatch</td>
+<td>🟢</td>
+<td>Reflection-based magic is exactly what the platform explicitly forbids. The exception is tightly scoped and documented.</td>
+</tr>
+<tr>
+<td>P13</td>
+<td><code>public</code> member where <code>internal</code> would suffice</td>
+<td>🟢</td>
+<td>Minimal surface area is directly enforceable. An oversized public API locks future changes.</td>
+</tr>
+<tr>
+<td>P14</td>
+<td>Method mutates state AND returns a result without documenting the side effect</td>
+<td>🟡</td>
+<td><strong>Scoped:</strong> flag methods that mutate a field AND return a value, where no <code>&lt;remarks&gt;</code> documents the side effect. <code>out</code>/<code>ref</code> parameters are a secondary signal.</td>
+</tr>
+<tr>
+<td>N1</td>
+<td><code>async void</code> method outside event handlers</td>
+<td>🟢</td>
+<td>A third silent exception path that bypasses both P4 and P5. Exceptions in <code>async void</code> are unhandled and crash the host process — they never reach the Result machinery.</td>
+</tr>
+<tr>
+<td>N2</td>
+<td><code>.Result</code> property or <code>.GetAwaiter().GetResult()</code> call on a <code>Task</code></td>
+<td>🟢</td>
+<td>Sync-over-async causes deadlocks under thread pool pressure — especially dangerous in the scheduler and IPC layer. Zero legitimate uses in this codebase.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="summary-by-rating">Summary by Rating</h2>
+<table>
+<thead>
+<tr>
+<th>Rating</th>
+<th>Count</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🟢 Indispensable</td>
+<td>81</td>
+<td>Keep exactly as written</td>
+</tr>
+<tr>
+<td>🟡 Discussable</td>
+<td>11</td>
+<td>See scoping notes below; agent applies judgment within defined scope</td>
+</tr>
+<tr>
+<td>🔴 Not really necessary</td>
+<td>0</td>
+<td>All 🔴 items resolved in 2026-05-31 review</td>
+</tr>
+<tr>
+<td>⛔ Bare mistake</td>
+<td>0</td>
+<td>No criterion is actively wrong — the set is clean in structure</td>
+</tr>
+</tbody>
+</table>
+<h3 id="remaining-scoped-criteria">🟡 Remaining scoped criteria</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Scope constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A8</td>
+<td>Flag hardcoded strings deviating from <code>JOSYN-REQ-&lt;GUID&gt;</code> / <code>JOSYN-RSP-&lt;GUID&gt;</code>; dynamic construction is fine</td>
+</tr>
+<tr>
+<td>D2</td>
+<td>Agent flags missing <code>&lt;param&gt;</code> as a judgment call when purpose is non-trivial</td>
+</tr>
+<tr>
+<td>D3</td>
+<td>Agent flags missing <code>&lt;returns&gt;</code> as a judgment call; omit for void/obvious</td>
+</tr>
+<tr>
+<td>D4</td>
+<td>Agent flags <code>&lt;remarks&gt;</code> as a judgment call; raise only when context would not fit in <code>&lt;summary&gt;</code></td>
+</tr>
+<tr>
+<td>D13</td>
+<td>Flag only when comment text is word-for-word identical to method name</td>
+</tr>
+<tr>
+<td>D15</td>
+<td>Flag only when <code>&lt;remarks&gt;</code> content = <code>&lt;summary&gt;</code> content (exact duplication)</td>
+</tr>
+<tr>
+<td>D17</td>
+<td>Agent flags obvious contradictions between README and code; full accuracy is a human judgment</td>
+</tr>
+<tr>
+<td>T6</td>
+<td>Check AAA structure; do not flag blank-line placement</td>
+</tr>
+<tr>
+<td>T18</td>
+<td>Agent uses judgment; over-mocking is a signal, not auto-fail</td>
+</tr>
+<tr>
+<td>P9</td>
+<td>Flag as candidate for review when &gt;1 non-test class implements the same interface</td>
+</tr>
+<tr>
+<td>P14</td>
+<td>Flag methods that mutate a field AND return a value with no <code>&lt;remarks&gt;</code> explaining the side effect</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="review-history">Review History</h2>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Reviewer</th>
+<th>Changes made</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026-05-30</td>
+<td>Initial draft</td>
+<td>First complete pass over all criteria</td>
+</tr>
+<tr>
+<td>2026-05-31</td>
+<td>Criteria review session</td>
+<td>Resolved all 🔴 and 🟡 items: 10 upgraded to 🟢, 10 dropped, 4 scoped. Added 4 missing checks (N1 <code>async void</code>, N2 sync-over-async, N4 <code>&lt;Version&gt;</code>, N5 <code>&lt;PackageId&gt;</code>). Net: 81🟢, 11🟡, 0🔴</td>
+</tr>
+</tbody>
+</table>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+</body>
+</html>
