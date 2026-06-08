@@ -1,0 +1,249 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>site-map.yaml — Authoring Guide — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../architecture/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../../architecture/components/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../architecture/platform/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../decisions/platform/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+<details open>
+  <summary class="nav-section">Unsorted</summary>
+  <a href="../../index.html" class="nav-link">Overview</a>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-toolbox]/site-builder/site-map-authoring.md</div><h1 id="site-map.yaml-authoring-guide">site-map.yaml — Authoring Guide</h1>
+<blockquote>
+<p>How to tell the assembler what you really want.</p>
+</blockquote>
+<hr />
+<h2 id="the-mental-model">The mental model</h2>
+<p>The site-assembler is a two-layer system:</p>
+<ul>
+<li><strong>Rules</strong> answer: <em>which docs belong in which section?</em> — automated, low maintenance</li>
+<li><strong>Intent</strong> answers: <em>what does this section mean, and how should a human navigate it?</em> — authored by you</li>
+</ul>
+<p>You never need to list individual documents. You only need to describe <strong>structure and meaning</strong>.
+The rules handle placement. You handle purpose.</p>
+<hr />
+<h2 id="the-three-tools-you-have">The three tools you have</h2>
+<h3 id="section-description">1. Section description</h3>
+<p><em>&quot;What is this section and who reads it?&quot;</em></p>
+<p>Add a <code>description</code> field to any section in <code>site-map.yaml</code>. One or two sentences. Rendered
+as the intro paragraph on the section's overview page.</p>
+<pre><code class="language-yaml">- title: Repos
+  folder: repos
+  description: &quot;One entry per repository — what it is, what it contains, and how it relates to the rest of the platform.&quot;
+  include: ...
+</code></pre>
+<p>Use this whenever a human landing on the section page would otherwise have no context.</p>
+<hr />
+<h3 id="groups-within-a-section">2. Groups within a section</h3>
+<p><em>&quot;These docs belong together and deserve a shared heading.&quot;</em></p>
+<p>Add a <code>groups</code> list to a section. Each group has a <code>label</code> and a <code>match</code> rule — the same
+rule syntax used in <code>include</code>. The assembler assigns docs to groups and renders them under
+sub-headings.</p>
+<pre><code class="language-yaml">  groups:
+    - label: &quot;Core repos&quot;
+      match: { repo: josyn-foundation }
+    - label: &quot;Protocol layer&quot;
+      match: { repo: josyn-jap }
+    - label: &quot;Platform&quot;
+      match: { repo: josyn-platform }
+      description: &quot;Cross-cutting architecture and standards documents.&quot;
+</code></pre>
+<p>You do not need to cover every doc. Docs matching no group collect in an implicit <strong>Other</strong>
+block at the bottom.</p>
+<p>Use groups when a section contains docs from distinct areas that would be confusing as one
+flat list.</p>
+<hr />
+<h3 id="reading-paths">3. Reading paths</h3>
+<p><em>&quot;If you are X, start here.&quot;</em></p>
+<p>Defined under <code>reading-paths</code> in <code>site-map.yaml</code>. Each path has a <code>label</code>, an <code>intro</code>
+sentence, and a short list of links (doc references or section links). Rendered as entry
+cards on the landing page.</p>
+<pre><code class="language-yaml">- perspective: job-developer
+  label: &quot;Job Developer&quot;
+  intro: &quot;You write jobs that run on the JOSYN platform.&quot;
+  links:
+    - { section: guides }
+    - { section: repos }
+</code></pre>
+<p>Keep each reading path short — three to five links. It is a starting point, not an index.</p>
+<hr />
+<h2 id="when-to-use-what">When to use what</h2>
+<table>
+<thead>
+<tr>
+<th>Question you are asking</th>
+<th>Tool</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A reader lands on a section and doesn't know what it is</td>
+<td><code>description</code> on the section</td>
+</tr>
+<tr>
+<td>A section mixes docs from different repos or topics</td>
+<td><code>groups</code> on the section</td>
+</tr>
+<tr>
+<td>A group of docs within a section needs its own context sentence</td>
+<td><code>description</code> on a group</td>
+</tr>
+<tr>
+<td>A new person doesn't know where to start in the whole site</td>
+<td><code>reading-paths</code></td>
+</tr>
+<tr>
+<td>A specific doc belongs in a different section than the rules place it</td>
+<td><code>overrides</code></td>
+</tr>
+<tr>
+<td>A doc should not appear on the site at all</td>
+<td><code>skip</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="what-you-do-not-need-to-do">What you do NOT need to do</h2>
+<ul>
+<li>You do not list individual documents. Rules place them automatically.</li>
+<li>You do not assign docs to groups manually. Groups use the same match-rule syntax.</li>
+<li>You do not re-run the indexer after editing <code>site-map.yaml</code>. Only the assembler reads it.</li>
+</ul>
+<hr />
+<h2 id="the-workflow">The workflow</h2>
+<ol>
+<li>Open <code>josyn-platform/docs/site-map.yaml</code></li>
+<li>For each section — ask: <em>&quot;Would a stranger understand what this section is?&quot;</em>
+If not, add a <code>description</code>.</li>
+<li>For each section — ask: <em>&quot;Is this a confusing mix of unrelated things?&quot;</em>
+If yes, add <code>groups</code>.</li>
+<li>Run <code>site-builder-assembler.cmd</code> — inspect the staged <code>{section}/README.md</code> files</li>
+<li>Adjust until the overview pages communicate what you intended</li>
+</ol>
+<hr />
+<h2 id="reference-full-section-with-all-intent-fields">Reference — full section with all intent fields</h2>
+<pre><code class="language-yaml">- title: Repos
+  folder: repos
+  description: &quot;Per-repository reference summaries and sub-package overviews.&quot;
+  groups:
+    - label: &quot;Foundation layer&quot;
+      match: { repo: josyn-foundation }
+      description: &quot;Infrastructure primitives — Result pattern, serialisation, IPC transport.&quot;
+    - label: &quot;Protocol layer&quot;
+      match: { repo: josyn-jap }
+    - label: &quot;Execution layer&quot;
+      match: { repo: josyn-job-host }
+    - label: &quot;Scheduler&quot;
+      match: { repo: josyn-backend }
+    - label: &quot;Platform&quot;
+      match: { repo: josyn-platform }
+  include:
+    - { type: repo-summary }
+    - { type: overview, folder-context: &quot;&quot; }
+    - { type: overview, folder-context: &quot;josyn-foundation*&quot; }
+    - { type: overview, folder-context: &quot;josyn-jap*&quot; }
+</code></pre>
+<p>All intent fields are optional. A section without <code>description</code> or <code>groups</code> behaves exactly
+as today — a flat table, no intro.</p>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

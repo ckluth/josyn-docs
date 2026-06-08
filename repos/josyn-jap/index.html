@@ -84,68 +84,67 @@
     <a href="../josyn-toolbox/index.html" class="nav-link">README</a>
 </details>
 </details>
+<details>
+  <summary class="nav-section">Unsorted</summary>
+  <a href="../../unsorted/index.html" class="nav-link">Overview</a>
+</details>
 
   </nav>
   <main>
     <article>
       <div class="origin">[josyn-jap]/README.md</div><h1 id="josyn-jap">josyn-jap</h1>
-<p><strong>josyn-jap</strong> enthält die Protokoll-Verträge der <strong>JOSYN</strong> (<em>JobSystem Next</em>)
-Systemschicht — die gemeinsamen NuGet-Pakete, auf die sich beide JAP-Parteien stützen.</p>
+<p><strong>josyn-jap</strong> contains the protocol contracts of the <strong>JOSYN</strong> (<em>JobSystem Next</em>)
+system layer — the shared NuGet packages that both JAP parties depend on.</p>
 <blockquote>
-<p><code>JOSYN.Jap.JAPServer</code> (die EXE) wurde gemäss ADR-004 nach <code>josyn-backend</code> verschoben.
-Die Protokollverträge (<code>Contract</code>, <code>Log</code>) verbleiben hier als einzige Quelle der Wahrheit.</p>
+<p><code>JOSYN.Jap.JAPServer</code> (the EXE) was relocated to <code>josyn-backend</code> per ADR-004.
+The protocol contract (<code>Contract</code>) remains here as the single source of truth.
+<code>JOSYN.Jap.Shared.Log</code> was relocated to <code>JOSYN.Commons.Log</code> per ADR-008.</p>
 </blockquote>
 <hr />
-<h2 id="bausteine">Bausteine</h2>
+<h2 id="building-blocks">Building blocks</h2>
 <table>
 <thead>
 <tr>
-<th>Komponente</th>
-<th>Typ</th>
-<th>Rolle</th>
-<th>Abhängigkeiten</th>
+<th>Component</th>
+<th>Type</th>
+<th>Role</th>
+<th>Dependencies</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><a href="josyn-jap-shared/index.html"><code>JOSYN.Jap.Shared.Contract</code></a></td>
 <td>NuGet</td>
-<td>Applikationsvertrag (JAP) zwischen JobHost und JAPServer</td>
-<td>ResultPattern</td>
-</tr>
-<tr>
-<td><a href="josyn-jap-shared/index.html"><code>JOSYN.Jap.Shared.Log</code></a></td>
-<td>NuGet</td>
-<td>Prozess-lokaler Datei-Logger für alle JOSYN-EXE-Prozesse</td>
+<td>Application contract (JAP) between JobHost and JAPServer</td>
 <td>ResultPattern</td>
 </tr>
 </tbody>
 </table>
-<h3 id="abhangigkeitskette">Abhängigkeitskette</h3>
+<h3 id="dependency-chain">Dependency chain</h3>
 <pre><code>JOSYN.Foundation.ResultPattern
-        ↑                ↑
-Shared.Contract    Shared.Log
+        ↑
+Shared.Contract
 </code></pre>
-<p><code>Contract</code> und <code>Log</code> kennen sich gegenseitig nicht.</p>
 <hr />
-<h2 id="lokales-arbeiten">Lokales Arbeiten</h2>
-<p>Jedes Sub-Repo ist autark. Aus dem jeweiligen Verzeichnis:</p>
-<pre><code>.local-build\build.cmd      # Release-Build
-.local-build\test.cmd       # Tests ausführen
-.local-build\pack.cmd       # NuGet-Pakete → ..\..\local-packages\
+<h2 id="local-development">Local development</h2>
+<p>Each sub-repo is self-contained. From the respective directory:</p>
+<pre><code>.local-build\build.cmd      # release build
+.local-build\test.cmd       # run tests
+.local-build\pack.cmd       # NuGet packages → ..\..\local-packages\
 </code></pre>
-<p>Oder über die Root-Skripte (alle Sub-Repos auf einmal):</p>
-<pre><code>.local-build\build.cmd      # Release-Build (alle Sub-Repos)
-.local-build\test.cmd       # Tests (alle Sub-Repos)
-.local-build\pack.cmd       # NuGet-Pakete (alle Sub-Repos)
-.local-build\all.cmd        # Clean → Build → Test → Pack
+<p>Or via the root scripts (all sub-repos at once):</p>
+<pre><code>.local-build\build.cmd      # release build (all sub-repos)
+.local-build\test.cmd       # tests (all sub-repos)
+.local-build\pack.cmd       # NuGet packages (all sub-repos)
+.local-build\all.cmd        # clean → build → test → pack
 </code></pre>
-<p><strong>Voraussetzung:</strong> <code>josyn-foundation-result-pattern</code> muss zuerst gepackt sein
-(liegt in <code>..\..\local-packages\</code>).</p>
+<p><strong>Prerequisite:</strong> <code>josyn-foundation-result-pattern</code> must be packed first
+(located in <code>..\..\local-packages\</code>).</p>
 <hr />
 <h2 id="status">Status</h2>
-<h2 id="reifer-poc-milestone-1.die-pakete-sind-intern-produktionsreif-die-preview-kennzeichnung-spiegelt-den-noch-offenen-abnahme-prozess-wider">Reifer PoC — Milestone 1. Die Pakete sind intern produktionsreif;
-die <code>preview</code>-Kennzeichnung spiegelt den noch offenen Abnahme-Prozess wider.</h2>
+<p>Milestone 1. Packages are internally production-ready;
+the <code>preview</code> label reflects the pending release process.</p>
+<hr />
 <p><em>JOSYN System — © 2026 HAEVG AG — MIT License</em></p>
 
     </article>

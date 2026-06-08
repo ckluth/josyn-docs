@@ -84,59 +84,60 @@
     <a href="../../josyn-toolbox/index.html" class="nav-link">README</a>
 </details>
 </details>
+<details>
+  <summary class="nav-section">Unsorted</summary>
+  <a href="../../../unsorted/index.html" class="nav-link">Overview</a>
+</details>
 
   </nav>
   <main>
     <article>
       <div class="origin">[josyn-jap]/josyn-jap-shared/README.md</div><h1 id="josyn.jap.shared">JOSYN.Jap.Shared</h1>
-<p><strong>JOSYN.Jap.Shared</strong> enthält die gemeinsamen Bibliotheken der <strong>JOSYN</strong> (<em>JobSystem Next</em>)
-Systemschicht — als eigenständige NuGet-Pakete, die von beiden EXE-Prozessen
-(<code>JobHost</code> und <code>JAPServer</code>) genutzt werden.</p>
+<p><strong>JOSYN.Jap.Shared</strong> contains the shared libraries of the <strong>JOSYN</strong> (<em>JobSystem Next</em>)
+system layer — as an independent NuGet package used by both EXE processes
+(<code>JobHost</code> and <code>JAPServer</code>).</p>
 <hr />
-<h2 id="pakete">Pakete</h2>
+<h2 id="packages">Packages</h2>
 <table>
 <thead>
 <tr>
-<th>Paket</th>
-<th>Rolle</th>
-<th>Abhängigkeiten</th>
+<th>Package</th>
+<th>Role</th>
+<th>Dependencies</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><a href="JOSYN.Jap.Shared.Contract/index.html"><code>JOSYN.Jap.Shared.Contract</code></a></td>
-<td>Applikationsvertrag (JAP) zwischen JobHost und JAPServer</td>
-<td>ResultPattern</td>
-</tr>
-<tr>
-<td><a href="JOSYN.Jap.Shared.Log/index.html"><code>JOSYN.Jap.Shared.Log</code></a></td>
-<td>Prozess-lokaler Datei-Logger für alle JOSYN-EXE-Prozesse</td>
+<td>Application contract (JAP) between JobHost and JAPServer</td>
 <td>ResultPattern</td>
 </tr>
 </tbody>
 </table>
-<h3 id="abhangigkeitskette">Abhängigkeitskette</h3>
+<blockquote>
+<p><code>JOSYN.Jap.Shared.Log</code> was relocated to <code>JOSYN.Commons.Log</code> per ADR-008.</p>
+</blockquote>
+<h3 id="dependency-chain">Dependency chain</h3>
 <pre><code>JOSYN.Foundation.ResultPattern
-        ↑                ↑
-JOSYN.Jap.        JOSYN.Jap.
-Shared.Contract    Shared.Log
+        ↑
+JOSYN.Jap.Shared.Contract
 </code></pre>
-<p><code>Contract</code> und <code>Log</code> kennen sich gegenseitig nicht.</p>
 <hr />
-<h2 id="lokales-arbeiten">Lokales Arbeiten</h2>
-<pre><code>.local-build\build.cmd          # Release-Build
-.local-build\build.cmd Debug    # Debug-Build
-.local-build\test.cmd           # Tests ausführen
-.local-build\pack.cmd           # NuGet-Pakete → ..\..\local-packages\
+<h2 id="local-development">Local development</h2>
+<pre><code>.local-build\build.cmd          # release build
+.local-build\build.cmd Debug    # debug build
+.local-build\test.cmd           # run tests
+.local-build\pack.cmd           # NuGet packages → ..\..\local-packages\
 </code></pre>
-<p><strong>Reihenfolge beim ersten Setup</strong> (wegen Abhängigkeit auf ResultPattern):</p>
+<p><strong>First-time setup order</strong> (due to dependency on ResultPattern):</p>
 <pre><code>1. josyn-foundation\josyn-foundation-result-pattern\  → pack
-2. josyn-jap\josyn-jap-shared\                     → pack
+2. josyn-jap\josyn-jap-shared\                        → pack
 </code></pre>
 <hr />
 <h2 id="status">Status</h2>
-<h2 id="reifer-poc-milestone-1.die-pakete-sind-intern-produktionsreif-die-preview-kennzeichnung-spiegelt-den-noch-offenen-abnahme-prozess-wider">Reifer PoC — Milestone 1. Die Pakete sind intern produktionsreif;
-die <code>preview</code>-Kennzeichnung spiegelt den noch offenen Abnahme-Prozess wider.</h2>
+<p>Milestone 1. Package is internally production-ready;
+the <code>preview</code> label reflects the pending release process.</p>
+<hr />
 <p><em>JOSYN.Jap.Shared — © 2026 HAEVG AG — MIT License</em></p>
 
     </article>

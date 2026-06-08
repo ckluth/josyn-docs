@@ -84,6 +84,10 @@
     <a href="../../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
 </details>
 </details>
+<details>
+  <summary class="nav-section">Unsorted</summary>
+  <a href="../../../../../unsorted/index.html" class="nav-link">Overview</a>
+</details>
 
   </nav>
   <main>
@@ -110,7 +114,7 @@ var result = starter.StartSession(&quot;MyJobType&quot;, iniArguments);
 if (result.Succeeded)
     Console.WriteLine($&quot;Session started: {result.Value}&quot;);
 </code></pre>
-<h2 id="known-poc-limitations">Known PoC limitations</h2>
+<h2 id="known-limitations">Known limitations</h2>
 <ul>
 <li>If <code>Process.Start</code> succeeds but JAPServer crashes after the 500 ms startup window,
 the session row in the store remains with an empty <code>Result</code> field. A session status

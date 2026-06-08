@@ -84,6 +84,10 @@
     <a href="../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
 </details>
 </details>
+<details>
+  <summary class="nav-section">Unsorted</summary>
+  <a href="../../../../unsorted/index.html" class="nav-link">Overview</a>
+</details>
 
   </nav>
   <main>
@@ -149,7 +153,7 @@
 <li><code>Assert.Throws&lt;TException&gt;(() =&gt; ...)</code> used correctly for the two documented <code>throw</code> cases.</li>
 <li>Test helpers (static factory methods, private scenario helpers) used appropriately.</li>
 </ul>
-<p><strong>Coverage note:</strong> No integration tests cover the actual named pipe transport (<code>PipesClient</code> / <code>PipesServer</code> end-to-end). This is acceptable for PoC stage. Not a violation, but worth tracking.</p>
+<p><strong>Coverage note:</strong> No integration tests cover the actual named pipe transport (<code>PipesClient</code> / <code>PipesServer</code> end-to-end). This is acceptable at the current stage. Not a violation, but worth tracking.</p>
 <hr />
 <h2 id="principles">principles ✅</h2>
 <p>All violations resolved.</p>
@@ -285,7 +289,7 @@
 <li>File names match type names throughout ✅</li>
 <li>Interface files prefixed with <code>I</code> ✅</li>
 </ul>
-<p><strong>Known PoC limitations:</strong></p>
+<p><strong>Known limitations:</strong></p>
 <ul>
 <li>Local NuGet feed path — production-only concern</li>
 </ul>

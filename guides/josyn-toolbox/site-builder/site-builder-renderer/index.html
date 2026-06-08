@@ -84,13 +84,18 @@
     <a href="../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
 </details>
 </details>
+<details>
+  <summary class="nav-section">Unsorted</summary>
+  <a href="../../../../unsorted/index.html" class="nav-link">Overview</a>
+</details>
 
   </nav>
   <main>
     <article>
       <div class="origin">[josyn-toolbox]/site-builder/site-builder-renderer/README.md</div><h1 id="site-builder-renderer">site-builder-renderer</h1>
 <p>A C# tool that converts a folder of markdown files into a self-contained, static HTML site
-with a collapsible sidebar navigation, responsive design, and a shared CSS stylesheet.</p>
+with a collapsible sidebar navigation, responsive design, a shared CSS stylesheet, and
+client-side Mermaid diagram rendering.</p>
 <p>Part of the <a href="../index.html"><code>site-builder</code></a> toolchain. Normally called by
 <code>site-builder-assembler</code> — run it standalone only for single-folder use cases.</p>
 <hr />
@@ -102,13 +107,103 @@ with a collapsible sidebar navigation, responsive design, and a shared CSS style
 <ul>
 <li>Optionally prepends a small origin line (the source file path within staging).</li>
 <li>Parses markdown using Markdig (with advanced extensions: tables, code, footnotes, etc.)</li>
+<li>Renders fenced code blocks tagged <code>mermaid</code> as diagram containers; all other code blocks render normally.</li>
 <li>Rewrites <code>.md</code> links to <code>.html</code> links (preserving relative paths).</li>
 <li>Wraps content in the HTML template with the generated nav sidebar.</li>
 </ul>
 </li>
 <li>Writes one <code>.html</code> file per <code>.md</code> file; <code>README.md</code> becomes <code>index.html</code>.</li>
 <li>Writes a single <code>site.css</code> to the output root.</li>
+<li>Copies <code>mermaid.min.js</code> from the vendored <code>vendor/</code> directory to the output root.</li>
 </ol>
+<hr />
+<h2 id="mermaid-diagrams">Mermaid diagrams</h2>
+<h3 id="authoring">Authoring</h3>
+<p>Any fenced code block tagged <code>mermaid</code> is rendered as a Mermaid diagram:</p>
+<pre><code class="language-markdown">```mermaid
+flowchart LR
+    Scheduler --&gt; JobProcess
+    JobProcess --&gt; Scheduler
+```
+</code></pre>
+<p>No special front-matter or configuration required. All Mermaid diagram types supported by
+the vendored version are available (flowcharts, sequence diagrams, class diagrams, etc.).</p>
+<h3 id="how-it-works">How it works</h3>
+<p>Four parts cooperate to deliver diagram rendering:</p>
+<ol>
+<li><p><strong><code>MermaidCodeBlockRenderer</code></strong> — registered into the Markdig pipeline at render time by
+swapping out Markdig's default <code>CodeBlockRenderer</code>. Fenced blocks tagged <code>mermaid</code> are
+emitted as <code>&lt;div class=&quot;mermaid&quot;&gt;</code> containing the escaped diagram source. All other code
+blocks are passed unchanged to the original renderer.</p>
+</li>
+<li><p><strong><code>HtmlTemplate.MermaidScript</code></strong> — injects two script tags at the bottom of every page:</p>
+<ul>
+<li><code>&lt;script src=&quot;...mermaid.min.js&quot;&gt;</code> — loads the vendored library (path is adjusted
+per-page depth so it always resolves to the output root copy).</li>
+<li>An inline <code>&lt;script&gt;</code> that calls <code>mermaid.initialize({startOnLoad:false, theme:'dark'})</code>
+followed by <code>mermaid.run({querySelector:'.mermaid'})</code>. The explicit <code>run()</code> call
+avoids the race condition that <code>startOnLoad:true</code> can trigger.</li>
+</ul>
+</li>
+<li><p><strong><code>SiteBuilder.Build</code></strong> — after writing all HTML pages and <code>site.css</code>, copies
+<code>vendor/mermaid.min.js</code> (from <code>AppContext.BaseDirectory/vendor/</code>) to the output root as
+<code>mermaid.min.js</code>. If the file is absent, the copy is skipped silently.</p>
+</li>
+<li><p><strong><code>PageRenderer</code></strong> — computes the correct relative prefix for each page (based on its
+depth in the output tree) so that both <code>site.css</code> and <code>mermaid.min.js</code> resolve correctly
+regardless of how many directory levels deep a page sits.</p>
+</li>
+</ol>
+<h3 id="why-vendored">Why vendored</h3>
+<p>The Mermaid library is checked in to <code>vendor/mermaid.min.js</code> and declared in
+<code>DocGenerator.csproj</code> as a <code>&lt;Content&gt;</code> item with <code>CopyToOutputDirectory: PreserveNewest</code>.
+This approach was chosen deliberately:</p>
+<ul>
+<li><strong>No CDN</strong> — the generated site works fully offline and from <code>file://</code> without any
+network dependency.</li>
+<li><strong>No npm / Node.js</strong> — the renderer has one runtime dependency (Markdig). Introducing a
+JS build step for a single library would add disproportionate tooling overhead.</li>
+<li><strong>Pinned version</strong> — the library in the repo is the library in the site. No surprise
+upgrades, no version drift between developer machines.</li>
+</ul>
+<p>Current vendored version: <strong>Mermaid 11.15.0</strong>.</p>
+<h3 id="risks-and-worst-case-scenarios">Risks and worst-case scenarios</h3>
+<table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Worst case</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>No automatic updates</strong> — the vendored file is pinned and never updated by tooling.</td>
+<td>A security vulnerability or rendering bug in Mermaid goes unnoticed until manually discovered.</td>
+<td>Periodically check the <a href="https://github.com/mermaid-js/mermaid/releases">Mermaid changelog</a>. Replace <code>vendor/mermaid.min.js</code> and update the version note above when upgrading.</td>
+</tr>
+<tr>
+<td><strong>Silent absence</strong> — if <code>vendor/mermaid.min.js</code> is missing from the build output (e.g., <code>&lt;Content&gt;</code> removed from csproj, or a stripped publish profile), the copy in <code>SiteBuilder.Build</code> is skipped silently.</td>
+<td>All pages load, the <code>&lt;script src=&quot;mermaid.min.js&quot;&gt;</code> tag is present, but the file returns 404. Diagrams show raw escaped text inside an unstyled <code>&lt;div&gt;</code>.</td>
+<td>The build will still succeed with no error. Verify by checking that <code>mermaid.min.js</code> exists in the output root after rendering.</td>
+</tr>
+<tr>
+<td><strong>No fallback for invalid syntax</strong> — invalid Mermaid source is already past the Markdig stage when it reaches the browser; there is no <code>&lt;pre&gt;&lt;code&gt;</code> fallback.</td>
+<td>Mermaid renders an error <code>&lt;div&gt;</code> in place of the diagram. The rest of the page is unaffected.</td>
+<td>No action needed at the tooling level; authors must fix the diagram source.</td>
+</tr>
+<tr>
+<td><strong>Dark theme hardcoded</strong> — <code>mermaid.initialize({theme:'dark'})</code> is embedded in <code>HtmlTemplate.MermaidScript</code>.</td>
+<td>A site rendered with a light CSS theme will have dark Mermaid diagrams that clash visually.</td>
+<td>Change the <code>theme</code> value in <code>HtmlTemplate.MermaidScript</code>. This is a code change, not a runtime option.</td>
+</tr>
+<tr>
+<td><strong>HTML-escaped source in the div</strong> — <code>MermaidCodeBlockRenderer</code> uses <code>escape: true</code> when writing raw lines, so characters like <code>&lt;</code>, <code>&gt;</code>, and <code>&amp;</code> are HTML-encoded in the <code>&lt;div&gt;</code> source.</td>
+<td>Mermaid reads diagram source from <code>.textContent</code>, which automatically decodes HTML entities — so rendering is correct. If you ever debug the raw HTML and see encoded entities, this is expected and not a bug.</td>
+<td>No action needed; the escaping is intentional and correct.</td>
+</tr>
+</tbody>
+</table>
 <hr />
 <h2 id="usage">Usage</h2>
 <h3 id="via-assembler-normal">Via assembler (normal)</h3>
@@ -213,7 +308,7 @@ that directory. External and anchor-only links are left unchanged.</p>
 </tr>
 <tr>
 <td><code>SiteBuilder.cs</code></td>
-<td>File discovery, recursive nav tree construction, orchestration</td>
+<td>File discovery, recursive nav tree construction, orchestration, vendor file copy</td>
 </tr>
 <tr>
 <td><code>PageRenderer.cs</code></td>
@@ -221,15 +316,24 @@ that directory. External and anchor-only links are left unchanged.</p>
 </tr>
 <tr>
 <td><code>HtmlTemplate.cs</code></td>
-<td>HTML template and CSS (all visual concerns)</td>
+<td>HTML template and CSS (all visual concerns), Mermaid script injection</td>
+</tr>
+<tr>
+<td><code>MermaidCodeBlockRenderer.cs</code></td>
+<td>Markdig renderer override — routes <code>mermaid</code> fenced blocks to <code>&lt;div class=&quot;mermaid&quot;&gt;</code></td>
+</tr>
+<tr>
+<td><code>vendor/mermaid.min.js</code></td>
+<td>Vendored Mermaid library (11.15.0) — copied to output root at render time</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="dependencies">Dependencies</h2>
 <ul>
-<li>.NET 8 SDK</li>
+<li>.NET 10 SDK</li>
 <li>NuGet: <code>Markdig</code> (markdown parsing with advanced extensions)</li>
+<li><code>vendor/mermaid.min.js</code> (vendored; checked in — no network or npm required)</li>
 </ul>
 
     </article>

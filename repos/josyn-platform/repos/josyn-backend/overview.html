@@ -84,6 +84,10 @@
     <a href="../../../josyn-toolbox/index.html" class="nav-link">README</a>
 </details>
 </details>
+<details>
+  <summary class="nav-section">Unsorted</summary>
+  <a href="../../../../unsorted/index.html" class="nav-link">Overview</a>
+</details>
 
   </nav>
   <main>
@@ -92,7 +96,7 @@
 <p><strong>Role:</strong> Scheduler and session-orchestration layer — the integration bridge between the
 legacy job backend and the JOSYN platform. Also the home of <code>JOSYN.Jap.JAPServer</code>
 (relocated from <code>josyn-jap</code> per ADR-004).</p>
-<p><strong>Location:</strong> <code>C:\Users\chris\OneDrive\DevGit\josyn-backend</code>
+<p><strong>Location:</strong> <code>C:\DevGit\josyn-backend</code>
 <strong>Version:</strong> <code>1.0.0-preview01</code> (stub)</p>
 <hr />
 <h2 id="decisions">Decisions</h2>
@@ -238,13 +242,13 @@ enforced by code conventions.</p>
 <code>SessionStarter</code>; legacy jobs continue to be started via the old <code>SessionStarter</code> in parallel.</p>
 <hr />
 <h2 id="current-state">Current state</h2>
-<p><code>JOSYN.Jap.JAPServer</code> is a working PoC EXE, relocated from <code>josyn-jap</code> per ADR-004.
+<p><code>JOSYN.Jap.JAPServer</code> is a working EXE, relocated from <code>josyn-jap</code> per ADR-004.
 <code>JOSYN.Backend.SessionStore</code> is the first real Category A NuGet package, ported from the
 sandbox prototype per ADR-002. (The sandbox is now called <code>josyn-playground</code>.)
-<code>JOSYN.Backend.GlobalConfig</code> is the second Category A NuGet package; provides <code>IGlobalConfig</code>
-and the PoC <code>HardcodedGlobalConfig</code> placeholder, per ADR-003.
+<code>JOSYN.Backend.BootstrapConfig</code> is the second Category A NuGet package; provides <code>IBootstrapConfig</code>
+and <code>FileBootstrapConfig</code> (reads <code>josyn.bootstrap.ini</code>), per ADR-003.
 <code>JOSYN.Backend.SessionStarter</code> is the third Category A NuGet package; provides <code>ISessionStarter</code>
-which persists the session and spawns <code>JAPServer.exe</code>, per Phase 3 of the PoC roadmap.
+which persists the session and spawns <code>JAPServer.exe</code>, per ADR-002 Phase 3.
 <code>JOSYN.Jap.JAPServer</code> has been fully wired: <code>GetRawArguments</code> reads from <code>SessionStore</code>,
 <code>PutRawResult</code> writes back to <code>SessionStore</code> — fake methods removed.
 <code>JOSYN.Backend.ErrorHandler</code> is a Category A NuGet package; provides <code>IErrorHandler</code>,
@@ -267,11 +271,11 @@ error paths, with <code>jobName</code> and <code>sessionGuid</code> enrichment a
 │   ├── JOSYN.Backend.SessionStore.slnx
 │   ├── .local-build/                       ← solution-local build + pack scripts
 │   └── JOSYN.Backend.SessionStore/
-├── josyn-backend-global-config/            ← Pattern B sub-folder
+├── josyn-backend-bootstrap-config/         ← Pattern B sub-folder
 │   ├── nuget.config
-│   ├── JOSYN.Backend.GlobalConfig.slnx
+│   ├── JOSYN.Backend.BootstrapConfig.slnx
 │   ├── .local-build/                       ← solution-local build + pack scripts
-│   └── JOSYN.Backend.GlobalConfig/
+│   └── JOSYN.Backend.BootstrapConfig/
 ├── josyn-backend-session-starter/          ← Pattern B sub-folder
 │   ├── nuget.config
 │   ├── JOSYN.Backend.SessionStarter.slnx
@@ -339,7 +343,7 @@ sealed class JAPServer(ISessionStore sessionStore, Guid sessionGuid) : IJosynApp
 <pre><code class="language-csharp">_jipDispatcher.RegisterAll&lt;IJosynApplicationProtocol&gt;(jAPServer);
 </code></pre>
 <p><code>RegisterAll</code> auto-discovers all methods on <code>IJosynApplicationProtocol</code> via reflection and maps them to <code>what</code> strings matching method names.</p>
-<h3 id="poc-limitations">PoC limitations</h3>
+<h3 id="known-limitations">Known limitations</h3>
 <ul>
 <li>Demo session key: <code>dea5611d-d740-437f-ad93-7a5dc5ae4299</code> in <code>launchSettings.json</code></li>
 </ul>
@@ -373,7 +377,7 @@ sealed class JAPServer(ISessionStore sessionStore, Guid sessionGuid) : IJosynApp
 <tr>
 <td><code>JOSYN.Backend.GlobalConfig</code> ✅</td>
 <td><em>(new)</em></td>
-<td><strong>Done</strong> — <code>IGlobalConfig</code> contract + <code>HardcodedGlobalConfig</code> PoC placeholder</td>
+<td><strong>Done</strong> — <code>IBootstrapConfig</code> contract + <code>FileBootstrapConfig</code> (file-based INI); supersedes <code>HardcodedGlobalConfig</code></td>
 </tr>
 <tr>
 <td><code>JOSYN.Backend.SessionStarter</code> ✅</td>
@@ -417,10 +421,12 @@ sealed class JAPServer(ISessionStore sessionStore, Guid sessionGuid) : IJosynApp
 &lt;PackageReference Include=&quot;JOSYN.Foundation.ResultPattern&quot;          Version=&quot;1.0.0-preview01&quot;/&gt;
 &lt;PackageReference Include=&quot;Microsoft.EntityFrameworkCore.SqlServer&quot;  Version=&quot;9.0.5&quot;/&gt;
 
-&lt;!-- JOSYN.Backend.GlobalConfig: no NuGet dependencies --&gt;
+&lt;!-- JOSYN.Backend.BootstrapConfig: PropertyBag + ResultPattern --&gt;
+&lt;PackageReference Include=&quot;JOSYN.Foundation.PropertyBag&quot;            Version=&quot;1.0.0-preview01&quot;/&gt;
+&lt;PackageReference Include=&quot;JOSYN.Foundation.ResultPattern&quot;          Version=&quot;1.0.0-preview01&quot;/&gt;
 
-&lt;!-- JOSYN.Backend.SessionStarter: depends on SessionStore + GlobalConfig + ResultPattern --&gt;
-&lt;PackageReference Include=&quot;JOSYN.Backend.GlobalConfig&quot;     Version=&quot;1.0.0-preview01&quot;/&gt;
+&lt;!-- JOSYN.Backend.SessionStarter: depends on SessionStore + BootstrapConfig + ResultPattern --&gt;
+&lt;PackageReference Include=&quot;JOSYN.Backend.BootstrapConfig&quot;  Version=&quot;1.0.0-preview01&quot;/&gt;
 &lt;PackageReference Include=&quot;JOSYN.Backend.SessionStore&quot;     Version=&quot;1.0.0-preview01&quot;/&gt;
 &lt;PackageReference Include=&quot;JOSYN.Foundation.ResultPattern&quot; Version=&quot;1.0.0-preview01&quot;/&gt;
 
@@ -431,6 +437,7 @@ sealed class JAPServer(ISessionStore sessionStore, Guid sessionGuid) : IJosynApp
 
 &lt;!-- JOSYN.Jap.JAPServer: foundation + josyn-jap shared packages + backend packages --&gt;
 &lt;PackageReference Include=&quot;JOSYN.Backend.SessionStore&quot;        Version=&quot;1.0.0-preview02&quot;/&gt;
+&lt;PackageReference Include=&quot;JOSYN.Backend.BootstrapConfig&quot;     Version=&quot;1.0.0-preview01&quot;/&gt;
 &lt;PackageReference Include=&quot;JOSYN.Backend.ErrorHandler&quot;        Version=&quot;1.0.0-preview01&quot;/&gt;
 &lt;PackageReference Include=&quot;JOSYN.Commons.Log&quot;                 Version=&quot;1.0.0-preview01&quot;/&gt;
 &lt;PackageReference Include=&quot;JOSYN.Foundation.JIP&quot;              Version=&quot;1.0.0-preview01&quot;/&gt;
@@ -447,23 +454,23 @@ sealed class JAPServer(ISessionStore sessionStore, Guid sessionGuid) : IJosynApp
 <h2 id="build-package">Build &amp; Package</h2>
 <pre><code>.local-build\build.cmd [Release|Debug]               ← builds ALL solutions in the repo
 josyn-backend-jap-server\.local-build\build.cmd      ← builds JAPServer only
-josyn-backend-global-config\.local-build\build.cmd   ← builds GlobalConfig only
+josyn-backend-bootstrap-config\.local-build\build.cmd ← builds BootstrapConfig only
 josyn-backend-session-starter\.local-build\build.cmd ← builds SessionStarter only
 josyn-backend-job-registry\.local-build\build.cmd    ← builds JobRegistry only
 </code></pre>
-<p><code>pack.cmd</code> at the repo root packs <code>SessionStore</code>, <code>GlobalConfig</code>, <code>SessionStarter</code>, <code>JobRegistry</code>, and <code>ErrorHandler</code> to the local feed.
+<p><code>pack.cmd</code> at the repo root packs <code>SessionStore</code>, <code>BootstrapConfig</code>, <code>SessionStarter</code>, <code>JobRegistry</code>, and <code>ErrorHandler</code> to the local feed.
 <code>JAPServer</code> is not packed.</p>
 <p>License: MIT | Company: HAEVG AG | Target: net10.0</p>
 <hr />
 <h2 id="sanity-notes">Sanity Notes</h2>
 <h3 id="current-state-expected">Current state — expected</h3>
 <ul>
-<li>No test project for <code>JOSYN.Jap.JAPServer</code> — known gap in the current PoC phase, not a violation.</li>
-<li>No test project for <code>JOSYN.Backend.SessionStore</code> — known gap in the current PoC phase, not a violation.</li>
-<li>No test project for <code>JOSYN.Backend.GlobalConfig</code> — known gap in the current PoC phase, not a violation.</li>
-<li>No test project for <code>JOSYN.Backend.SessionStarter</code> — known gap in the current PoC phase, not a violation.</li>
-<li><code>HardcodedGlobalConfig</code> uses compile-time developer-machine constants — known PoC limitation, not a violation.</li>
-<li><code>SessionStarter</code>: on <code>Process.Start</code> failure after session is saved, an orphaned row with empty <code>Result</code> remains in the store — known PoC limitation; requires a session status column to fix.</li>
+<li>No test project for <code>JOSYN.Jap.JAPServer</code> — known gap, not a violation.</li>
+<li>No test project for <code>JOSYN.Backend.SessionStore</code> — known gap, not a violation.</li>
+<li>No test project for <code>JOSYN.Backend.GlobalConfig</code> (<code>BootstrapConfig</code>) — known gap, not a violation.</li>
+<li>No test project for <code>JOSYN.Backend.SessionStarter</code> — known gap, not a violation.</li>
+<li><code>HardcodedGlobalConfig</code> uses compile-time developer-machine constants — superseded by <code>FileBootstrapConfig</code>; no longer present.</li>
+<li><code>SessionStarter</code>: on <code>Process.Start</code> failure after session is saved, an orphaned row with empty <code>Result</code> remains in the store — known limitation; requires a session status column to fix.</li>
 <li>The planned components (<code>TriggerAgent</code>, <code>Scheduling</code>, etc.) do not exist yet — expected.</li>
 </ul>
 <h3 id="structural-specifics">Structural specifics</h3>
@@ -474,7 +481,7 @@ josyn-backend-job-registry\.local-build\build.cmd    ← builds JobRegistry only
 </ul>
 <h3 id="dependency-constraints">Dependency constraints</h3>
 <ul>
-<li><code>JOSYN.Jap.JAPServer</code>: permitted references are <code>JOSYN.Foundation.JIP</code>, <code>JOSYN.Foundation.PropertyBag</code>, <code>JOSYN.Foundation.ResultPattern</code>, <code>JOSYN.Jap.Shared.Contract</code>, <code>JOSYN.Commons.Log</code>, <code>JOSYN.Backend.SessionStore</code>, <code>JOSYN.Backend.ErrorHandler</code>. Any other cross-repo reference is a violation.</li>
+<li><code>JOSYN.Jap.JAPServer</code>: permitted references are <code>JOSYN.Foundation.JIP</code>, <code>JOSYN.Foundation.PropertyBag</code>, <code>JOSYN.Foundation.ResultPattern</code>, <code>JOSYN.Jap.Shared.Contract</code>, <code>JOSYN.Commons.Log</code>, <code>JOSYN.Backend.SessionStore</code>, <code>JOSYN.Backend.BootstrapConfig</code>, <code>JOSYN.Backend.ErrorHandler</code>. Any other cross-repo reference is a violation.</li>
 <li>Neither current nor future projects in this repo may reference <code>josyn-job-host</code> packages.</li>
 <li>Runtime spawning of <code>JAPServer.exe</code> (built within this repo) is correct — this is <strong>not</strong> a NuGet dependency.</li>
 </ul>

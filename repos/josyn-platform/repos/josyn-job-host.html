@@ -84,6 +84,10 @@
     <a href="../../josyn-toolbox/index.html" class="nav-link">README</a>
 </details>
 </details>
+<details>
+  <summary class="nav-section">Unsorted</summary>
+  <a href="../../../unsorted/index.html" class="nav-link">Overview</a>
+</details>
 
   </nav>
   <main>
@@ -92,7 +96,7 @@
 <p><strong>Role:</strong> Job execution runtime — a NuGet library linked by every JOSYN job executable.
 When a job process starts, it calls <code>Core.Run(args)</code> and the library handles all
 protocol communication, argument deserialization, reflection dispatch, and result routing.</p>
-<p><strong>Location:</strong> <code>C:\Users\chris\OneDrive\DevGit\josyn-job-host</code>
+<p><strong>Location:</strong> <code>C:\DevGit\josyn-job-host</code>
 <strong>Namespace:</strong> <code>JOSYN.JobHost</code>
 <strong>Version:</strong> <code>1.0.0-preview01</code></p>
 <hr />
@@ -267,7 +271,7 @@ public sealed record MyResult
 &lt;PackageReference Include=&quot;JOSYN.Foundation.PropertyBag&quot; Version=&quot;1.0.0-preview01&quot;/&gt;
 &lt;PackageReference Include=&quot;JOSYN.Foundation.ResultPattern&quot; Version=&quot;1.0.0-preview01&quot;/&gt;
 &lt;PackageReference Include=&quot;JOSYN.Jap.Shared.Contract&quot; Version=&quot;1.0.0-preview01&quot;/&gt;
-&lt;PackageReference Include=&quot;JOSYN.Jap.Shared.Log&quot; Version=&quot;1.0.0-preview01&quot;/&gt;
+&lt;PackageReference Include=&quot;JOSYN.Commons.Log&quot; Version=&quot;1.0.0-preview01&quot;/&gt;
 </code></pre>
 <hr />
 <h2 id="test-coverage">Test coverage</h2>
@@ -332,7 +336,7 @@ public sealed record MyResult
 </ul>
 <h3 id="dependency-constraints">Dependency constraints</h3>
 <ul>
-<li>Permitted references: <code>JOSYN.Foundation.JIP</code>, <code>JOSYN.Foundation.PropertyBag</code>, <code>JOSYN.Foundation.ResultPattern</code>, <code>JOSYN.Jap.Shared.Contract</code>, <code>JOSYN.Jap.Shared.Log</code>.</li>
+<li>Permitted references: <code>JOSYN.Foundation.JIP</code>, <code>JOSYN.Foundation.PropertyBag</code>, <code>JOSYN.Foundation.ResultPattern</code>, <code>JOSYN.Jap.Shared.Contract</code>, <code>JOSYN.Commons.Log</code>.</li>
 <li><code>JOSYN.Jap.JAPServer</code> is <strong>never</strong> a dependency — it is a runtime peer, not a library.</li>
 </ul>
 
