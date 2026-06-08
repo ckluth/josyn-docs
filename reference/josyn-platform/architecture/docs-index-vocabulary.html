@@ -250,6 +250,8 @@ This file is the schema — not the enrichment prompt, not the index.</li>
     });
 
     var resizer = document.getElementById('sidebar-resizer');
+    var savedW = localStorage.getItem('sidebar-w');
+    if (savedW) document.documentElement.style.setProperty('--sidebar-w', savedW);
     resizer.addEventListener('contextmenu', function(e) { e.preventDefault(); });
     resizer.addEventListener('mousedown', function(e) {
       e.preventDefault();
@@ -273,10 +275,12 @@ This file is the schema — not the enrichment prompt, not the index.</li>
     function stopResize() {
       document.removeEventListener('mousemove', onResize);
       document.removeEventListener('mouseup', stopResize);
+      localStorage.setItem('sidebar-w', getComputedStyle(document.documentElement).getPropertyValue('--sidebar-w').trim());
     }
     function stopTouchResize() {
       document.removeEventListener('touchmove', onTouchResize);
       document.removeEventListener('touchend', stopTouchResize);
+      localStorage.setItem('sidebar-w', getComputedStyle(document.documentElement).getPropertyValue('--sidebar-w').trim());
     }
   </script>
   <script src="../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
