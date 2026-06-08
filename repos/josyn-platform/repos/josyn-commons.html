@@ -20,16 +20,20 @@
     <a href="../../../architecture/components/index.html" class="nav-link">Overview</a>
 </details>
 <details>
-    <summary class="nav-subsection">Decisions</summary>
-    <a href="../../../architecture/decisions/index.html" class="nav-link">Overview</a>
-</details>
-<details>
     <summary class="nav-subsection">Platform</summary>
     <a href="../../../architecture/platform/index.html" class="nav-link">Overview</a>
 </details>
 <details>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="../../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details>
@@ -80,18 +84,15 @@
     <a href="../../josyn-toolbox/index.html" class="nav-link">README</a>
 </details>
 </details>
-<details>
-  <summary class="nav-section">Unsorted</summary>
-  <a href="../../../unsorted/index.html" class="nav-link">Overview</a>
-</details>
 
   </nav>
+  <div id="sidebar-resizer"></div>
   <main>
     <article>
       <div class="origin">[josyn-platform]/repos/josyn-commons.md</div><h1 id="josyn-commons">josyn-commons</h1>
 <p><strong>Role:</strong> Domain-agnostic platform utilities — open for growth.
 Consumed by any repo as NuGet packages. Never referenced by <code>josyn-foundation</code>.</p>
-<p><strong>Location:</strong> <code>C:\DevGit\josyn-commons</code>
+<p><strong>Location:</strong> <code>C:\Users\chris\OneDrive\DevGit\josyn-commons</code>
 <strong>Version:</strong> <code>1.0.0-preview01</code></p>
 <hr />
 <h2 id="architectural-position">Architectural position</h2>
@@ -188,6 +189,21 @@ would pull <code>josyn-commons</code> out of its bottom-of-DAG position.</p>
     document.querySelectorAll('#sidebar a').forEach(function(a) {
       a.addEventListener('click', closeNav);
     });
+
+    var resizer = document.getElementById('sidebar-resizer');
+    resizer.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      document.addEventListener('mousemove', onResize);
+      document.addEventListener('mouseup', stopResize);
+    });
+    function onResize(e) {
+      var w = Math.max(160, Math.min(600, e.clientX));
+      document.documentElement.style.setProperty('--sidebar-w', w + 'px');
+    }
+    function stopResize() {
+      document.removeEventListener('mousemove', onResize);
+      document.removeEventListener('mouseup', stopResize);
+    }
   </script>
   <script src="../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
 </body>

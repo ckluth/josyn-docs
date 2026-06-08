@@ -84,12 +84,9 @@
     <a href="../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
 </details>
 </details>
-<details>
-  <summary class="nav-section">Unsorted</summary>
-  <a href="../../../../unsorted/index.html" class="nav-link">Overview</a>
-</details>
 
   </nav>
+  <div id="sidebar-resizer"></div>
   <main>
     <article>
       <div class="origin">[josyn-platform]/decisions/ADR-002-josyn-backend.md</div><h1 id="adr-002-introducing-josyn-backend-as-a-separate-layer">ADR-002 — Introducing <code>josyn-backend</code> as a Separate Layer</h1>
@@ -215,6 +212,21 @@ purely runtime (spawn) — not a code import</li>
     document.querySelectorAll('#sidebar a').forEach(function(a) {
       a.addEventListener('click', closeNav);
     });
+
+    var resizer = document.getElementById('sidebar-resizer');
+    resizer.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      document.addEventListener('mousemove', onResize);
+      document.addEventListener('mouseup', stopResize);
+    });
+    function onResize(e) {
+      var w = Math.max(160, Math.min(600, e.clientX));
+      document.documentElement.style.setProperty('--sidebar-w', w + 'px');
+    }
+    function stopResize() {
+      document.removeEventListener('mousemove', onResize);
+      document.removeEventListener('mouseup', stopResize);
+    }
   </script>
   <script src="../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
 </body>

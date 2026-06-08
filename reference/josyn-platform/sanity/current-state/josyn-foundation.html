@@ -20,16 +20,20 @@
     <a href="../../../../architecture/components/index.html" class="nav-link">Overview</a>
 </details>
 <details>
-    <summary class="nav-subsection">Decisions</summary>
-    <a href="../../../../architecture/decisions/index.html" class="nav-link">Overview</a>
-</details>
-<details>
     <summary class="nav-subsection">Platform</summary>
     <a href="../../../../architecture/platform/index.html" class="nav-link">Overview</a>
 </details>
 <details>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="../../../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details>
@@ -80,12 +84,9 @@
     <a href="../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
 </details>
 </details>
-<details>
-  <summary class="nav-section">Unsorted</summary>
-  <a href="../../../../unsorted/index.html" class="nav-link">Overview</a>
-</details>
 
   </nav>
+  <div id="sidebar-resizer"></div>
   <main>
     <article>
       <div class="origin">[josyn-platform]/sanity/current-state/josyn-foundation.md</div><h1 id="sanity-state-josyn-foundation">Sanity State — josyn-foundation</h1>
@@ -149,7 +150,7 @@
 <li><code>Assert.Throws&lt;TException&gt;(() =&gt; ...)</code> used correctly for the two documented <code>throw</code> cases.</li>
 <li>Test helpers (static factory methods, private scenario helpers) used appropriately.</li>
 </ul>
-<p><strong>Coverage note:</strong> No integration tests cover the actual named pipe transport (<code>PipesClient</code> / <code>PipesServer</code> end-to-end). This is acceptable at the current stage. Not a violation, but worth tracking.</p>
+<p><strong>Coverage note:</strong> No integration tests cover the actual named pipe transport (<code>PipesClient</code> / <code>PipesServer</code> end-to-end). This is acceptable for PoC stage. Not a violation, but worth tracking.</p>
 <hr />
 <h2 id="principles">principles ✅</h2>
 <p>All violations resolved.</p>
@@ -285,7 +286,7 @@
 <li>File names match type names throughout ✅</li>
 <li>Interface files prefixed with <code>I</code> ✅</li>
 </ul>
-<p><strong>Known limitations:</strong></p>
+<p><strong>Known PoC limitations:</strong></p>
 <ul>
 <li>Local NuGet feed path — production-only concern</li>
 </ul>
@@ -303,6 +304,21 @@
     document.querySelectorAll('#sidebar a').forEach(function(a) {
       a.addEventListener('click', closeNav);
     });
+
+    var resizer = document.getElementById('sidebar-resizer');
+    resizer.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      document.addEventListener('mousemove', onResize);
+      document.addEventListener('mouseup', stopResize);
+    });
+    function onResize(e) {
+      var w = Math.max(160, Math.min(600, e.clientX));
+      document.documentElement.style.setProperty('--sidebar-w', w + 'px');
+    }
+    function stopResize() {
+      document.removeEventListener('mousemove', onResize);
+      document.removeEventListener('mouseup', stopResize);
+    }
   </script>
   <script src="../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
 </body>

@@ -20,16 +20,20 @@
     <a href="../../architecture/components/index.html" class="nav-link">Overview</a>
 </details>
 <details>
-    <summary class="nav-subsection">Decisions</summary>
-    <a href="../../architecture/decisions/index.html" class="nav-link">Overview</a>
-</details>
-<details>
     <summary class="nav-subsection">Platform</summary>
     <a href="../../architecture/platform/index.html" class="nav-link">Overview</a>
 </details>
 <details>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details>
@@ -80,12 +84,9 @@
     <a href="../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
 </details>
 </details>
-<details>
-  <summary class="nav-section">Unsorted</summary>
-  <a href="../../unsorted/index.html" class="nav-link">Overview</a>
-</details>
 
   </nav>
+  <div id="sidebar-resizer"></div>
   <main>
     <article>
       <div class="origin">[josyn-platform]/ROADMAP.md</div><h1 id="josyn-platform-roadmap-status">JOSYN Platform — Roadmap &amp; Status</h1>
@@ -175,25 +176,6 @@ The platform is being built incrementally, with a working round-trip already in 
 <li>Migration path from old jobs to the new platform</li>
 <li>Many <code>josyn-job-host</code> features beyond arguments/result basics</li>
 </ul>
-<hr />
-<h2 id="open-documentation-items">Open documentation items</h2>
-<p>Things that exist in the codebase but are not yet properly documented.
-Work these off before a public release.</p>
-<ul>
-<li><p><strong><code>josyn-backend</code> undocumented components</strong> — five packages exist with no entry in
-<code>repos/josyn-backend/overview.md</code>:</p>
-<ul>
-<li><code>JOSYN.Backend.CLI</code> (<code>josyn-backend-cli</code>)</li>
-<li><code>JOSYN.Backend.Listener</code> (<code>josyn-backend-listener</code>)</li>
-<li><code>JOSYN.Backend.Ticker</code> (<code>josyn-backend-ticker</code>)</li>
-<li><code>JOSYN.Backend.ConfigStore</code> (<code>josyn-backend-config-store</code>)</li>
-<li><code>JOSYN.Backend.AdapterContracts</code> (<code>josyn-backend-adapter-contracts</code>)
-Each needs a component description, dependency list, and sanity notes entry.</li>
-</ul>
-</li>
-<li><p><strong><code>josyn-contoso</code></strong> — exists and works; no <code>repos/josyn-contoso.md</code> yet.</p>
-</li>
-</ul>
 
     </article>
   </main>
@@ -208,6 +190,21 @@ Each needs a component description, dependency list, and sanity notes entry.</li
     document.querySelectorAll('#sidebar a').forEach(function(a) {
       a.addEventListener('click', closeNav);
     });
+
+    var resizer = document.getElementById('sidebar-resizer');
+    resizer.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      document.addEventListener('mousemove', onResize);
+      document.addEventListener('mouseup', stopResize);
+    });
+    function onResize(e) {
+      var w = Math.max(160, Math.min(600, e.clientX));
+      document.documentElement.style.setProperty('--sidebar-w', w + 'px');
+    }
+    function stopResize() {
+      document.removeEventListener('mousemove', onResize);
+      document.removeEventListener('mouseup', stopResize);
+    }
   </script>
   <script src="../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
 </body>

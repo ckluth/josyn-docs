@@ -20,16 +20,20 @@
     <a href="../../../../components/index.html" class="nav-link">Overview</a>
 </details>
 <details>
-    <summary class="nav-subsection">Decisions</summary>
-    <a href="../../../../decisions/index.html" class="nav-link">Overview</a>
-</details>
-<details>
     <summary class="nav-subsection">Platform</summary>
     <a href="../../../../platform/index.html" class="nav-link">Overview</a>
 </details>
 <details open>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="../../../index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../../decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details>
@@ -80,12 +84,9 @@
     <a href="../../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
 </details>
 </details>
-<details>
-  <summary class="nav-section">Unsorted</summary>
-  <a href="../../../../../unsorted/index.html" class="nav-link">Overview</a>
-</details>
 
   </nav>
+  <div id="sidebar-resizer"></div>
   <main>
     <article>
       <div class="origin">[josyn-platform]/solution-architecture/03-physical-architecture/session-store.md</div><h1 id="session-store">Session Store</h1>
@@ -130,9 +131,9 @@ JAPServer       ──reads args──►   session store  (GetRawArguments)
 JAPServer       ──writes result─► session store  (PutRawResult / PutError)
 Backend         ──polls result──► session store  (completion detection)
 </code></pre>
-<p><em>(The current backend uses a 500 ms poll loop to detect completion.
+<p><em>(The current PoC backend uses a 500 ms poll loop to detect completion.
 A production implementation will use a push signal.)</em></p>
-<h2 id="known-limitations">Known Limitations</h2>
+<h2 id="known-poc-limitations">Known PoC Limitations</h2>
 <ul>
 <li>No <strong>session status column</strong> — orphaned rows from failed process spawns are
 indistinguishable from running sessions. A <code>status</code> field (pending / running /
@@ -140,7 +141,7 @@ complete / failed) is needed for production.</li>
 <li>No separated <strong>start / end timestamps</strong>.</li>
 <li>No explicit <strong>job identity</strong> column linking the session to a registered job name.</li>
 </ul>
-<p>These are known gaps, not final design choices.</p>
+<p>These are known gaps in the PoC, not final design choices.</p>
 
     </article>
   </main>
@@ -155,6 +156,21 @@ complete / failed) is needed for production.</li>
     document.querySelectorAll('#sidebar a').forEach(function(a) {
       a.addEventListener('click', closeNav);
     });
+
+    var resizer = document.getElementById('sidebar-resizer');
+    resizer.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      document.addEventListener('mousemove', onResize);
+      document.addEventListener('mouseup', stopResize);
+    });
+    function onResize(e) {
+      var w = Math.max(160, Math.min(600, e.clientX));
+      document.documentElement.style.setProperty('--sidebar-w', w + 'px');
+    }
+    function stopResize() {
+      document.removeEventListener('mousemove', onResize);
+      document.removeEventListener('mouseup', stopResize);
+    }
   </script>
   <script src="../../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
 </body>

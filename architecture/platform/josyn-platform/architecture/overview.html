@@ -19,10 +19,6 @@
     <summary class="nav-subsection">Components</summary>
     <a href="../../../components/index.html" class="nav-link">Overview</a>
 </details>
-<details>
-    <summary class="nav-subsection">Decisions</summary>
-    <a href="../../../decisions/index.html" class="nav-link">Overview</a>
-</details>
 <details open>
     <summary class="nav-subsection">Platform</summary>
     <a href="../../index.html" class="nav-link">Overview</a>
@@ -30,6 +26,14 @@
 <details>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="../../../solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details>
@@ -80,12 +84,9 @@
     <a href="../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
 </details>
 </details>
-<details>
-  <summary class="nav-section">Unsorted</summary>
-  <a href="../../../../unsorted/index.html" class="nav-link">Overview</a>
-</details>
 
   </nav>
+  <div id="sidebar-resizer"></div>
   <main>
     <article>
       <div class="origin">[josyn-platform]/architecture/overview.md</div><h1 id="architecture-overview">Architecture Overview</h1>
@@ -144,7 +145,7 @@ josyn-backend reads session completion from session store / exit codes
 <hr />
 <h2 id="component-map">Component Map</h2>
 <pre><code>josyn-backend (NuGet packages + EXEs)
-├── JOSYN.Backend.BootstrapConfig      ← runtime config: connection string, exe paths (file-based INI)
+├── JOSYN.Backend.GlobalConfig         ← runtime config: connection string, exe paths
 ├── JOSYN.Backend.SessionStore         ← session persistence: EF Core, SQL Server
 ├── JOSYN.Backend.SessionStarter       ← session lifecycle: GUID, store write, process spawn
 ├── JOSYN.Backend.JobRegistry          ← job registration: Name, TechnicalUserName; josyn.JobRegistrations table
@@ -169,8 +170,8 @@ josyn-foundation (NuGet packages)
         └── Convention: JipClient, JipServer, JipDispatcher, Request, Response
 
 josyn-jap (NuGet packages — protocol contracts only)
-└── JOSYN.Jap.Shared.Contract          ← IJosynApplicationProtocol, ErrorReport
-    (JOSYN.Jap.Shared.Log relocated to JOSYN.Commons.Log per ADR-008)
+├── JOSYN.Jap.Shared.Contract          ← IJosynApplicationProtocol, ErrorReport
+└── JOSYN.Jap.Shared.Log               ← LocalLog (static, file-based, caller-aware)
 
 josyn-job-host (NuGet library)
 └── JOSYN.JobHost
@@ -197,29 +198,31 @@ josyn-platform (this repo)
             └───────┬───────┘
                     │
 JOSYN.Jap.Shared.Contract (+ ResultPattern)
-        ▲
-        │
+JOSYN.Jap.Shared.Log      (+ ResultPattern)
+        ▲                         ▲
+        │                         │
 JOSYN.Jap.JAPServer       JOSYN.JobHost
 (in josyn-backend          (+ JIP + PropertyBag
- + JIP + PropertyBag        + Contract)
+ + JIP + PropertyBag        + Contract + Log)
  + SessionStore            [protocol client]
  + GlobalConfig
- + Contract)
+ + Contract + Log)
+[protocol server]
         │                         │
         └── IJosynApplicationProtocol ──┘
              (IPC at runtime — not a code dep.)
 </code></pre>
 <pre><code>── josyn-backend package chain ────────────────────────────────────────
 
-Backend.BootstrapConfig  (+ PropertyBag + ResultPattern)
-Backend.SessionStore     (+ ResultPattern)
+Backend.GlobalConfig  (no NuGet dependencies)
+Backend.SessionStore  (+ ResultPattern)
         ▲                   ▲
         └─────────┬──────────┘
                   │
 Backend.SessionStarter  (+ ResultPattern)
 
 Consumers of the backend packages:
-  JOSYN.Jap.JAPServer (EXE)                → + SessionStore + BootstrapConfig  (see above)
+  JOSYN.Jap.JAPServer (EXE)                → + SessionStore + GlobalConfig  (see above)
 
 ────────────────────────────────────────────────────────────────────────
 </code></pre>
@@ -347,6 +350,21 @@ LocalLog.Error(causer, &quot;message&quot;);     // writes to &lt;LogDir&gt;/&lt
     document.querySelectorAll('#sidebar a').forEach(function(a) {
       a.addEventListener('click', closeNav);
     });
+
+    var resizer = document.getElementById('sidebar-resizer');
+    resizer.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      document.addEventListener('mousemove', onResize);
+      document.addEventListener('mouseup', stopResize);
+    });
+    function onResize(e) {
+      var w = Math.max(160, Math.min(600, e.clientX));
+      document.documentElement.style.setProperty('--sidebar-w', w + 'px');
+    }
+    function stopResize() {
+      document.removeEventListener('mousemove', onResize);
+      document.removeEventListener('mouseup', stopResize);
+    }
   </script>
   <script src="../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
 </body>

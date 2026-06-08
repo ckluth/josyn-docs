@@ -20,16 +20,20 @@
     <a href="../../../../components/index.html" class="nav-link">Overview</a>
 </details>
 <details>
-    <summary class="nav-subsection">Decisions</summary>
-    <a href="../../../../decisions/index.html" class="nav-link">Overview</a>
-</details>
-<details>
     <summary class="nav-subsection">Platform</summary>
     <a href="../../../../platform/index.html" class="nav-link">Overview</a>
 </details>
 <details open>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="../../../index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../../decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details>
@@ -80,12 +84,9 @@
     <a href="../../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
 </details>
 </details>
-<details>
-  <summary class="nav-section">Unsorted</summary>
-  <a href="../../../../../unsorted/index.html" class="nav-link">Overview</a>
-</details>
 
   </nav>
+  <div id="sidebar-resizer"></div>
   <main>
     <article>
       <div class="origin">[josyn-platform]/solution-architecture/05-deployment-and-operations/job-deployment.md</div><h1 id="job-deployment">Job Deployment</h1>
@@ -126,7 +127,7 @@ with the job executable name.</p>
 <p>This is a per-job choice. JOSYN imposes no constraint — process isolation means each job
 executable is free to make its own decision independently of other jobs or the backend.</p>
 <h2 id="installer">Installer</h2>
-<p><em>(TBD — no installer exists yet. The backend is currently deployed manually.)</em></p>
+<p><em>(TBD — no installer exists yet. The backend is currently deployed manually during PoC.)</em></p>
 <h2 id="bootstrapping">Bootstrapping</h2>
 <p><em>(TBD — the bootstrapping sequence for a fresh machine installation is not yet defined.
 Expected concerns: database connection configuration, service account setup, job repository
@@ -147,6 +148,21 @@ root path configuration, initial job registration.)</em></p>
     document.querySelectorAll('#sidebar a').forEach(function(a) {
       a.addEventListener('click', closeNav);
     });
+
+    var resizer = document.getElementById('sidebar-resizer');
+    resizer.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      document.addEventListener('mousemove', onResize);
+      document.addEventListener('mouseup', stopResize);
+    });
+    function onResize(e) {
+      var w = Math.max(160, Math.min(600, e.clientX));
+      document.documentElement.style.setProperty('--sidebar-w', w + 'px');
+    }
+    function stopResize() {
+      document.removeEventListener('mousemove', onResize);
+      document.removeEventListener('mouseup', stopResize);
+    }
   </script>
   <script src="../../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
 </body>

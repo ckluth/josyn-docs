@@ -20,16 +20,20 @@
     <a href="../../../index.html" class="nav-link">Overview</a>
 </details>
 <details>
-    <summary class="nav-subsection">Decisions</summary>
-    <a href="../../../../decisions/index.html" class="nav-link">Overview</a>
-</details>
-<details>
     <summary class="nav-subsection">Platform</summary>
     <a href="../../../../platform/index.html" class="nav-link">Overview</a>
 </details>
 <details>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="../../../../solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../../decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details>
@@ -80,12 +84,9 @@
     <a href="../../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
 </details>
 </details>
-<details>
-  <summary class="nav-section">Unsorted</summary>
-  <a href="../../../../../unsorted/index.html" class="nav-link">Overview</a>
-</details>
 
   </nav>
+  <div id="sidebar-resizer"></div>
   <main>
     <article>
       <div class="origin">[josyn-backend]/josyn-backend-session-starter/JOSYN.Backend.SessionStarter/README.md</div><h1 id="josyn.backend.sessionstarter">JOSYN.Backend.SessionStarter</h1>
@@ -110,7 +111,7 @@ var result = starter.StartSession(&quot;MyJobType&quot;, iniArguments);
 if (result.Succeeded)
     Console.WriteLine($&quot;Session started: {result.Value}&quot;);
 </code></pre>
-<h2 id="known-limitations">Known limitations</h2>
+<h2 id="known-poc-limitations">Known PoC limitations</h2>
 <ul>
 <li>If <code>Process.Start</code> succeeds but JAPServer crashes after the 500 ms startup window,
 the session row in the store remains with an empty <code>Result</code> field. A session status
@@ -157,6 +158,21 @@ Replace with a real config source before production use.</li>
     document.querySelectorAll('#sidebar a').forEach(function(a) {
       a.addEventListener('click', closeNav);
     });
+
+    var resizer = document.getElementById('sidebar-resizer');
+    resizer.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      document.addEventListener('mousemove', onResize);
+      document.addEventListener('mouseup', stopResize);
+    });
+    function onResize(e) {
+      var w = Math.max(160, Math.min(600, e.clientX));
+      document.documentElement.style.setProperty('--sidebar-w', w + 'px');
+    }
+    function stopResize() {
+      document.removeEventListener('mousemove', onResize);
+      document.removeEventListener('mouseup', stopResize);
+    }
   </script>
   <script src="../../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
 </body>

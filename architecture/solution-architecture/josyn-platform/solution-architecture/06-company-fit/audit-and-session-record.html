@@ -20,16 +20,20 @@
     <a href="../../../../components/index.html" class="nav-link">Overview</a>
 </details>
 <details>
-    <summary class="nav-subsection">Decisions</summary>
-    <a href="../../../../decisions/index.html" class="nav-link">Overview</a>
-</details>
-<details>
     <summary class="nav-subsection">Platform</summary>
     <a href="../../../../platform/index.html" class="nav-link">Overview</a>
 </details>
 <details open>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="../../../index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../../decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details>
@@ -80,12 +84,9 @@
     <a href="../../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
 </details>
 </details>
-<details>
-  <summary class="nav-section">Unsorted</summary>
-  <a href="../../../../../unsorted/index.html" class="nav-link">Overview</a>
-</details>
 
   </nav>
+  <div id="sidebar-resizer"></div>
   <main>
     <article>
       <div class="origin">[josyn-platform]/solution-architecture/06-company-fit/audit-and-session-record.md</div><h1 id="audit-and-the-session-record">Audit and the Session Record</h1>
@@ -100,8 +101,8 @@ This provides a built-in, structured audit trail:</p>
 </ul>
 <p>For a company that must demonstrate audit-readiness, this is a significant improvement
 over log-file-based approaches — the record is structured, queryable, and permanent.</p>
-<h2 id="current-audit-gaps">Current Audit Gaps</h2>
-<p>The current session store has known gaps that must be addressed before it qualifies
+<h2 id="audit-gaps-in-the-current-poc">Audit Gaps in the Current PoC</h2>
+<p>The current PoC session store has known gaps that must be addressed before it qualifies
 as production audit-ready:</p>
 <table>
 <thead>
@@ -129,7 +130,7 @@ as production audit-ready:</p>
 </tr>
 </tbody>
 </table>
-<p>These are known limitations, not permanent design choices.</p>
+<p>These are known PoC limitations, not permanent design choices.</p>
 <h2 id="compliance-considerations">Compliance Considerations</h2>
 <p><em>(TBD — what specific regulatory or company-policy obligations apply to job execution records?
 E.g.: minimum retention period, access control on session data, personal data handling.)</em></p>
@@ -147,6 +148,21 @@ E.g.: minimum retention period, access control on session data, personal data ha
     document.querySelectorAll('#sidebar a').forEach(function(a) {
       a.addEventListener('click', closeNav);
     });
+
+    var resizer = document.getElementById('sidebar-resizer');
+    resizer.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      document.addEventListener('mousemove', onResize);
+      document.addEventListener('mouseup', stopResize);
+    });
+    function onResize(e) {
+      var w = Math.max(160, Math.min(600, e.clientX));
+      document.documentElement.style.setProperty('--sidebar-w', w + 'px');
+    }
+    function stopResize() {
+      document.removeEventListener('mousemove', onResize);
+      document.removeEventListener('mouseup', stopResize);
+    }
   </script>
   <script src="../../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
 </body>

@@ -20,16 +20,20 @@
     <a href="../../architecture/components/index.html" class="nav-link">Overview</a>
 </details>
 <details>
-    <summary class="nav-subsection">Decisions</summary>
-    <a href="../../architecture/decisions/index.html" class="nav-link">Overview</a>
-</details>
-<details>
     <summary class="nav-subsection">Platform</summary>
     <a href="../../architecture/platform/index.html" class="nav-link">Overview</a>
 </details>
 <details>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details>
@@ -80,12 +84,9 @@
     <a href="../josyn-toolbox/index.html" class="nav-link">README</a>
 </details>
 </details>
-<details>
-  <summary class="nav-section">Unsorted</summary>
-  <a href="../../unsorted/index.html" class="nav-link">Overview</a>
-</details>
 
   </nav>
+  <div id="sidebar-resizer"></div>
   <main>
     <article>
       <div class="origin">[josyn-platform]/README.md</div><h1 id="josyn-platform">JOSYN Platform</h1>
@@ -153,7 +154,7 @@ No code to find in this place, just documentation: architecture, decisions, and 
 <h3 id="why-josyn-backend-is-separate-from-josyn-jap">Why <code>josyn-backend</code> is separate from <code>josyn-jap</code></h3>
 <p><code>josyn-backend</code> owns the <em>when</em> and <em>what</em> of job execution (scheduling, session persistence, JAPServer spawning). <code>josyn-jap</code> owns only the <em>contract</em> of a single in-flight session (the JAP protocol interface and the shared logger). <code>JOSYN.Jap.JAPServer</code> — the server implementation — lives in <code>josyn-backend</code> because it needs direct access to backend resources (<code>SessionStore</code>, <code>CompanyConfig</code>); see <a href="decisions/ADR-004-japserver-relocation.html">decisions/ADR-004-japserver-relocation.md</a>. <code>josyn-backend</code> takes a NuGet dependency on the two shared packages from <code>josyn-jap</code> (<code>Shared.Contract</code>, <code>Shared.Log</code>) for this reason. The session GUID remains the only runtime coupling between JAPServer and <code>job.exe</code>.</p>
 <hr />
-<h2 id="beyond-the-platform-josyn-playground-josyn-toolbox-josyn-contoso-and-josyn-docs">Beyond the Platform — <code>josyn-playground</code>, <code>josyn-toolbox</code>, <code>josyn-contoso</code>, and <code>josyn-docs</code></h2>
+<h2 id="beyond-the-platform-josyn-playground-and-josyn-toolbox">Beyond the Platform — <code>josyn-playground</code> and <code>josyn-toolbox</code></h2>
 <p><code>josyn-playground</code> is a consumer repository that sits outside the platform's dependency graph.
 It may reference any platform repo — as a pure consumer. The platform never references it back.</p>
 <p>Its purposes are:</p>
@@ -169,12 +170,6 @@ It may reference any platform repo — as a pure consumer. The platform never re
 machine-sync utilities, code generators, and documentation tools. It is also a pure consumer:
 the platform does not know it exists. Toolbox content is stable and regularly executed;
 playground content is experimental and may be throwaway.</p>
-<p><code>josyn-contoso</code> is a demo company adapter repository. It implements platform extension points
-(such as <code>IConfigSource</code>) with hardcoded fake data to demonstrate the ADR-009 adapter pattern
-end-to-end. It represents what a real company adapter would look like. The platform has no
-dependency on it — it is a pure consumer that will evolve alongside the platform.</p>
-<p><code>josyn-docs</code> is the generation target for the published HTML documentation site. Its content
-is produced by the site-builder tooling in <code>josyn-toolbox</code> and should not be edited by hand.</p>
 <hr />
 <h2 id="vocabulary">Vocabulary</h2>
 <table>
@@ -248,7 +243,7 @@ graph TD
 <p>Coding standards: <a href="architecture/coding-standards.html">architecture/coding-standards.md</a></p>
 <hr />
 <h2 id="status">Status</h2>
-<p>All repos at version <code>1.0.0-preview01</code>. <code>josyn-backend</code> is in active development.</p>
+<p>All repos at version <code>1.0.0-preview01</code> — active PoC phase. <code>josyn-backend</code> is a compilable stub.</p>
 <p>See <code>decisions/</code> for architectural decision records.</p>
 <hr />
 <h2 id="for-maintainers">For maintainers</h2>
@@ -267,6 +262,21 @@ graph TD
     document.querySelectorAll('#sidebar a').forEach(function(a) {
       a.addEventListener('click', closeNav);
     });
+
+    var resizer = document.getElementById('sidebar-resizer');
+    resizer.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      document.addEventListener('mousemove', onResize);
+      document.addEventListener('mouseup', stopResize);
+    });
+    function onResize(e) {
+      var w = Math.max(160, Math.min(600, e.clientX));
+      document.documentElement.style.setProperty('--sidebar-w', w + 'px');
+    }
+    function stopResize() {
+      document.removeEventListener('mousemove', onResize);
+      document.removeEventListener('mouseup', stopResize);
+    }
   </script>
   <script src="../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
 </body>

@@ -20,16 +20,20 @@
     <a href="architecture/components/index.html" class="nav-link">Overview</a>
 </details>
 <details>
-    <summary class="nav-subsection">Decisions</summary>
-    <a href="architecture/decisions/index.html" class="nav-link">Overview</a>
-</details>
-<details>
     <summary class="nav-subsection">Platform</summary>
     <a href="architecture/platform/index.html" class="nav-link">Overview</a>
 </details>
 <details>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="architecture/solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details>
@@ -80,12 +84,9 @@
     <a href="repos/josyn-toolbox/index.html" class="nav-link">README</a>
 </details>
 </details>
-<details>
-  <summary class="nav-section">Unsorted</summary>
-  <a href="unsorted/index.html" class="nav-link">Overview</a>
-</details>
 
   </nav>
+  <div id="sidebar-resizer"></div>
   <main>
     <article>
       <h1 id="josyn-documentation">JOSYN Documentation</h1>
@@ -104,7 +105,7 @@
 <p><em>You design the platform and govern its decisions.</em></p>
 <ul>
 <li><a href="architecture/platform/josyn-platform/architecture/overview.html"><strong>Architecture Overview</strong></a> — Explains the platform structure, runtime flow, and dependency graph.</li>
-<li><a href="architecture/decisions/index.html"><strong>Architecture — Decisions</strong></a></li>
+<li><a href="decisions/index.html"><strong>Decisions</strong></a></li>
 <li><a href="notes/josyn-platform/ROADMAP.html"><strong>JOSYN Platform — Roadmap &amp; Status</strong></a> — Tracks platform status, milestones, completed work, and likely next steps.</li>
 </ul>
 <hr />
@@ -137,6 +138,8 @@
 </li>
 <li><p><a href="architecture/index.html"><strong>Architecture</strong></a></p>
 </li>
+<li><p><a href="decisions/index.html"><strong>Decisions</strong></a></p>
+</li>
 <li><p><a href="reference/index.html"><strong>Reference</strong></a></p>
 </li>
 <li><p><a href="repos/index.html"><strong>Repos</strong></a></p>
@@ -144,8 +147,6 @@
 <li><p><a href="guides/index.html"><strong>Guides</strong></a></p>
 </li>
 <li><p><a href="notes/index.html"><strong>Notes</strong></a></p>
-</li>
-<li><p><a href="unsorted/index.html"><strong>Unsorted</strong></a></p>
 </li>
 </ul>
 
@@ -162,6 +163,21 @@
     document.querySelectorAll('#sidebar a').forEach(function(a) {
       a.addEventListener('click', closeNav);
     });
+
+    var resizer = document.getElementById('sidebar-resizer');
+    resizer.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      document.addEventListener('mousemove', onResize);
+      document.addEventListener('mouseup', stopResize);
+    });
+    function onResize(e) {
+      var w = Math.max(160, Math.min(600, e.clientX));
+      document.documentElement.style.setProperty('--sidebar-w', w + 'px');
+    }
+    function stopResize() {
+      document.removeEventListener('mousemove', onResize);
+      document.removeEventListener('mouseup', stopResize);
+    }
   </script>
   <script src="mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
 </body>

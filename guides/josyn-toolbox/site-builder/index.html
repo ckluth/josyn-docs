@@ -20,16 +20,20 @@
     <a href="../../../architecture/components/index.html" class="nav-link">Overview</a>
 </details>
 <details>
-    <summary class="nav-subsection">Decisions</summary>
-    <a href="../../../architecture/decisions/index.html" class="nav-link">Overview</a>
-</details>
-<details>
     <summary class="nav-subsection">Platform</summary>
     <a href="../../../architecture/platform/index.html" class="nav-link">Overview</a>
 </details>
 <details>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="../../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details open>
@@ -80,12 +84,9 @@
     <a href="../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
 </details>
 </details>
-<details>
-  <summary class="nav-section">Unsorted</summary>
-  <a href="../../../unsorted/index.html" class="nav-link">Overview</a>
-</details>
 
   </nav>
+  <div id="sidebar-resizer"></div>
   <main>
     <article>
       <div class="origin">[josyn-toolbox]/site-builder/README.md</div><h1 id="site-builder-josyn-documentation-pipeline">site-builder — JOSYN Documentation Pipeline</h1>
@@ -255,8 +256,8 @@ git -C josyn-docs commit -m &quot;docs: site rebuild [skip ci]&quot;
 git -C josyn-docs push
 </code></pre>
 <h3 id="net-sdk-version">5. .NET SDK version</h3>
-<p>The renderer (<code>site-builder-renderer</code>) targets .NET 10. Verify the Azure DevOps agent
-image includes .NET 10 SDK, or add a <code>UseDotNet</code> task to the pipeline YAML.</p>
+<p>The renderer (<code>site-builder-renderer</code>) targets .NET 8. Verify the Azure DevOps agent
+image includes .NET 8 SDK, or add a <code>UseDotNet</code> task to the pipeline YAML.</p>
 <h3 id="preferred-ci-approach">Preferred CI approach</h3>
 <p>Rather than calling the <code>.cmd</code> wrappers, a CI pipeline should call the PS1 scripts
 directly with fully explicit paths. The assembler and renderer are two separate tasks,
@@ -312,6 +313,21 @@ synchronisation bridge.</p>
     document.querySelectorAll('#sidebar a').forEach(function(a) {
       a.addEventListener('click', closeNav);
     });
+
+    var resizer = document.getElementById('sidebar-resizer');
+    resizer.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      document.addEventListener('mousemove', onResize);
+      document.addEventListener('mouseup', stopResize);
+    });
+    function onResize(e) {
+      var w = Math.max(160, Math.min(600, e.clientX));
+      document.documentElement.style.setProperty('--sidebar-w', w + 'px');
+    }
+    function stopResize() {
+      document.removeEventListener('mousemove', onResize);
+      document.removeEventListener('mouseup', stopResize);
+    }
   </script>
   <script src="../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
 </body>

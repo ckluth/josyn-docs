@@ -20,16 +20,20 @@
     <a href="../../architecture/components/index.html" class="nav-link">Overview</a>
 </details>
 <details>
-    <summary class="nav-subsection">Decisions</summary>
-    <a href="../../architecture/decisions/index.html" class="nav-link">Overview</a>
-</details>
-<details>
     <summary class="nav-subsection">Platform</summary>
     <a href="../../architecture/platform/index.html" class="nav-link">Overview</a>
 </details>
 <details>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details>
@@ -80,68 +84,54 @@
     <a href="../josyn-toolbox/index.html" class="nav-link">README</a>
 </details>
 </details>
-<details>
-  <summary class="nav-section">Unsorted</summary>
-  <a href="../../unsorted/index.html" class="nav-link">Overview</a>
-</details>
 
   </nav>
+  <div id="sidebar-resizer"></div>
   <main>
     <article>
       <div class="origin">[josyn-backend]/README.md</div><h1 id="josyn-backend">josyn-backend</h1>
 <blockquote>
-<p><strong>Scheduler and session-orchestration layer for the JOSYN platform.</strong>
-Full architectural context: <a href="../josyn-platform/repos/josyn-backend/overview.html">josyn-platform/repos/josyn-backend</a>
+<p><strong>Stub — placeholder for the JOSYN backend scheduler integration layer.</strong>
+Full architectural context: <a href="../josyn-platform/index.html">josyn-platform</a>
 <code>JOSYN.Jap.JAPServer</code> was relocated here from <code>josyn-jap</code> per ADR-004.</p>
 </blockquote>
 <hr />
-<h2 id="what-this-is">What this is</h2>
-<p>The scheduling and session-orchestration layer that bridges the legacy job system with the JOSYN platform.
-<code>SessionStarter</code> is the <strong>migration rendezvous</strong>: instead of spawning the old <code>JobHost.exe</code>, it spawns
-<code>JAPServer.exe JOSYN-IPC &lt;guid&gt;</code>, which in turn coordinates with the job executable via named-pipe IPC.</p>
+<h2 id="what-this-will-be">What this will be</h2>
+<p>The scheduling and session-orchestration layer that bridges the legacy job system with the JOSYN platform.</p>
+<p>Its <code>SessionStarter</code> component is the <strong>migration rendezvous</strong>: instead of spawning the old <code>JobHost.exe</code>, it will spawn <code>JAPServer.exe JOSYN-IPC &lt;guid&gt;</code>, which in turn coordinates with the job executable via named-pipe IPC.</p>
+<p>See <a href="../josyn-platform/repos/josyn-backend.html">josyn-platform/repos/josyn-backend.md</a> for the full architectural description, migration narrative, and planned component list.</p>
 <hr />
 <h2 id="current-state">Current state</h2>
-<p>All core backend packages are implemented and working:</p>
-<table>
-<thead>
-<tr>
-<th>Package</th>
-<th>Status</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>JOSYN.Backend.BootstrapConfig</code></td>
-<td>✅ <code>IBootstrapConfig</code> + <code>FileBootstrapConfig</code> (reads <code>josyn.bootstrap.ini</code>)</td>
-</tr>
-<tr>
-<td><code>JOSYN.Backend.SessionStore</code></td>
-<td>✅ EF Core, SQL Server, <code>josyn</code> schema</td>
-</tr>
-<tr>
-<td><code>JOSYN.Backend.SessionStarter</code></td>
-<td>✅ Allocates GUID, persists session, spawns <code>JAPServer.exe</code></td>
-</tr>
-<tr>
-<td><code>JOSYN.Backend.JobRegistry</code></td>
-<td>✅ <code>IJobRegistry</code>, <code>josyn.JobRegistrations</code> table</td>
-</tr>
-<tr>
-<td><code>JOSYN.Backend.ErrorHandler</code></td>
-<td>✅ <code>IErrorHandler</code>, <code>SqlErrorHandler</code>, <code>josyn.ErrorStore</code></td>
-</tr>
-<tr>
-<td><code>JOSYN.Jap.JAPServer</code> (EXE)</td>
-<td>✅ Fully wired — reads args and writes result to <code>SessionStore</code></td>
-</tr>
-</tbody>
-</table>
-<p>For the full component description, directory structure, dependencies, and sanity notes see
-<a href="../josyn-platform/repos/josyn-backend/overview.html">josyn-platform/repos/josyn-backend/overview.md</a>.</p>
+<p><code>JOSYN.Backend.SessionStarter</code> is a compilable stub; all methods return <code>Result.Error(&quot;Noch nicht implementiert.&quot;)</code>.
+<code>JOSYN.Jap.JAPServer</code> is a working PoC EXE — relocated from <code>josyn-jap</code> per ADR-004.</p>
+<pre><code>josyn-backend/
+├── JOSYN.Backend.SessionStarter.slnx      ← library solution
+├── JOSYN.Backend.SessionStarter/
+│   ├── Contracts/
+│   │   └── ISessionStarter.cs             ← static abstract contract
+│   ├── SessionStarter.cs                  ← stub implementation
+│   └── StartSessionRequest.cs
+│
+├── JOSYN.Jap.JAPServer.slnx               ← EXE solution (relocated from josyn-jap)
+├── JOSYN.Jap.JAPServer/
+│   ├── Host.cs
+│   ├── JAPServer.cs
+│   ├── Program.cs
+│   ├── icon.ico
+│   ├── Properties/launchSettings.json
+│   └── .local-build/                      ← project-local build + launch scripts
+│
+└── .local-build/
+    ├── build.cmd                           ← builds ALL solutions
+    └── pack.cmd                            ← packs SessionStarter only
+</code></pre>
 <hr />
 <h2 id="build">Build</h2>
-<pre><code>.local-build\build.cmd [Release|Debug]     # builds ALL solutions in the repo
-.local-build\pack.cmd                      # packs all NuGet packages to ..\local-packages\
+<pre><code>.local-build\build.cmd [Release|Debug]     # builds SessionStarter + JAPServer
+.local-build\pack.cmd                      # packs SessionStarter to ..\local-packages\
+</code></pre>
+<p>JAPServer only:</p>
+<pre><code>JOSYN.Jap.JAPServer\.local-build\build.cmd [Release|Debug]
 </code></pre>
 <p>License: MIT | Company: HAEVG AG | Target: net10.0</p>
 
@@ -158,6 +148,21 @@ Full architectural context: <a href="../josyn-platform/repos/josyn-backend/overv
     document.querySelectorAll('#sidebar a').forEach(function(a) {
       a.addEventListener('click', closeNav);
     });
+
+    var resizer = document.getElementById('sidebar-resizer');
+    resizer.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      document.addEventListener('mousemove', onResize);
+      document.addEventListener('mouseup', stopResize);
+    });
+    function onResize(e) {
+      var w = Math.max(160, Math.min(600, e.clientX));
+      document.documentElement.style.setProperty('--sidebar-w', w + 'px');
+    }
+    function stopResize() {
+      document.removeEventListener('mousemove', onResize);
+      document.removeEventListener('mouseup', stopResize);
+    }
   </script>
   <script src="../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
 </body>

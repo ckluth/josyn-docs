@@ -20,16 +20,20 @@
     <a href="../../architecture/components/index.html" class="nav-link">Overview</a>
 </details>
 <details>
-    <summary class="nav-subsection">Decisions</summary>
-    <a href="../../architecture/decisions/index.html" class="nav-link">Overview</a>
-</details>
-<details>
     <summary class="nav-subsection">Platform</summary>
     <a href="../../architecture/platform/index.html" class="nav-link">Overview</a>
 </details>
 <details>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Decisions</summary>
+  <a href="../../decisions/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details>
@@ -80,69 +84,67 @@
     <a href="../josyn-toolbox/index.html" class="nav-link">README</a>
 </details>
 </details>
-<details>
-  <summary class="nav-section">Unsorted</summary>
-  <a href="../../unsorted/index.html" class="nav-link">Overview</a>
-</details>
 
   </nav>
+  <div id="sidebar-resizer"></div>
   <main>
     <article>
       <div class="origin">[josyn-foundation]/README.md</div><h1 id="josyn-foundation">josyn-foundation</h1>
-<p><strong>josyn-foundation</strong> contains the three core building blocks of <strong>JOSYN</strong> (<em>JobSystem Next</em>) —
-as independent NuGet packages that can be versioned and deployed separately.</p>
+<p><strong>josyn-foundation</strong> enthält die drei Kern-Bausteine von <strong>JOSYN</strong> (<em>JobSystem Next</em>) —
+als eigenständige NuGet-Pakete, die unabhängig voneinander versioniert und eingesetzt
+werden können.</p>
 <hr />
-<h2 id="building-blocks">Building blocks</h2>
+<h2 id="bausteine">Bausteine</h2>
 <table>
 <thead>
 <tr>
-<th>Package</th>
-<th>Role</th>
-<th>Dependencies</th>
+<th>Paket</th>
+<th>Rolle</th>
+<th>Abhängigkeiten</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><a href="josyn-foundation-result-pattern/index.html"><code>JOSYN.Foundation.ResultPattern</code></a></td>
-<td>Errors-as-values — JOSYN's consistent error-handling principle</td>
+<td>Errors-as-Values — das durchgängige Fehlerbehandlungsprinzip von JOSYN</td>
 <td>—</td>
 </tr>
 <tr>
 <td><a href="josyn-foundation-property-bag/index.html"><code>JOSYN.Foundation.PropertyBag</code></a></td>
-<td>Serialization of flat records for JOSYN IPC channels (INI / JSON)</td>
+<td>Serialisierung flacher Records für JOSYN-IPC-Kanäle (INI / JSON)</td>
 <td>ResultPattern</td>
 </tr>
 <tr>
 <td><a href="josyn-foundation-jip/index.html"><code>JOSYN.Foundation.JIP</code></a></td>
-<td>Named-pipe IPC transport (JOSYN Interprocess Protocol)</td>
+<td>Named-Pipe-IPC-Transport (JOSYN Interprocess Protocol)</td>
 <td>ResultPattern</td>
 </tr>
 </tbody>
 </table>
-<h3 id="dependency-chain">Dependency chain</h3>
+<h3 id="abhangigkeitskette">Abhängigkeitskette</h3>
 <pre><code>JOSYN.Foundation.ResultPattern
         ↑                ↑
 JOSYN.Foundation.   JOSYN.Foundation.
    PropertyBag           JIP
 </code></pre>
-<p><code>ResultPattern</code> is the only shared dependency. <code>PropertyBag</code> and <code>JIP</code> are unaware of each other.</p>
+<p><code>ResultPattern</code> ist die einzige gemeinsame Abhängigkeit. PropertyBag und JIP kennen
+sich gegenseitig nicht.</p>
 <hr />
-<h2 id="local-development">Local development</h2>
-<p>Each sub-repo is self-contained. From the respective directory:</p>
-<pre><code>.local-build\build.cmd      # release build
-.local-build\test.cmd       # run tests
-.local-build\pack.cmd       # NuGet package → ..\..\local-packages\
+<h2 id="lokales-arbeiten">Lokales Arbeiten</h2>
+<p>Jedes Sub-Repo ist autark. Aus dem jeweiligen Verzeichnis:</p>
+<pre><code>.local-build\build.cmd      # Release-Build
+.local-build\test.cmd       # Tests ausführen
+.local-build\pack.cmd       # NuGet-Paket → ..\..\local-packages\
 </code></pre>
-<p><strong>First-time setup order</strong> (due to dependencies):</p>
+<p><strong>Reihenfolge beim ersten Setup</strong> (wegen Abhängigkeiten):</p>
 <pre><code>1. josyn-foundation-result-pattern\  → pack
 2. josyn-foundation-property-bag\    → pack
 3. josyn-foundation-jip\             → pack
 </code></pre>
 <hr />
 <h2 id="status">Status</h2>
-<p>Milestone 1. Packages are internally production-ready;
-the <code>preview</code> label reflects the pending release process.</p>
-<hr />
+<h2 id="reifer-poc-milestone-1.die-pakete-sind-intern-produktionsreif-die-preview-kennzeichnung-spiegelt-den-noch-offenen-abnahme-prozess-wider">Reifer PoC — Milestone 1. Die Pakete sind intern produktionsreif;
+die <code>preview</code>-Kennzeichnung spiegelt den noch offenen Abnahme-Prozess wider.</h2>
 <p><em>JOSYN Foundation — © 2026 HAEVG AG — MIT License</em></p>
 
     </article>
@@ -158,6 +160,21 @@ the <code>preview</code> label reflects the pending release process.</p>
     document.querySelectorAll('#sidebar a').forEach(function(a) {
       a.addEventListener('click', closeNav);
     });
+
+    var resizer = document.getElementById('sidebar-resizer');
+    resizer.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      document.addEventListener('mousemove', onResize);
+      document.addEventListener('mouseup', stopResize);
+    });
+    function onResize(e) {
+      var w = Math.max(160, Math.min(600, e.clientX));
+      document.documentElement.style.setProperty('--sidebar-w', w + 'px');
+    }
+    function stopResize() {
+      document.removeEventListener('mousemove', onResize);
+      document.removeEventListener('mouseup', stopResize);
+    }
   </script>
   <script src="../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
 </body>
