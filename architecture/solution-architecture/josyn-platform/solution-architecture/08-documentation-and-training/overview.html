@@ -167,6 +167,7 @@ Writing that guide is the highest-leverage documentation investment for JOSYN ri
     });
 
     var resizer = document.getElementById('sidebar-resizer');
+    resizer.addEventListener('contextmenu', function(e) { e.preventDefault(); });
     resizer.addEventListener('mousedown', function(e) {
       e.preventDefault();
       document.addEventListener('mousemove', onResize);

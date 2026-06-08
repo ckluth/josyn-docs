@@ -195,6 +195,7 @@ SQL Server database before the package can be used in production</li>
     });
 
     var resizer = document.getElementById('sidebar-resizer');
+    resizer.addEventListener('contextmenu', function(e) { e.preventDefault(); });
     resizer.addEventListener('mousedown', function(e) {
       e.preventDefault();
       document.addEventListener('mousemove', onResize);

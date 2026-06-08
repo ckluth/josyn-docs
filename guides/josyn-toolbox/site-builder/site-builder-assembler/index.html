@@ -262,6 +262,7 @@ Criteria fields are AND. Wildcards (<code>*</code>) supported in string values.<
     });
 
     var resizer = document.getElementById('sidebar-resizer');
+    resizer.addEventListener('contextmenu', function(e) { e.preventDefault(); });
     resizer.addEventListener('mousedown', function(e) {
       e.preventDefault();
       document.addEventListener('mousemove', onResize);

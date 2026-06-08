@@ -145,6 +145,7 @@ purpose of the system before any technical or organisational detail is introduce
     });
 
     var resizer = document.getElementById('sidebar-resizer');
+    resizer.addEventListener('contextmenu', function(e) { e.preventDefault(); });
     resizer.addEventListener('mousedown', function(e) {
       e.preventDefault();
       document.addEventListener('mousemove', onResize);

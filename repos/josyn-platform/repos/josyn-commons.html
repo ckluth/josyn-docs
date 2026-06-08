@@ -191,6 +191,7 @@ would pull <code>josyn-commons</code> out of its bottom-of-DAG position.</p>
     });
 
     var resizer = document.getElementById('sidebar-resizer');
+    resizer.addEventListener('contextmenu', function(e) { e.preventDefault(); });
     resizer.addEventListener('mousedown', function(e) {
       e.preventDefault();
       document.addEventListener('mousemove', onResize);

@@ -137,6 +137,7 @@ See <a href="evolution-horizon.html">evolution-horizon.md</a> for what this woul
     });
 
     var resizer = document.getElementById('sidebar-resizer');
+    resizer.addEventListener('contextmenu', function(e) { e.preventDefault(); });
     resizer.addEventListener('mousedown', function(e) {
       e.preventDefault();
       document.addEventListener('mousemove', onResize);

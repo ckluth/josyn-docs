@@ -352,6 +352,7 @@ LocalLog.Error(causer, &quot;message&quot;);     // writes to &lt;LogDir&gt;/&lt
     });
 
     var resizer = document.getElementById('sidebar-resizer');
+    resizer.addEventListener('contextmenu', function(e) { e.preventDefault(); });
     resizer.addEventListener('mousedown', function(e) {
       e.preventDefault();
       document.addEventListener('mousemove', onResize);
