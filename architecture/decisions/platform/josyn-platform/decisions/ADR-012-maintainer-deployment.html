@@ -1,0 +1,290 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ADR-012 — Maintainer Deployment (First Iteration) — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details open>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../../index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../../../components/index.html" class="nav-link">Overview</a>
+</details>
+<details open>
+    <summary class="nav-subsection">Decisions</summary>
+    <a href="../../../index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../platform/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../../solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Unsorted</summary>
+  <a href="../../../../../unsorted/index.html" class="nav-link">Overview</a>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-platform]/decisions/ADR-012-maintainer-deployment.md</div><h1 id="adr-012-maintainer-deployment-first-iteration">ADR-012 — Maintainer Deployment (First Iteration)</h1>
+<p><strong>Date:</strong> 2026-06-06
+<strong>Status:</strong> Proposal — under construction; serves as basis for later refinement</p>
+<hr />
+<h2 id="context">Context</h2>
+<p>The JOSYN platform is in the PoC phase. There is no CI/CD system, no installer, and no
+automated staging pipeline yet. Nevertheless it is necessary to deploy the coordinated set
+of artefacts (backend EXEs, adapter DLLs, job EXEs, bootstrap.ini) reproducibly and without
+manual steps on a developer machine — both for integration testing and for manual
+demonstration.</p>
+<p>This ADR describes the first, deliberately simple iteration: a single PowerShell script for
+maintainer use on the same machine where the local repos reside.</p>
+<hr />
+<h2 id="decision">Decision</h2>
+<h3 id="deployment-script">Deployment Script</h3>
+<p>A PowerShell script <code>deploy-maintainer.ps1</code> lives at:</p>
+<pre><code>josyn-toolbox\deploy\deploy-maintainer.ps1
+</code></pre>
+<p>The script is placed in <code>josyn-toolbox</code> because it:</p>
+<ul>
+<li>is not platform infrastructure (no protocol, no CI, no service)</li>
+<li>is maintainer tooling — deliberately outside the produced artefacts</li>
+<li>has dependencies on multiple repos (<code>josyn-backend</code>, <code>josyn-contoso</code>) and therefore
+does not belong cleanly in any single repo</li>
+</ul>
+<p>The script uses <strong><code>dotnet publish --no-self-contained</code></strong> instead of <code>dotnet build + Copy-Item</code>.
+This publishes all runtime dependencies completely and without manual selection into the
+target folder.</p>
+<h3 id="target-structure">Target Structure</h3>
+<pre><code>$BackendRoot\                            (default: C:\ProgramData\JOSYN)
+    josyn.bootstrap.ini                  &lt;- shared bootstrap configuration
+    CLI\
+        JOSYN.Backend.CLI.exe            &lt;- backend CLI executable
+    JAPServer\
+        JOSYN.Jap.JAPServer.exe          &lt;- JAP server executable
+        Adapters\
+            Contoso.Josyn.Adapter.dll    &lt;- adapter assembly (ADR-009)
+
+$JobRepositoryRoot\                      (default: C:\ProgramData\JOSYN\JobRepository)
+    Contoso.DemoProduct.DemoJob\
+        Contoso.DemoProduct.DemoJob.exe  &lt;- first demo job
+</code></pre>
+<h3 id="bootstrap.ini-convention">bootstrap.ini Convention</h3>
+<p><code>josyn.bootstrap.ini</code> lives at the <code>$BackendRoot</code> level — one level <strong>above</strong> the directory
+of each trigger executable. Every trigger exe (CLI, and in future: listener, ticker, …) loads
+it via:</p>
+<pre><code class="language-csharp">Path.Combine(AppContext.BaseDirectory, &quot;..&quot;, &quot;josyn.bootstrap.ini&quot;)
+</code></pre>
+<p><strong>Rationale:</strong> The ini is not CLI-specific configuration — it is an installation-wide bootstrap
+resource. Placing it once at <code>$BackendRoot</code> level avoids duplication and ensures that all
+trigger executables see the same configuration.</p>
+<h3 id="backendroot-convention">BackendRoot Convention</h3>
+<p>The directory of the loaded <code>josyn.bootstrap.ini</code> <strong>is</strong> the BackendRoot.
+All further deployment paths are derived from it by convention —
+no path is stored explicitly in the ini:</p>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Convention path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JAPServer executable</td>
+<td><code>BackendRoot\JAPServer\JOSYN.Jap.JAPServer.exe</code></td>
+</tr>
+<tr>
+<td>Job repository</td>
+<td><code>BackendRoot\JobRepository\{JobTypeName}\{JobTypeName}.exe</code></td>
+</tr>
+<tr>
+<td>Adapters</td>
+<td><code>BackendRoot\JAPServer\Adapters\</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>BackendRoot</code> itself is computed in <code>FileBootstrapConfig</code> as <code>Path.GetDirectoryName(iniPath)</code>
+and exposed via <code>IBootstrapConfig.BackendRoot</code>.</p>
+<h3 id="japserver-path-convention">JAPServer Path Convention</h3>
+<p>The path to <code>JOSYN.Jap.JAPServer.exe</code> is <strong>not</strong> configured in <code>josyn.bootstrap.ini</code>.
+Instead, <code>SessionStarter</code> computes it at runtime by convention:</p>
+<pre><code>&lt;directory of the invoking trigger executable&gt;/../JAPServer/JOSYN.Jap.JAPServer.exe
+</code></pre>
+<p><strong>Rationale:</strong>
+<code>SessionStarter</code> is the only place that needs to know <code>JAPServer.exe</code>. Beyond the current
+CLI executable, further trigger executables will be introduced in future (scheduler service,
+workflow adapter). All are deployed as sibling sub-folders next to <code>JAPServer\</code>. The
+convention keeps this coupling consistent without any configuration overhead — at the cost
+of a fixed directory structure, which this ADR makes binding.</p>
+<p><strong>Consequence for deployment:</strong>
+The <code>JapServerExePath</code> key is removed from <code>josyn.bootstrap.ini</code> entirely.
+<code>deploy-maintainer.ps1</code> no longer writes it.</p>
+<h3 id="bootstrap.ini-adjustment">bootstrap.ini Adjustment</h3>
+<p><code>josyn.bootstrap.ini</code> from the <code>josyn-backend</code> repo root is copied as-is. No keys need
+to be rewritten:</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Repo value</th>
+<th>Deployment value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><code>SessionStoreConnectionString</code> and <code>ConfigSourceType</code> are carried over unchanged.
+All path keys are gone — they are computed by convention from BackendRoot (see above).</p>
+<h3 id="execution-order">Execution Order</h3>
+<ol>
+<li>Clean target folder (full delete + recreate)</li>
+<li>Publish <code>JOSYN.Jap.JAPServer</code> → <code>$BackendRoot\JAPServer\</code></li>
+<li>Publish <code>JOSYN.Backend.CLI</code> → <code>$BackendRoot\CLI\</code></li>
+<li>Publish <code>Contoso.Josyn.Adapter</code> → <code>$BackendRoot\JAPServer\Adapters\</code></li>
+<li>Publish <code>Contoso.DemoProduct.DemoJob</code> → <code>$JobRepositoryRoot\Contoso.DemoProduct.DemoJob\</code></li>
+<li>Copy and adjust <code>josyn.bootstrap.ini</code> (<code>JobRepositoryRoot</code>) → <code>$BackendRoot\</code></li>
+</ol>
+<hr />
+<h2 id="rationale">Rationale</h2>
+<p><strong>Why <code>josyn-toolbox\deploy\</code>?</strong>
+The script is maintainer tooling. It has no property of a platform artefact (no protocol,
+no NuGet package, no assembly). <code>josyn-toolbox</code> is the designated location for such tooling.
+The toolbox constraint does not apply in this direction: the script <em>consumes</em> platform repos
+— it is not referenced by them.</p>
+<p><strong>Why a full delete instead of incremental update?</strong>
+In the PoC phase the target directory is not a live service folder — a clean state is more
+important than minimal downtime. The maintainer deploys manually; a brief interruption is
+acceptable.</p>
+<p><strong>Why <code>--no-self-contained</code>?</strong>
+The developer machine has .NET 10 installed. Self-contained would significantly increase the
+deployment size with no benefit for this iteration.</p>
+<hr />
+<h2 id="open-questions-refinement-basis">Open Questions (Refinement Basis)</h2>
+<p>These questions are explicitly open — this ADR does not close them, but documents them as
+input for a future deployment architecture:</p>
+<ol>
+<li><p><strong>Staging environments:</strong> How is the distinction between DEV, INT, and PROD handled?
+Separate bootstrap.ini per environment? Environment parameter in the script?
+(See ADR-010)</p>
+</li>
+<li><p><strong>Job repository convention:</strong> The <code>JobRepositoryRoot</code> concept is modelled in
+<code>IBootstrapConfig</code> as a simple root path. If jobs require multiple files (configuration,
+icons, manifest), each job sub-folder needs a defined structure. That structure has not
+been decided yet.</p>
+</li>
+<li><p><strong>Adapter loading convention:</strong> The <code>Adapters\</code> sub-directory next to the backend EXE is
+a convention from ADR-009, physically implemented here for the first time. Whether multiple
+adapters can coexist side by side has not been specified.</p>
+</li>
+<li><p><strong>CI/CD:</strong> This script is explicitly not a CI build step. If a pipeline is introduced, the
+deployment model must be redesigned (staging slots, artifact upload, rollback strategy).</p>
+</li>
+<li><p><strong>Installer vs. script:</strong> For a real production environment a Windows installer (MSI/WiX)
+or a packaging format is the natural next step. That is outside the current scope.</p>
+</li>
+<li><p><strong>Multiple jobs:</strong> Currently <code>Contoso.DemoProduct.DemoJob</code> is the only job. When further
+jobs are added the script must be extended or parameterised (e.g., a loop over a list of
+job solutions).</p>
+</li>
+</ol>
+<hr />
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>The maintainer can create a complete, consistent deployment environment on the local machine
+with a single <code>pwsh .\deploy-maintainer.ps1</code> call.</li>
+<li>The exact target structure is documented and reproducible.</li>
+<li>Open questions are explicitly recorded — future refinement can pick up directly from here.</li>
+</ul>
+<hr />
+<h2 id="relation-to-other-adrs">Relation to Other ADRs</h2>
+<ul>
+<li><strong>ADR-009</strong> (Runtime Context Provider / Adapter Pattern): The <code>Adapters\</code> directory is the
+physical realisation of the adapter loading mechanism described there.</li>
+<li><strong>ADR-010</strong> (Environment Separation): This ADR addresses DEV only.
+INT and PROD are explicitly open questions (see above).</li>
+</ul>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

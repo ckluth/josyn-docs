@@ -20,20 +20,16 @@
     <a href="../../../architecture/components/index.html" class="nav-link">Overview</a>
 </details>
 <details>
+    <summary class="nav-subsection">Decisions</summary>
+    <a href="../../../architecture/decisions/index.html" class="nav-link">Overview</a>
+</details>
+<details>
     <summary class="nav-subsection">Platform</summary>
     <a href="../../../architecture/platform/index.html" class="nav-link">Overview</a>
 </details>
 <details>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="../../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
-</details>
-</details>
-<details>
-  <summary class="nav-section">Decisions</summary>
-  <a href="../../../decisions/index.html" class="nav-link">Overview</a>
-<details>
-    <summary class="nav-subsection">Platform</summary>
-    <a href="../../../decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details>
@@ -94,95 +90,120 @@
     <article>
       <div class="origin">[josyn-toolbox]/site-builder/site-map-authoring.md</div><h1 id="site-map.yaml-authoring-guide">site-map.yaml — Authoring Guide</h1>
 <blockquote>
-<p>How to tell the assembler what you really want.</p>
+<p>How to tell the assembler what you really want.
+This guide covers <strong>site-map.yaml v2</strong>. The schema changed significantly from v1 (sections/include/groups) to v2 (tree/mapping/overrides). If you see those old keys in a file, it is out of date.</p>
 </blockquote>
 <hr />
 <h2 id="the-mental-model">The mental model</h2>
 <p>The site-assembler is a two-layer system:</p>
 <ul>
-<li><strong>Rules</strong> answer: <em>which docs belong in which section?</em> — automated, low maintenance</li>
-<li><strong>Intent</strong> answers: <em>what does this section mean, and how should a human navigate it?</em> — authored by you</li>
+<li><strong>Placement</strong> answers: <em>which docs belong in which folder?</em> — driven by <code>mapping</code> and <code>overrides</code>, automated, low maintenance</li>
+<li><strong>Structure</strong> answers: <em>what folders exist and how are they nested?</em> — driven by <code>tree</code>, authored by you</li>
+<li><strong>Navigation</strong> answers: <em>how does a human find their way in?</em> — driven by <code>reading-paths</code>, authored by you</li>
 </ul>
-<p>You never need to list individual documents. You only need to describe <strong>structure and meaning</strong>.
-The rules handle placement. You handle purpose.</p>
+<p>You never list individual documents. You describe structure and intent. Rules handle placement.</p>
 <hr />
-<h2 id="the-three-tools-you-have">The three tools you have</h2>
-<h3 id="section-description">1. Section description</h3>
-<p><em>&quot;What is this section and who reads it?&quot;</em></p>
-<p>Add a <code>description</code> field to any section in <code>site-map.yaml</code>. One or two sentences. Rendered
-as the intro paragraph on the section's overview page.</p>
-<pre><code class="language-yaml">- title: Repos
-  folder: repos
-  description: &quot;One entry per repository — what it is, what it contains, and how it relates to the rest of the platform.&quot;
-  include: ...
+<h2 id="the-four-sections-of-site-map.yaml">The four sections of site-map.yaml</h2>
+<h3 id="tree-folder-hierarchy">1. <code>tree</code> — folder hierarchy</h3>
+<p>Defines every folder that can receive documents. Indentation controls nesting.</p>
+<pre><code class="language-yaml">tree:
+  - architecture:
+      - platform
+      - solution-architecture
+      - components
+      - decisions:
+          - platform
+          - backend
+  - reference
+  - repos
+  - guides
+  - notes
+  - unsorted:
+      catch-all: true
 </code></pre>
-<p>Use this whenever a human landing on the section page would otherwise have no context.</p>
+<ul>
+<li>A node with children uses the <code>name:</code> syntax followed by indented child nodes.</li>
+<li>A leaf node uses the <code>- name</code> syntax.</li>
+<li>Exactly one node should have <code>catch-all: true</code>. Documents that match no mapping rule land here (with a warning).</li>
+<li>The path of a node is its full slash-separated ancestry: <code>architecture/decisions/platform</code>.</li>
+</ul>
 <hr />
-<h3 id="groups-within-a-section">2. Groups within a section</h3>
-<p><em>&quot;These docs belong together and deserve a shared heading.&quot;</em></p>
-<p>Add a <code>groups</code> list to a section. Each group has a <code>label</code> and a <code>match</code> rule — the same
-rule syntax used in <code>include</code>. The assembler assigns docs to groups and renders them under
-sub-headings.</p>
-<pre><code class="language-yaml">  groups:
-    - label: &quot;Core repos&quot;
-      match: { repo: josyn-foundation }
-    - label: &quot;Protocol layer&quot;
-      match: { repo: josyn-jap }
-    - label: &quot;Platform&quot;
-      match: { repo: josyn-platform }
-      description: &quot;Cross-cutting architecture and standards documents.&quot;
+<h3 id="mapping-placement-rules">2. <code>mapping</code> — placement rules</h3>
+<p>Evaluated top-to-bottom. <strong>First matching rule wins.</strong></p>
+<pre><code class="language-yaml">mapping:
+  - { type: agent-instruction, skip: true }
+  - { type: decision, repo: josyn-platform, to: architecture/decisions/platform }
+  - { type: decision, to: architecture/decisions/platform }
 </code></pre>
-<p>You do not need to cover every doc. Docs matching no group collect in an implicit <strong>Other</strong>
-block at the bottom.</p>
-<p>Use groups when a section contains docs from distinct areas that would be confusing as one
-flat list.</p>
+<ul>
+<li><code>to:</code> places matching docs at that tree path. The value must exactly match a path in <code>tree</code>.</li>
+<li><code>skip: true</code> excludes matching docs from the site entirely.</li>
+<li>Fields within a rule are <strong>AND</strong>. Multiple rule objects are <strong>OR</strong> (first match wins).</li>
+<li>Supported match fields: <code>type</code>, <code>repo</code>, <code>state</code>, <code>folder-context</code>. Values support <code>*</code> wildcard.</li>
+</ul>
 <hr />
-<h3 id="reading-paths">3. Reading paths</h3>
-<p><em>&quot;If you are X, start here.&quot;</em></p>
-<p>Defined under <code>reading-paths</code> in <code>site-map.yaml</code>. Each path has a <code>label</code>, an <code>intro</code>
-sentence, and a short list of links (doc references or section links). Rendered as entry
-cards on the landing page.</p>
-<pre><code class="language-yaml">- perspective: job-developer
-  label: &quot;Job Developer&quot;
-  intro: &quot;You write jobs that run on the JOSYN platform.&quot;
-  links:
-    - { section: guides }
-    - { section: repos }
+<h3 id="overrides-per-file-exceptions">3. <code>overrides</code> — per-file exceptions</h3>
+<p>Applied <strong>before</strong> mapping rules. Useful for one-off placements or exclusions.</p>
+<pre><code class="language-yaml">overrides:
+  - { repo: josyn-platform, path: README.md, to: repos }
+  - { repo: josyn-platform, path: MAINTAINERS.md, skip: true }
 </code></pre>
-<p>Keep each reading path short — three to five links. It is a starting point, not an index.</p>
+<ul>
+<li>Match is exact: both <code>repo</code> and <code>path</code> must match.</li>
+<li>Same <code>to:</code> / <code>skip:</code> semantics as mapping rules.</li>
+</ul>
+<hr />
+<h3 id="reading-paths-landing-page-navigation-cards">4. <code>reading-paths</code> — landing page navigation cards</h3>
+<p>Rendered as &quot;Who are you?&quot; entry cards on the landing page. Each path is a persona with a short curated link list.</p>
+<pre><code class="language-yaml">reading-paths:
+  - perspective: maintainer-architect
+    label: &quot;Maintainer — Architect&quot;
+    intro: &quot;You design the platform and govern its decisions.&quot;
+    links:
+      - { repo: josyn-platform, path: architecture/overview.md }
+      - { section: architecture/decisions }
+      - { repo: josyn-platform, path: ROADMAP.md }
+</code></pre>
+<p>Link types:</p>
+<ul>
+<li><code>{ repo: x, path: y }</code> — links to a specific indexed document.</li>
+<li><code>{ section: path }</code> — links to a section's index page. <strong><code>path</code> is the full tree path</strong>, e.g. <code>architecture/decisions</code>, not just <code>decisions</code>.</li>
+</ul>
+<p><strong>Critical rule:</strong> whenever you move a section in <code>tree</code>, search <code>reading-paths</code> for any <code>{ section: ... }</code> reference to that section and update it. <code>reading-paths</code> holds hard path references — they do not update automatically.</p>
+<p>Keep each reading path to three to five links. It is a starting point, not an index.</p>
 <hr />
 <h2 id="when-to-use-what">When to use what</h2>
 <table>
 <thead>
 <tr>
-<th>Question you are asking</th>
+<th>Question</th>
 <th>Tool</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>A reader lands on a section and doesn't know what it is</td>
-<td><code>description</code> on the section</td>
+<td>I want a new folder in the site</td>
+<td>Add a node to <code>tree</code></td>
 </tr>
 <tr>
-<td>A section mixes docs from different repos or topics</td>
-<td><code>groups</code> on the section</td>
+<td>I want docs of type X to land in folder Y</td>
+<td>Add a rule to <code>mapping</code></td>
 </tr>
 <tr>
-<td>A group of docs within a section needs its own context sentence</td>
-<td><code>description</code> on a group</td>
+<td>One specific doc belongs somewhere unusual</td>
+<td>Add an entry to <code>overrides</code></td>
 </tr>
 <tr>
-<td>A new person doesn't know where to start in the whole site</td>
-<td><code>reading-paths</code></td>
+<td>A doc should never appear on the site</td>
+<td><code>skip: true</code> in <code>mapping</code> or <code>overrides</code></td>
 </tr>
 <tr>
-<td>A specific doc belongs in a different section than the rules place it</td>
-<td><code>overrides</code></td>
+<td>A new persona needs a starting point on the landing page</td>
+<td>Add an entry to <code>reading-paths</code></td>
 </tr>
 <tr>
-<td>A doc should not appear on the site at all</td>
-<td><code>skip</code></td>
+<td>I moved a section in the tree</td>
+<td>Update <code>tree</code>, <code>mapping</code> rules that reference it, <strong>and</strong> any <code>{ section: ... }</code> links in <code>reading-paths</code></td>
 </tr>
 </tbody>
 </table>
@@ -190,45 +211,48 @@ cards on the landing page.</p>
 <h2 id="what-you-do-not-need-to-do">What you do NOT need to do</h2>
 <ul>
 <li>You do not list individual documents. Rules place them automatically.</li>
-<li>You do not assign docs to groups manually. Groups use the same match-rule syntax.</li>
 <li>You do not re-run the indexer after editing <code>site-map.yaml</code>. Only the assembler reads it.</li>
 </ul>
 <hr />
-<h2 id="the-workflow">The workflow</h2>
+<h2 id="workflow">Workflow</h2>
 <ol>
-<li>Open <code>josyn-platform/docs/site-map.yaml</code></li>
-<li>For each section — ask: <em>&quot;Would a stranger understand what this section is?&quot;</em>
-If not, add a <code>description</code>.</li>
-<li>For each section — ask: <em>&quot;Is this a confusing mix of unrelated things?&quot;</em>
-If yes, add <code>groups</code>.</li>
-<li>Run <code>site-builder-assembler.cmd</code> — inspect the staged <code>{section}/README.md</code> files</li>
-<li>Adjust until the overview pages communicate what you intended</li>
+<li>Edit <code>docs/site-map.yaml</code></li>
+<li>If you moved or renamed a section — grep for its old path in <code>reading-paths</code> and fix references</li>
+<li>Run <code>site-builder-assembler.cmd</code></li>
+<li>Inspect the staging folder and the generated <code>_index.md</code> files</li>
+<li>Adjust until the structure and landing page communicate what you intended</li>
 </ol>
 <hr />
-<h2 id="reference-full-section-with-all-intent-fields">Reference — full section with all intent fields</h2>
-<pre><code class="language-yaml">- title: Repos
-  folder: repos
-  description: &quot;Per-repository reference summaries and sub-package overviews.&quot;
-  groups:
-    - label: &quot;Foundation layer&quot;
-      match: { repo: josyn-foundation }
-      description: &quot;Infrastructure primitives — Result pattern, serialisation, IPC transport.&quot;
-    - label: &quot;Protocol layer&quot;
-      match: { repo: josyn-jap }
-    - label: &quot;Execution layer&quot;
-      match: { repo: josyn-job-host }
-    - label: &quot;Scheduler&quot;
-      match: { repo: josyn-backend }
-    - label: &quot;Platform&quot;
-      match: { repo: josyn-platform }
-  include:
-    - { type: repo-summary }
-    - { type: overview, folder-context: &quot;&quot; }
-    - { type: overview, folder-context: &quot;josyn-foundation*&quot; }
-    - { type: overview, folder-context: &quot;josyn-jap*&quot; }
+<h2 id="reference-annotated-complete-example">Reference — annotated complete example</h2>
+<pre><code class="language-yaml">tree:
+  - architecture:
+      - platform          # top-level docs about the platform architecture
+      - decisions:
+          - platform      # ADRs from josyn-platform
+          - backend       # ADRs from josyn-backend
+  - reference
+  - unsorted:
+      catch-all: true     # unmatched docs land here with a warning
+
+mapping:
+  - { type: agent-instruction, skip: true }         # never show AGENTS.md on the site
+  - { state: superseded, skip: true }               # hide retired docs
+  - { type: decision, repo: josyn-platform, to: architecture/decisions/platform }
+  - { type: decision, repo: josyn-backend,  to: architecture/decisions/backend  }
+  - { type: decision, to: architecture/decisions/platform }  # fallback for other repos
+  - { type: reference, to: reference }
+
+overrides:
+  - { repo: josyn-platform, path: MAINTAINERS.md, skip: true }
+
+reading-paths:
+  - perspective: maintainer-architect
+    label: &quot;Maintainer — Architect&quot;
+    intro: &quot;You design the platform and govern its decisions.&quot;
+    links:
+      - { repo: josyn-platform, path: architecture/overview.md }
+      - { section: architecture/decisions }   # full tree path, not just &quot;decisions&quot;
 </code></pre>
-<p>All intent fields are optional. A section without <code>description</code> or <code>groups</code> behaves exactly
-as today — a flat table, no intro.</p>
 
     </article>
   </main>

@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Architecture — Decisions — Backend — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details open>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../components/index.html" class="nav-link">Overview</a>
+</details>
+<details open>
+    <summary class="nav-subsection">Decisions</summary>
+    <a href="../index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../platform/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Unsorted</summary>
+  <a href="../../../unsorted/index.html" class="nav-link">Overview</a>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <h1 id="architecture-decisions-backend">Architecture — Decisions — Backend</h1>
+<h2 id="documents">Documents</h2>
+<table>
+<thead>
+<tr>
+<th>Document</th>
+<th>Repo</th>
+<th>Summary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="josyn-platform/repos/josyn-backend/decisions/ADR-001-backend-building-block-model.html">ADR-001 — Backend Building Block Model</a></td>
+<td>josyn-platform</td>
+<td>Defines the building block model used inside josyn-backend.</td>
+</tr>
+<tr>
+<td><a href="josyn-platform/repos/josyn-backend/decisions/ADR-002-session-store.html">ADR-002 — SessionStore</a></td>
+<td>josyn-platform</td>
+<td>Introduces SessionStore as a Category A backend component.</td>
+</tr>
+<tr>
+<td><a href="josyn-platform/repos/josyn-backend/decisions/ADR-003-global-config.html">ADR-003 — GlobalConfig</a></td>
+<td>josyn-platform</td>
+<td>Introduces GlobalConfig as a separate backend building block.</td>
+</tr>
+<tr>
+<td><a href="josyn-platform/repos/josyn-backend/decisions/ADR-004-backend-restructuring.html">ADR-004 — Backend Restructuring: Trigger Executables, ErrorHandler, and SessionStarter Fire-and-Forget Correction</a></td>
+<td>josyn-platform</td>
+<td>Proposes backend restructuring and corrected fire-and-forget session startup.</td>
+</tr>
+<tr>
+<td><a href="josyn-platform/repos/josyn-backend/decisions/ADR-005-job-registry.html">ADR-005 — JobRegistry</a></td>
+<td>josyn-platform</td>
+<td>Introduces JobRegistry as the authoritative record of runnable jobs.</td>
+</tr>
+<tr>
+<td><a href="josyn-platform/repos/josyn-backend/decisions/ADR-006-error-handler.html">ADR-006 — ErrorHandler</a></td>
+<td>josyn-platform</td>
+<td>Proposes a backend-wide error reporting component and contract.</td>
+</tr>
+</tbody>
+</table>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

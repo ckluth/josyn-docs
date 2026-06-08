@@ -1,0 +1,217 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ADR-002 — Introducing  as a Separate Layer — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details open>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../../index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../../../components/index.html" class="nav-link">Overview</a>
+</details>
+<details open>
+    <summary class="nav-subsection">Decisions</summary>
+    <a href="../../../index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../platform/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../../solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Unsorted</summary>
+  <a href="../../../../../unsorted/index.html" class="nav-link">Overview</a>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-platform]/decisions/ADR-002-josyn-backend.md</div><h1 id="adr-002-introducing-josyn-backend-as-a-separate-layer">ADR-002 — Introducing <code>josyn-backend</code> as a Separate Layer</h1>
+<p><strong>Date:</strong> 2026-05-29
+<strong>Status:</strong> Accepted</p>
+<hr />
+<h2 id="context">Context</h2>
+<p>The current JOSYN platform PoC has four repos:</p>
+<table>
+<thead>
+<tr>
+<th>Repo</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>josyn-foundation</code></td>
+<td>Infrastructure primitives</td>
+</tr>
+<tr>
+<td><code>josyn-jap</code></td>
+<td>Per-session JAP protocol server + shared packages</td>
+</tr>
+<tr>
+<td><code>josyn-job-host</code></td>
+<td>Job executable runtime library</td>
+</tr>
+<tr>
+<td><code>josyn-platform</code></td>
+<td>Architecture, decisions, cross-cutting docs</td>
+</tr>
+</tbody>
+</table>
+<p><strong>What is missing:</strong> the layer that <em>triggers</em> job sessions. Currently the PoC documents a
+&quot;Job Scheduler&quot; as the actor that spawns processes, but no JOSYN repo embodies it.
+In the legacy system this role is fulfilled by <code>JobSystem.Service</code>,
+<code>JobSystem.TriggerAgent</code>, <code>JobSystem.SessionStarter</code>, and several companion components.</p>
+<p>The legacy <code>SessionStarter</code> is the key migration seam. It:</p>
+<ol>
+<li>Creates a session record in the <code>JobSessions</code> SQL table</li>
+<li>Calls <code>Process.Start(JobHost.exe, sessionUID)</code></li>
+</ol>
+<p><code>JobHost.exe</code> is the architectural bottleneck of the legacy system: it loads job DLLs via
+heavy reflection into its own process space, cannot tolerate conflicting assembly versions,
+and must be rebuilt for every .NET target. This wall prevents evolution.</p>
+<hr />
+<h2 id="decision">Decision</h2>
+<p>Introduce <strong><code>josyn-backend</code></strong> as the fifth repo, representing the scheduling and
+session-orchestration layer.</p>
+<h3 id="responsibility-boundaries">Responsibility boundaries</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Owns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>josyn-backend</code></td>
+<td>Scheduling, trigger evaluation, session-store persistence, session GUID assignment, spawning JAPServer and job.exe</td>
+</tr>
+<tr>
+<td><code>josyn-jap</code></td>
+<td>The per-session JAP protocol server; receiving and fulfilling <code>GetRawArguments</code>, <code>PutRawResult</code>, <code>PutError</code></td>
+</tr>
+<tr>
+<td><code>josyn-job-host</code></td>
+<td>The runtime embedded in job executables; protocol client, argument deserialization, reflection dispatch</td>
+</tr>
+<tr>
+<td><code>josyn-foundation</code></td>
+<td>Infrastructure primitives shared by all layers</td>
+</tr>
+</tbody>
+</table>
+<p><code>josyn-jap</code> and <code>josyn-job-host</code> are <strong>unaware of <code>josyn-backend</code></strong>.
+The session GUID is the only coupling — passed as a CLI argument at spawn time.</p>
+<h3 id="the-migration-seam">The migration seam</h3>
+<p><code>SessionStarter</code> (in <code>josyn-backend</code>) replaces the <code>JobSystem.SessionStarter</code> call site:</p>
+<pre><code>Old:  SessionStarter → Process.Start(JobHost.exe, &lt;sessionUID&gt;)
+
+New:  SessionStarter → Process.Start(JAPServer.exe, JOSYN-IPC &lt;guid&gt;)
+      SessionStarter → Process.Start(job.exe,       JOSYN-IPC &lt;guid&gt;)
+</code></pre>
+<p>This swap is the minimum viable change to move a job from the legacy model to the JOSYN model.
+Old and new can run in parallel: legacy jobs continue via the old <code>SessionStarter</code>;
+migrated jobs use the new <code>SessionStarter</code>.</p>
+<h3 id="stub-first-approach">Stub-first approach</h3>
+<p><code>josyn-backend</code> is introduced as a compilable stub today:</p>
+<ul>
+<li><code>JOSYN.Backend.SessionStarter</code> defines the contract (<code>ISessionStarter</code>) and a
+placeholder implementation that returns <code>Result.Error(&quot;Noch nicht implementiert.&quot;)</code></li>
+<li>All other planned components (<code>TriggerAgent</code>, <code>Scheduling</code>, <code>SessionStore</code>, <code>JobRepository</code>,
+<code>Service</code>, <code>WorkflowAdapter</code>) are deferred until migration begins</li>
+</ul>
+<hr />
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li><code>josyn-jap</code> is <strong>no longer called &quot;the backend&quot;</strong> in platform documentation.
+The correct term for <code>josyn-jap</code> is &quot;the JAP session server&quot; or &quot;the per-session server&quot;.
+&quot;Backend&quot; now refers exclusively to <code>josyn-backend</code>.</li>
+<li>The platform vocabulary gains a new entry: <strong>Backend</strong> → <code>josyn-backend</code></li>
+<li>The platform now has five repos; <code>josyn-platform/README.md</code> reflects this</li>
+<li>The runtime flow in <code>architecture/overview.md</code> is updated to show <code>josyn-backend</code>
+as the spawner of both <code>JAPServer.exe</code> and <code>job.exe</code></li>
+<li><code>josyn-backend</code> depends only on <code>JOSYN.Foundation.ResultPattern</code> in the stub phase.
+It will <strong>never</strong> take a NuGet dependency on <code>josyn-jap</code>; the relationship is
+purely runtime (spawn) — not a code import</li>
+</ul>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

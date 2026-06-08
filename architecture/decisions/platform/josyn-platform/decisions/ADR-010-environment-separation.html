@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ADR-010 — Environment Separation and Installation Model — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details open>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../../index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../../../components/index.html" class="nav-link">Overview</a>
+</details>
+<details open>
+    <summary class="nav-subsection">Decisions</summary>
+    <a href="../../../index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../platform/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../../solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Unsorted</summary>
+  <a href="../../../../../unsorted/index.html" class="nav-link">Overview</a>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-platform]/decisions/ADR-010-environment-separation.md</div><h1 id="adr-010-environment-separation-and-installation-model">ADR-010 — Environment Separation and Installation Model</h1>
+<p><strong>Date:</strong> 2026-06-05
+<strong>Status:</strong> Proposal — not yet fully designed; enough context to continue later</p>
+<hr />
+<h2 id="context">Context</h2>
+<p>JOSYN operates in three environments: <strong>PROD</strong>, <strong>INT</strong>, <strong>DEV</strong>.</p>
+<p>During bootstrapping design (ADR-009 follow-up) a key insight emerged:</p>
+<blockquote>
+<p><strong>A server is already within an environment by nature of its installation.</strong></p>
+</blockquote>
+<p>This means environment selection is an <strong>installation-time concern</strong>, not a runtime concern.
+There is no env-switch flag, no <code>[DEV]</code> / <code>[PROD]</code> section in a shared config file.
+Each installation has its own <code>josyn.bootstrap.ini</code> containing the correct values for
+exactly one environment.</p>
+<hr />
+<h2 id="central-decision-to-be-confirmed">Central decision (to be confirmed)</h2>
+<p><strong>Environment = Installation. One installation, one environment, one bootstrap file.</strong></p>
+<p>Consequences:</p>
+<ul>
+<li><code>josyn.bootstrap.ini</code> is flat (no sections). The INI sections capability of
+<code>IniDictionarySerializer</code> is not used for environment switching.</li>
+<li>No runtime environment selection logic in <code>josyn-backend</code>.</li>
+<li>Deploying to a new environment means creating a new installation with its own bootstrap file.</li>
+<li>The risk of PROD/DEV cross-contamination is eliminated structurally, not by runtime guards.</li>
+</ul>
+<hr />
+<h2 id="open-questions-to-resolve-when-this-adr-is-formally-written">Open questions (to resolve when this ADR is formally written)</h2>
+<ol>
+<li><p><strong>What is the installation unit?</strong>
+A directory? A Windows service instance? A container? The answer shapes what
+&quot;one installation&quot; means in practice.</p>
+</li>
+<li><p><strong>How does DEV work on a developer machine?</strong>
+A developer may run DEV and INT locally. Are these two separate installation folders?
+Two separate service instances? Is there a convention for local developer setups?</p>
+</li>
+<li><p><strong>Are there any truly environment-invariant bootstrap values?</strong>
+E.g., log format, culture, timeout values — things that would be identical across
+all environments. If yes: do they live in the same bootstrap file, or separately?</p>
+</li>
+<li><p><strong>How are bootstrap files managed and deployed?</strong>
+Checked into a secrets store? Generated by a deployment pipeline? Managed manually?
+This is an operational question but shapes what the file format must support.
+⚠️ <strong>Installation note:</strong> The initial provisioning of <code>josyn.bootstrap.ini</code> must be
+explicitly addressed in the installation process — it is a required file that must
+exist before the backend can start, is never committed to source control, and must
+be created as part of every new environment setup.</p>
+</li>
+<li><p><strong>Interaction with ADR-009 adapters:</strong>
+The HAEVG adapter (context provider) may itself be environment-aware — e.g., it may
+call a different HAEVG config endpoint for PROD vs. INT. Is that the adapter's own
+concern, or does JOSYN pass the active environment as a parameter to the adapter?</p>
+</li>
+</ol>
+<hr />
+<h2 id="relation-to-other-adrs">Relation to other ADRs</h2>
+<ul>
+<li><strong>ADR-009</strong> (Runtime Context Provider Pattern): assumes a single flat bootstrap file
+per installation. This ADR confirms that assumption and explains why.</li>
+<li><strong>ADR-010</strong> (this): defines the installation model that makes ADR-009's assumption valid.</li>
+</ul>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

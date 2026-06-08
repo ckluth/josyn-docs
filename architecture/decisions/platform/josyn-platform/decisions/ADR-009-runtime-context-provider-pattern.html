@@ -1,0 +1,284 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ADR-009 — Runtime Context Provider Pattern for External Integrations — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../../../site.css">
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details open>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../../index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../../../components/index.html" class="nav-link">Overview</a>
+</details>
+<details open>
+    <summary class="nav-subsection">Decisions</summary>
+    <a href="../../../index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../../platform/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../../solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../../../../guides/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+<details>
+  <summary class="nav-section">Unsorted</summary>
+  <a href="../../../../../unsorted/index.html" class="nav-link">Overview</a>
+</details>
+
+  </nav>
+  <main>
+    <article>
+      <div class="origin">[josyn-platform]/decisions/ADR-009-runtime-context-provider-pattern.md</div><h1 id="adr-009-runtime-context-provider-pattern-for-external-integrations">ADR-009 — Runtime Context Provider Pattern for External Integrations</h1>
+<p><strong>Date:</strong> 2026-06-05
+<strong>Status:</strong> Accepted</p>
+<hr />
+<h2 id="context">Context</h2>
+<p>JOSYN will be deployed in two distinct environments:</p>
+<ul>
+<li><strong>Standalone (MIT):</strong> No company-specific dependencies. Config comes from a local file.</li>
+<li><strong>HAEVG:</strong> The company provides services — configuration, identity management, auth tokens,
+and potentially others — via NuGet packages (e.g., <code>haevg-config-reader</code>) that must not
+become compile-time dependencies of JOSYN.</li>
+</ul>
+<p>As JOSYN matures, multiple HAEVG-specific integration contracts of varying complexity are
+expected. A general-purpose pattern is needed — one that works for a simple key-value config
+reader today and for a richer multi-method identity provider tomorrow.</p>
+<h3 id="constraints-established-during-design">Constraints established during design</h3>
+<ul>
+<li>A HAEVG-specific host EXE (different binary per environment) is explicitly rejected.
+JOSYN ships one binary; deployment context is a configuration concern.</li>
+<li>One-to-many IPC (many concurrent JAPServer processes reaching one shared adapter service)
+is rejected: high implementation complexity and at odds with JOSYN's session-isolation model
+(see ADR-004, Challenge 3 rebuttal).</li>
+<li>No HTTP. No DI containers.</li>
+</ul>
+<hr />
+<h2 id="decision">Decision</h2>
+<h3 id="adapter-pattern-three-parties-no-compile-time-coupling">1. Adapter pattern: three parties, no compile-time coupling</h3>
+<pre><code>JOSYN                        Adapter assembly              External NuGet
+─────────────────────        ─────────────────────         ─────────────────
+IContextProvider       ◄──── HaevgContextProvider ──────►  haevg-config-reader
+(ships with JOSYN)           (HAEVG-owned, separate)       (untouched)
+</code></pre>
+<p>JOSYN defines haevg-agnostic interfaces in <code>Backend.GlobalConfig</code>. Adapter assemblies live
+outside JOSYN, are not distributed with the standalone build, and are the only layer that
+references HAEVG NuGet packages.</p>
+<h3 id="adapters-are-invoked-exclusively-by-josyn-backend-at-session-start-before-spawning">2. Adapters are invoked exclusively by josyn-backend — at session start, before spawning</h3>
+<p>This is the structural core of the decision.</p>
+<p><code>josyn-backend</code> is the single orchestrating process. It resolves all external context
+(configuration, tokens, identity, credentials) <strong>before</strong> spawning JAPServer. The resolved
+values are passed as structured arguments. JAPServer passes relevant values through to job.exe
+via the JAP arguments mechanism.</p>
+<pre><code>josyn-backend
+  │  1. IContextProvider.GetValue(...)   ← only adapter call
+  │  2. IContextProvider.AcquireToken(...)
+  │  3. Build full argument set
+  └── spawns: JAPServer.exe (receives everything it needs)
+                └── spawns: job.exe (receives everything it needs as arguments)
+</code></pre>
+<p><strong>JAPServer and job.exe never call the adapter.</strong> They are pure receivers of pre-resolved data.</p>
+<h3 id="jobs-are-pure-functions">3. Jobs are pure functions</h3>
+<p>A job receives arguments and returns a result. Everything it needs for execution — tokens,
+config values, identity context — arrives as arguments. Jobs do not make ad-hoc calls to
+external infrastructure at runtime. This is consistent with JOSYN's functional-first principle.</p>
+<p>If a job implements a REST client, the required access token is pre-loaded by the backend and
+delivered as a job argument.</p>
+<h3 id="one-to-one-jip-is-sufficient">4. One-to-one JIP is sufficient</h3>
+<p>Because the adapter is called only from <code>josyn-backend</code> (a single process), the many-to-one
+topology never arises. The existing JIP infrastructure and session model require no changes.</p>
+<h3 id="rendezvous-convention-folder-config-driven-type-name">5. Rendezvous: convention folder + config-driven type name</h3>
+<p>The adapter assembly is not referenced at compile time. The bootstrap config file names the
+adapter type:</p>
+<pre><code class="language-json">{
+  &quot;ConnectionString&quot;: &quot;...&quot;,
+  &quot;ContextProviderType&quot;: &quot;HAEVG.Josyn.Adapter.HaevgContextProvider, HAEVG.Josyn.Adapter&quot;
+}
+</code></pre>
+<p>JOSYN loads the assembly from a well-known <code>Adapters/</code> subfolder of the backend installation
+and instantiates the type via <code>Type.GetType()</code> + <code>Activator.CreateInstance()</code>. No assembly
+scanning. No MEF. This is a deliberate, bounded use of reflection — the second in the platform
+after <code>[JobEntryPoint]</code> dispatch.</p>
+<p>When <code>ContextProviderType</code> is absent, <code>josyn-backend</code> uses its built-in file-based provider.
+This is the standalone path.</p>
+<hr />
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li><code>josyn-backend</code> gains a <code>Backend.GlobalConfig</code> abstraction with an <code>IContextProvider</code>
+interface (or equivalent). The built-in implementation reads from the local config file.</li>
+<li>The <code>Adapters/</code> folder becomes a deployment-level concern: present and populated in HAEVG
+installations, empty or absent in standalone.</li>
+<li>Jobs cannot depend on runtime adapter availability. Any information a job might need must be
+anticipatable at session-start time and expressible as a job argument.</li>
+<li>The pattern generalises: future HAEVG integrations (identity, notifications, workflow)
+follow the same structure — new methods on <code>IContextProvider</code>, or additional interfaces
+resolved the same way.</li>
+</ul>
+<hr />
+<h2 id="open-questions-to-resolve-before-accepting">Open questions (to resolve before accepting)</h2>
+<ol>
+<li><p><strong>Single interface vs. multiple interfaces:</strong> ✅ <strong>Resolved — separate interfaces per concern.</strong>
+Each integration (config, identity, tokens, notifications, …) gets its own interface and
+its own registration entry in the bootstrap config. No catch-all adapter. This keeps each
+contract minimal, independently replaceable, and independently versioned.</p>
+</li>
+<li><p><strong>Adapter assembly isolation:</strong> ✅ <strong>Resolved — isolated <code>AssemblyLoadContext</code>, analogous
+to <code>JobAssemblyLoadContext</code> in the legacy system.</strong>
+The adapter is loaded in its own <code>AssemblyLoadContext</code> so its dependency versions cannot
+conflict with those already loaded by <code>josyn-backend</code>. The ALC delegates loading of the
+shared adapter-contract assemblies back to the default context, preserving type identity
+for interface casts. This requires the adapter-facing interfaces to live in a dedicated,
+minimal contracts package — separate from <code>Backend.GlobalConfig</code> — that both the host and
+the adapter assembly reference. Analogous to <code>josyn-jap</code> as a contracts-only repo.</p>
+</li>
+<li><p><strong>Error handling at load time:</strong> ✅ <strong>Resolved — fail fast, no fallback.</strong>
+If a configured adapter type cannot be found or instantiated, <code>josyn-backend</code> must not
+start. A fallback to the built-in provider would silently run the backend with missing
+or wrong context — there is no second-best strategy when elementary functionality is
+absent at startup. The error is surfaced as a hard startup failure with a clear message.</p>
+</li>
+</ol>
+<hr />
+<h2 id="decision-challenge-objections-and-rebuttals">Decision challenge — objections and rebuttals</h2>
+<p>This decision was stress-tested by deliberately arguing against it. Six challenges were
+raised; each is preserved here with its rebuttal to document why the decision holds.</p>
+<hr />
+<h3 id="challenge-1-yagni-only-config-reading-is-needed-today">Challenge 1 — &quot;YAGNI: only config reading is needed today&quot;</h3>
+<p><em>The only concrete requirement today is reading a connection string. The full adapter pattern —
+isolated <code>AssemblyLoadContext</code>, dedicated contracts package, convention folder, per-concern
+interfaces — is significant engineering for a problem that may never grow beyond one
+<code>GetValue(string key)</code> call.</em></p>
+<p><strong>Rebuttal:</strong> The constraint that motivates the entire pattern — no compile-time dependency
+on <code>haevg-config-reader</code> — exists today, not hypothetically. The pattern is the minimum viable
+response to a constraint that is already in force. The ALC complexity is bounded and paid once;
+the marginal cost of each subsequent adapter integration is near zero. Starting with a direct
+reference and refactoring later, when real integrations arrive under time pressure, costs more
+and carries migration risk. YAGNI applies to features; it does not apply to architectural
+boundaries that are cheaper to establish now than to retrofit later.</p>
+<hr />
+<h3 id="challenge-2-yagni-haevg-integration-may-never-materialise">Challenge 2 — &quot;YAGNI: HAEVG integration may never materialise&quot;</h3>
+<p><em>JOSYN is MIT-licensed and may be used purely standalone. The adapter machinery — contracts
+package, ALC loader, convention folder — is dead weight in standalone deployments.</em></p>
+<p><strong>Rebuttal:</strong> The standalone path bears zero cost from this decision. When <code>ContextProviderType</code>
+is absent from the bootstrap config, no assembly is loaded, no ALC is created, and the built-in
+file-based provider is used. The adapter machinery is invisible to standalone deployments.
+The cost of the pattern is borne exclusively by the deployment that needs it.</p>
+<hr />
+<h3 id="challenge-3-scalability-pre-loading-breaks-for-data-driven-lookups">Challenge 3 — &quot;Scalability: pre-loading breaks for data-driven lookups&quot;</h3>
+<p><em>If a job processes hundreds of records, each associated with a different responsible user,
+those users cannot be known at session start. The pre-load-everything principle breaks down
+for data-driven identity resolution.</em></p>
+<p><strong>Rebuttal:</strong> This challenge conflates two distinct concerns. The adapter pattern addresses
+<strong>infrastructure context</strong>: who is authorised to run this job, which token should the job use
+to call downstream services. It does not address <strong>business-logic data</strong>: which users are
+associated with which records — that is the job's own domain problem. A job that needs to
+resolve user identity for business records should call its downstream service directly, using
+the pre-loaded token as a credential. No adapter call from JAPServer or job.exe is ever needed.
+The adapter and the business logic operate at different layers and must not be conflated.</p>
+<hr />
+<h3 id="challenge-4-scalability-multiple-adapters-at-startup-add-latency">Challenge 4 — &quot;Scalability: multiple adapters at startup add latency&quot;</h3>
+<p><em>As the number of adapter interfaces grows — config, identity, tokens, notifications — startup
+time grows with each external service call. A slow identity service delays every session start.</em></p>
+<p><strong>Rebuttal:</strong> Adapters are called once per session start, not per request. The number of
+distinct adapter interfaces is expected to remain small. Where latency becomes a real concern,
+the correct tool is caching within the adapter — the adapter implementation may cache results
+for a configurable TTL. This is the adapter's own implementation concern; JOSYN's startup
+sequence invokes the adapter and takes the result, without knowledge of how it was obtained.
+No architectural change to the pattern is required.</p>
+<hr />
+<h3 id="challenge-5-the-config-driven-type-name-is-a-security-risk">Challenge 5 — &quot;The config-driven type name is a security risk&quot;</h3>
+<p><em>The bootstrap config names an arbitrary assembly and type. If the file is writable by an
+attacker, arbitrary code executes inside the <code>josyn-backend</code> process.</em></p>
+<p><strong>Rebuttal:</strong> The bootstrap config file already contains the database connection string. If it
+is writable by an attacker, the connection string is compromised and the system is fully owned
+regardless of adapter loading. The adapter type name does not introduce a new attack surface
+that is not already present. Securing the bootstrap config file is an operational responsibility
+that is independent of this decision.</p>
+<hr />
+<h3 id="challenge-6-a-separate-contracts-package-is-premature-overhead">Challenge 6 — &quot;A separate contracts package is premature overhead&quot;</h3>
+<p><em>Requiring a dedicated contracts NuGet package — with its own version, publish pipeline, and
+release cadence — adds friction for what is currently a single interface. This is engineering
+overhead without immediate payoff.</em></p>
+<p><strong>Rebuttal:</strong> The contracts package is not an organisational preference — it is a technical
+necessity imposed by the <code>AssemblyLoadContext</code> type-identity constraint. Without a shared
+binary that both the host (default context) and the adapter (isolated context) load as the
+same identity, interface casts fail at runtime. There is no lighter alternative once the
+isolation decision is accepted. The package will be small and stable — analogous to <code>josyn-jap</code>,
+which is similarly minimal and similarly load-bearing. Small and stable is a feature.</p>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+  </script>
+  <script src="../../../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>
