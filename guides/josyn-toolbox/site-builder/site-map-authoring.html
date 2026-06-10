@@ -1,0 +1,320 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>site-map.yaml — Authoring Guide — JOSYN Documentation</title>
+  <link rel="stylesheet" href="../../../site.css">
+  <script>var _sw=localStorage.getItem('sidebar-w');if(_sw)document.documentElement.style.setProperty('--sidebar-w',_sw);</script>
+</head>
+<body>
+  <button id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  <div id="nav-backdrop"></div>
+  <nav id="sidebar">
+    <div class="nav-header">JOSYN Documentation</div>
+    <a href="../../../index.html" class="nav-home">JOSYN Documentation</a>
+<details>
+  <summary class="nav-section">Architecture</summary>
+  <a href="../../../architecture/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Components</summary>
+    <a href="../../../architecture/components/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Decisions</summary>
+    <a href="../../../architecture/decisions/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Platform</summary>
+    <a href="../../../architecture/platform/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Solution Architecture</summary>
+    <a href="../../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
+</details>
+</details>
+<details open>
+  <summary class="nav-section">Guides</summary>
+  <a href="../../index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Notes</summary>
+  <a href="../../../notes/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Reference</summary>
+  <a href="../../../reference/index.html" class="nav-link">Overview</a>
+</details>
+<details>
+  <summary class="nav-section">Repos</summary>
+  <a href="../../../repos/index.html" class="nav-link">Overview</a>
+<details>
+    <summary class="nav-subsection">Josyn Backend</summary>
+    <a href="../../../repos/josyn-backend/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Commons</summary>
+    <a href="../../../repos/josyn-commons/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Contoso</summary>
+    <a href="../../../repos/josyn-contoso/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Foundation</summary>
+    <a href="../../../repos/josyn-foundation/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Jap</summary>
+    <a href="../../../repos/josyn-jap/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Job Host</summary>
+    <a href="../../../repos/josyn-job-host/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Platform</summary>
+    <a href="../../../repos/josyn-platform/index.html" class="nav-link">README</a>
+</details>
+<details>
+    <summary class="nav-subsection">Josyn Toolbox</summary>
+    <a href="../../../repos/josyn-toolbox/index.html" class="nav-link">README</a>
+</details>
+</details>
+
+  </nav>
+  <div id="sidebar-resizer"></div>
+  <main>
+    <article>
+      <div class="origin">[josyn-toolbox]/site-builder/site-map-authoring.md</div><h1 id="site-map.yaml-authoring-guide">site-map.yaml — Authoring Guide</h1>
+<blockquote>
+<p>How to tell the assembler what you really want.
+This guide covers <strong>site-map.yaml v2</strong>. The schema changed significantly from v1 (sections/include/groups) to v2 (tree/mapping/overrides). If you see those old keys in a file, it is out of date.</p>
+</blockquote>
+<hr />
+<h2 id="the-mental-model">The mental model</h2>
+<p>The site-assembler is a two-layer system:</p>
+<ul>
+<li><strong>Placement</strong> answers: <em>which docs belong in which folder?</em> — driven by <code>mapping</code> and <code>overrides</code>, automated, low maintenance</li>
+<li><strong>Structure</strong> answers: <em>what folders exist and how are they nested?</em> — driven by <code>tree</code>, authored by you</li>
+<li><strong>Navigation</strong> answers: <em>how does a human find their way in?</em> — driven by <code>reading-paths</code>, authored by you</li>
+</ul>
+<p>You never list individual documents. You describe structure and intent. Rules handle placement.</p>
+<hr />
+<h2 id="the-five-sections-of-site-map.yaml">The five sections of site-map.yaml</h2>
+<h3 id="site-identity-and-paths">0. <code>site</code> — identity and paths</h3>
+<p>Controls the title, intro text, and all paths used by the assembler.</p>
+<pre><code class="language-yaml">site:
+  title: &quot;JOSYN Documentation&quot;         # H1 of the landing page; also the HTML &lt;title&gt;
+  intro: &quot;One paragraph of context.&quot;   # Optional. Shown below the H1 on the landing page. Omit or leave blank to suppress.
+  docs-index: &quot;C:/DevGit/josyn-platform/docs/docs-index.json&quot;
+  repos-root: &quot;C:/DevGit&quot;
+  output:     &quot;C:/DevGit/josyn-docs&quot;
+  staging:    &quot;C:/DevGit/temp/josyn-site-staging&quot;
+</code></pre>
+<ul>
+<li><code>title</code> is required.</li>
+<li><code>intro</code> is optional. If absent or empty, no intro paragraph is rendered.</li>
+</ul>
+<hr />
+<h3 id="tree-folder-hierarchy">1. <code>tree</code> — folder hierarchy</h3>
+<p>Defines every folder that can receive documents. Indentation controls nesting.</p>
+<pre><code class="language-yaml">tree:
+  - architecture:
+      - platform
+      - solution-architecture
+      - components
+      - decisions:
+          - platform
+          - backend
+  - reference
+  - repos
+  - guides
+  - notes
+  - unsorted:
+      catch-all: true
+</code></pre>
+<ul>
+<li>A node with children uses the <code>name:</code> syntax followed by indented child nodes.</li>
+<li>A leaf node uses the <code>- name</code> syntax.</li>
+<li>Exactly one node should have <code>catch-all: true</code>. Documents that match no mapping rule land here (with a warning).</li>
+<li>The path of a node is its full slash-separated ancestry: <code>architecture/decisions/platform</code>.</li>
+</ul>
+<hr />
+<h3 id="mapping-placement-rules">2. <code>mapping</code> — placement rules</h3>
+<p>Evaluated top-to-bottom. <strong>First matching rule wins.</strong></p>
+<pre><code class="language-yaml">mapping:
+  - { type: agent-instruction, skip: true }
+  - { type: decision, repo: josyn-platform, to: architecture/decisions/platform }
+  - { type: decision, to: architecture/decisions/platform }
+</code></pre>
+<ul>
+<li><code>to:</code> places matching docs at that tree path. The value must exactly match a path in <code>tree</code>.</li>
+<li><code>skip: true</code> excludes matching docs from the site entirely.</li>
+<li>Fields within a rule are <strong>AND</strong>. Multiple rule objects are <strong>OR</strong> (first match wins).</li>
+<li>Supported match fields: <code>type</code>, <code>repo</code>, <code>state</code>, <code>folder-context</code>. Values support <code>*</code> wildcard.</li>
+</ul>
+<hr />
+<h3 id="overrides-per-file-exceptions">3. <code>overrides</code> — per-file exceptions</h3>
+<p>Applied <strong>before</strong> mapping rules. Useful for one-off placements or exclusions.</p>
+<pre><code class="language-yaml">overrides:
+  - { repo: josyn-platform, path: README.md, to: repos }
+  - { repo: josyn-platform, path: MAINTAINERS.md, skip: true }
+</code></pre>
+<ul>
+<li>Match is exact: both <code>repo</code> and <code>path</code> must match.</li>
+<li>Same <code>to:</code> / <code>skip:</code> semantics as mapping rules.</li>
+</ul>
+<hr />
+<h3 id="reading-paths-landing-page-navigation-cards">4. <code>reading-paths</code> — landing page navigation cards</h3>
+<p>Rendered as &quot;Who are you?&quot; entry cards on the landing page. Each path is a persona with a short curated link list.</p>
+<p>If <code>reading-paths</code> is empty (<code>reading-paths: []</code>), the entire &quot;Who are you?&quot; section is omitted from the landing page.</p>
+<pre><code class="language-yaml">reading-paths:
+  - perspective: maintainer-architect
+    label: &quot;Maintainer — Architect&quot;
+    intro: &quot;You design the platform and govern its decisions.&quot;
+    links:
+      - { repo: josyn-platform, path: architecture/overview.md }
+      - { section: architecture/decisions }
+      - { repo: josyn-platform, path: ROADMAP.md }
+</code></pre>
+<p>Link types:</p>
+<ul>
+<li><code>{ repo: x, path: y }</code> — links to a specific indexed document.</li>
+<li><code>{ section: path }</code> — links to a section's index page. <strong><code>path</code> is the full tree path</strong>, e.g. <code>architecture/decisions</code>, not just <code>decisions</code>.</li>
+</ul>
+<p><strong>Critical rule:</strong> whenever you move a section in <code>tree</code>, search <code>reading-paths</code> for any <code>{ section: ... }</code> reference to that section and update it. <code>reading-paths</code> holds hard path references — they do not update automatically.</p>
+<p>Keep each reading path to three to five links. It is a starting point, not an index.</p>
+<hr />
+<h2 id="when-to-use-what">When to use what</h2>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Tool</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>I want a new folder in the site</td>
+<td>Add a node to <code>tree</code></td>
+</tr>
+<tr>
+<td>I want docs of type X to land in folder Y</td>
+<td>Add a rule to <code>mapping</code></td>
+</tr>
+<tr>
+<td>One specific doc belongs somewhere unusual</td>
+<td>Add an entry to <code>overrides</code></td>
+</tr>
+<tr>
+<td>A doc should never appear on the site</td>
+<td><code>skip: true</code> in <code>mapping</code> or <code>overrides</code></td>
+</tr>
+<tr>
+<td>A new persona needs a starting point on the landing page</td>
+<td>Add an entry to <code>reading-paths</code></td>
+</tr>
+<tr>
+<td>I moved a section in the tree</td>
+<td>Update <code>tree</code>, <code>mapping</code> rules that reference it, <strong>and</strong> any <code>{ section: ... }</code> links in <code>reading-paths</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="what-you-do-not-need-to-do">What you do NOT need to do</h2>
+<ul>
+<li>You do not list individual documents. Rules place them automatically.</li>
+<li>You do not re-run the indexer after editing <code>site-map.yaml</code>. Only the assembler reads it.</li>
+</ul>
+<hr />
+<h2 id="workflow">Workflow</h2>
+<ol>
+<li>Edit <code>docs/site-map.yaml</code></li>
+<li>If you moved or renamed a section — grep for its old path in <code>reading-paths</code> and fix references</li>
+<li>Run <code>site-builder-assembler.cmd</code></li>
+<li>Inspect the staging folder and the generated <code>_index.md</code> files</li>
+<li>Adjust until the structure and landing page communicate what you intended</li>
+</ol>
+<hr />
+<h2 id="reference-annotated-complete-example">Reference — annotated complete example</h2>
+<pre><code class="language-yaml">tree:
+  - architecture:
+      - platform          # top-level docs about the platform architecture
+      - decisions:
+          - platform      # ADRs from josyn-platform
+          - backend       # ADRs from josyn-backend
+  - reference
+  - unsorted:
+      catch-all: true     # unmatched docs land here with a warning
+
+mapping:
+  - { type: agent-instruction, skip: true }         # never show AGENTS.md on the site
+  - { state: superseded, skip: true }               # hide retired docs
+  - { type: decision, repo: josyn-platform, to: architecture/decisions/platform }
+  - { type: decision, repo: josyn-backend,  to: architecture/decisions/backend  }
+  - { type: decision, to: architecture/decisions/platform }  # fallback for other repos
+  - { type: reference, to: reference }
+
+overrides:
+  - { repo: josyn-platform, path: MAINTAINERS.md, skip: true }
+
+reading-paths:
+  - perspective: maintainer-architect
+    label: &quot;Maintainer — Architect&quot;
+    intro: &quot;You design the platform and govern its decisions.&quot;
+    links:
+      - { repo: josyn-platform, path: architecture/overview.md }
+      - { section: architecture/decisions }   # full tree path, not just &quot;decisions&quot;
+</code></pre>
+
+    </article>
+  </main>
+  <script>
+    var toggle   = document.getElementById('nav-toggle');
+    var backdrop = document.getElementById('nav-backdrop');
+    function closeNav() { document.body.classList.remove('nav-open'); }
+    toggle.addEventListener('click', function() {
+      document.body.classList.toggle('nav-open');
+    });
+    backdrop.addEventListener('click', closeNav);
+    document.querySelectorAll('#sidebar a').forEach(function(a) {
+      a.addEventListener('click', closeNav);
+    });
+
+    var resizer = document.getElementById('sidebar-resizer');
+    var resizeW = null;
+    resizer.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+    resizer.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      document.addEventListener('mousemove', onResize);
+      document.addEventListener('mouseup', stopResize);
+    });
+    resizer.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      document.addEventListener('touchmove', onTouchResize, { passive: false });
+      document.addEventListener('touchend', stopTouchResize);
+    }, { passive: false });
+    function onResize(e) {
+      resizeW = Math.max(160, Math.min(600, e.clientX)) + 'px';
+      document.documentElement.style.setProperty('--sidebar-w', resizeW);
+    }
+    function onTouchResize(e) {
+      e.preventDefault();
+      resizeW = Math.max(160, Math.min(600, e.touches[0].clientX)) + 'px';
+      document.documentElement.style.setProperty('--sidebar-w', resizeW);
+    }
+    function stopResize() {
+      document.removeEventListener('mousemove', onResize);
+      document.removeEventListener('mouseup', stopResize);
+      if (resizeW) localStorage.setItem('sidebar-w', resizeW);
+    }
+    function stopTouchResize() {
+      document.removeEventListener('touchmove', onTouchResize);
+      document.removeEventListener('touchend', stopTouchResize);
+      if (resizeW) localStorage.setItem('sidebar-w', resizeW);
+    }
+  </script>
+  <script src="../../../mermaid.min.js"></script><script>mermaid.initialize({startOnLoad:false,theme:'dark'});mermaid.run({querySelector:'.mermaid'});</script>
+</body>
+</html>

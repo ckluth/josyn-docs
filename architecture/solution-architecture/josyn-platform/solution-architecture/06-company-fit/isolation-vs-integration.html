@@ -21,20 +21,16 @@
     <a href="../../../../components/index.html" class="nav-link">Overview</a>
 </details>
 <details>
+    <summary class="nav-subsection">Decisions</summary>
+    <a href="../../../../decisions/index.html" class="nav-link">Overview</a>
+</details>
+<details>
     <summary class="nav-subsection">Platform</summary>
     <a href="../../../../platform/index.html" class="nav-link">Overview</a>
 </details>
 <details open>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="../../../index.html" class="nav-link">Overview</a>
-</details>
-</details>
-<details>
-  <summary class="nav-section">Decisions</summary>
-  <a href="../../../../../decisions/index.html" class="nav-link">Overview</a>
-<details>
-    <summary class="nav-subsection">Platform</summary>
-    <a href="../../../../../decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details>
@@ -154,7 +150,7 @@ This keeps JOSYN honest about its boundaries and gives companies a clear, stable
 <li><strong>No company-specific code in platform packages.</strong> <code>JOSYN.Foundation.*</code>, <code>JOSYN.Jap.*</code>,
 <code>JOSYN.JobHost</code> must never contain any reference to HAEVG AG, the company config-manager,
 or any other company-specific concept.</li>
-<li><strong><code>HardcodedGlobalConfig</code> is a PoC placeholder</strong>, not a model. The real <code>GlobalConfig</code>
+<li><strong><code>HardcodedGlobalConfig</code> is a placeholder</strong>, not a model. The real <code>GlobalConfig</code>
 implementation belongs to the company adapter layer — outside the platform proper.</li>
 <li><strong>Extension points should be documented as such.</strong> A company should be able to read the
 platform docs and understand exactly where to plug in — without reverse-engineering internals.</li>

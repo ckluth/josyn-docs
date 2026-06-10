@@ -21,20 +21,16 @@
     <a href="../../../../architecture/components/index.html" class="nav-link">Overview</a>
 </details>
 <details>
+    <summary class="nav-subsection">Decisions</summary>
+    <a href="../../../../architecture/decisions/index.html" class="nav-link">Overview</a>
+</details>
+<details>
     <summary class="nav-subsection">Platform</summary>
     <a href="../../../../architecture/platform/index.html" class="nav-link">Overview</a>
 </details>
 <details>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="../../../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
-</details>
-</details>
-<details>
-  <summary class="nav-section">Decisions</summary>
-  <a href="../../../../decisions/index.html" class="nav-link">Overview</a>
-<details>
-    <summary class="nav-subsection">Platform</summary>
-    <a href="../../../../decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details>
@@ -102,7 +98,7 @@ the full component map, dependency graph, and IPC protocol details.</p>
 <pre><code>josyn-foundation   →  (nothing — zero outbound NuGet deps)
 josyn-jap          →  josyn-foundation packages only
 josyn-job-host     →  josyn-foundation packages + josyn-jap shared packages (Contract, Log)
-josyn-backend      →  josyn-foundation packages + JOSYN.Jap.Shared.Contract + JOSYN.Jap.Shared.Log
+josyn-backend      →  josyn-foundation packages + JOSYN.Jap.Contract + JOSYN.Jap.Shared.Log
                        (shared packages only — permitted because JOSYN.Jap.JAPServer lives in this repo)
                        JOSYN.Backend.SessionStarter itself: ResultPattern only
 josyn-commons      →  nothing, OR josyn-foundation ResultPattern only

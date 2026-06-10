@@ -21,20 +21,16 @@
     <a href="../../../index.html" class="nav-link">Overview</a>
 </details>
 <details>
+    <summary class="nav-subsection">Decisions</summary>
+    <a href="../../../../decisions/index.html" class="nav-link">Overview</a>
+</details>
+<details>
     <summary class="nav-subsection">Platform</summary>
     <a href="../../../../platform/index.html" class="nav-link">Overview</a>
 </details>
 <details>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="../../../../solution-architecture/index.html" class="nav-link">Overview</a>
-</details>
-</details>
-<details>
-  <summary class="nav-section">Decisions</summary>
-  <a href="../../../../../decisions/index.html" class="nav-link">Overview</a>
-<details>
-    <summary class="nav-subsection">Platform</summary>
-    <a href="../../../../../decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details>
@@ -116,7 +112,7 @@ flowchart TD
     C --&gt; D[&quot;JAPServer\nIJosynApplicationProtocol-Implementierung\nGetRawArguments / PutRawResult / PutError&quot;]
 </div>
 <p><strong>Transport:</strong> <code>JOSYN.Foundation.JIP</code> Named Pipes (session-isoliert per GUID-Key).
-<strong>Anwendungsprotokoll:</strong> <code>JOSYN.Jap.Shared.Contract.IJosynApplicationProtocol</code>.
+<strong>Anwendungsprotokoll:</strong> <code>JOSYN.Jap.Contract.IJosynApplicationProtocol</code>.
 <strong>Dispatch:</strong> <code>JipDispatcher.RegisterAll&lt;T&gt;</code> — kein manuelles What-String-Wiring.</p>
 <hr />
 <h2 id="exit-codes">Exit-Codes</h2>
@@ -157,7 +153,7 @@ flowchart TD
 <td>Named-Pipe-IPC-Transport + JIP-Konventions-Layer</td>
 </tr>
 <tr>
-<td><code>JOSYN.Jap.Shared.Contract</code></td>
+<td><code>JOSYN.Jap.Contract</code></td>
 <td><code>IJosynApplicationProtocol</code>-Anwendungsprotokoll</td>
 </tr>
 <tr>
@@ -183,7 +179,7 @@ flowchart TD
 Verbindungen — bis ESC gedrückt wird.</li>
 <li><strong>ESC-Abbruch:</strong> ESC an der Konsole beendet den Server nach dem Abschluss der aktuellen
 Verbindung.</li>
-<li><strong><code>FakeReadArgumentsFromFile</code></strong> — hardcoded für den PoC-Scope; bewusst, kein Bug.</li>
+<li><strong><code>FakeReadArgumentsFromFile</code></strong> — hardcoded; bewusst, kein Bug.</li>
 <li><strong>Demo-Session-Key:</strong> <code>dea5611d-d740-437f-ad93-7a5dc5ae4299</code> (hardcoded in <code>launchSettings.json</code>).</li>
 <li><strong>Fehlermeldungen sind auf Deutsch</strong> — projekt-weite Konvention.</li>
 <li><strong><code>de-DE</code> Default-Kultur</strong> — betrifft Zahlen- und Datumsformatierung.</li>

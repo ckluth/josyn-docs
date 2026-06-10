@@ -21,20 +21,16 @@
     <a href="../../../architecture/components/index.html" class="nav-link">Overview</a>
 </details>
 <details>
+    <summary class="nav-subsection">Decisions</summary>
+    <a href="../../../architecture/decisions/index.html" class="nav-link">Overview</a>
+</details>
+<details>
     <summary class="nav-subsection">Platform</summary>
     <a href="../../../architecture/platform/index.html" class="nav-link">Overview</a>
 </details>
 <details>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="../../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
-</details>
-</details>
-<details>
-  <summary class="nav-section">Decisions</summary>
-  <a href="../../../decisions/index.html" class="nav-link">Overview</a>
-<details>
-    <summary class="nav-subsection">Platform</summary>
-    <a href="../../../decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details>
@@ -93,22 +89,22 @@
       <div class="origin">[josyn-platform]/repos/josyn-jap.md</div><h1 id="josyn-jap">josyn-jap</h1>
 <p><strong>Role:</strong> JAP protocol contracts — the single source of truth for the contract shared between
 <code>JOSYN.Jap.JAPServer</code> (server, in <code>josyn-backend</code>) and <code>JOSYN.JobHost</code> (client). Contains the
-shared protocol contract (<code>JOSYN.Jap.Shared.Contract</code>). The process-local logger has been
+shared protocol contract (<code>JOSYN.Jap.Contract</code>). The process-local logger has been
 relocated to <code>JOSYN.Commons.Log</code> per ADR-008.</p>
-<p><strong>Location:</strong> <code>C:\Users\chris\OneDrive\DevGit\josyn-jap</code>
+<p><strong>Location:</strong> <code>C:\DevGit\josyn-jap</code>
 <strong>Version:</strong> <code>1.0.0-preview01</code></p>
 <hr />
 <h2 id="structure">Structure</h2>
 <pre><code>josyn-jap/
 └── josyn-jap-shared/             ← NuGet library (one package)
-    └── JOSYN.Jap.Shared.Contract/
+    └── JOSYN.Jap.Contract/
 </code></pre>
 <blockquote>
 <p><code>JOSYN.Jap.JAPServer</code> (the EXE) was relocated to <code>josyn-backend</code> per ADR-004.
 <code>JOSYN.Jap.Shared.Log</code> was relocated to <code>josyn-commons</code> as <code>JOSYN.Commons.Log</code> per ADR-008.</p>
 </blockquote>
 <hr />
-<h2 id="josyn.jap.shared.contract">JOSYN.Jap.Shared.Contract</h2>
+<h2 id="josyn.jap.contract">JOSYN.Jap.Contract</h2>
 <p><strong>Purpose:</strong> Transport-agnostic definition of the JOSYN Application Protocol (JAP).
 Shared between JAPServer (implements it) and JobHost (calls it via JAPClient).</p>
 <p><strong>Dependencies:</strong> <code>JOSYN.Foundation.ResultPattern</code></p>
@@ -177,11 +173,11 @@ public interface IErrorReport
 <h3 id="structural-specifics">Structural specifics</h3>
 <ul>
 <li><strong>Single-subdirectory repo</strong>: <code>josyn-jap-shared/</code> contains one NuGet package. Evaluated as one unit.</li>
-<li><code>JOSYN.Jap.Shared.Contract</code> is a NuGet library — must have <code>GenerateDocumentationFile</code>, NuGet metadata, <code>icon.png</code>.</li>
+<li><code>JOSYN.Jap.Contract</code> is a NuGet library — must have <code>GenerateDocumentationFile</code>, NuGet metadata, <code>icon.png</code>.</li>
 </ul>
 <h3 id="dependency-constraints">Dependency constraints</h3>
 <ul>
-<li><code>JOSYN.Jap.Shared.Contract</code> may only reference <code>JOSYN.Foundation.ResultPattern</code>. Any reference to <code>PropertyBag</code>, <code>JIP</code>, or any other package is a violation.</li>
+<li><code>JOSYN.Jap.Contract</code> may only reference <code>JOSYN.Foundation.ResultPattern</code>. Any reference to <code>PropertyBag</code>, <code>JIP</code>, or any other package is a violation.</li>
 </ul>
 <h3 id="known-exceptions-not-violations">Known exceptions (not violations)</h3>
 <ul>

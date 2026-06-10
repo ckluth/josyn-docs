@@ -21,20 +21,16 @@
     <a href="../../../../components/index.html" class="nav-link">Overview</a>
 </details>
 <details>
+    <summary class="nav-subsection">Decisions</summary>
+    <a href="../../../../decisions/index.html" class="nav-link">Overview</a>
+</details>
+<details>
     <summary class="nav-subsection">Platform</summary>
     <a href="../../../../platform/index.html" class="nav-link">Overview</a>
 </details>
 <details open>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="../../../index.html" class="nav-link">Overview</a>
-</details>
-</details>
-<details>
-  <summary class="nav-section">Decisions</summary>
-  <a href="../../../../../decisions/index.html" class="nav-link">Overview</a>
-<details>
-    <summary class="nav-subsection">Platform</summary>
-    <a href="../../../../../decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details>
@@ -132,9 +128,9 @@ JAPServer       ──reads args──►   session store  (GetRawArguments)
 JAPServer       ──writes result─► session store  (PutRawResult / PutError)
 Backend         ──polls result──► session store  (completion detection)
 </code></pre>
-<p><em>(The current PoC backend uses a 500 ms poll loop to detect completion.
+<p><em>(The current backend uses a 500 ms poll loop to detect completion.
 A production implementation will use a push signal.)</em></p>
-<h2 id="known-poc-limitations">Known PoC Limitations</h2>
+<h2 id="known-limitations">Known Limitations</h2>
 <ul>
 <li>No <strong>session status column</strong> — orphaned rows from failed process spawns are
 indistinguishable from running sessions. A <code>status</code> field (pending / running /
@@ -142,7 +138,7 @@ complete / failed) is needed for production.</li>
 <li>No separated <strong>start / end timestamps</strong>.</li>
 <li>No explicit <strong>job identity</strong> column linking the session to a registered job name.</li>
 </ul>
-<p>These are known gaps in the PoC, not final design choices.</p>
+<p>These are known gaps, not final design choices.</p>
 
     </article>
   </main>

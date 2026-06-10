@@ -21,20 +21,16 @@
     <a href="../../../index.html" class="nav-link">Overview</a>
 </details>
 <details>
+    <summary class="nav-subsection">Decisions</summary>
+    <a href="../../../../decisions/index.html" class="nav-link">Overview</a>
+</details>
+<details>
     <summary class="nav-subsection">Platform</summary>
     <a href="../../../../platform/index.html" class="nav-link">Overview</a>
 </details>
 <details>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="../../../../solution-architecture/index.html" class="nav-link">Overview</a>
-</details>
-</details>
-<details>
-  <summary class="nav-section">Decisions</summary>
-  <a href="../../../../../decisions/index.html" class="nav-link">Overview</a>
-<details>
-    <summary class="nav-subsection">Platform</summary>
-    <a href="../../../../../decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details>
@@ -112,7 +108,7 @@ var result = starter.StartSession(&quot;MyJobType&quot;, iniArguments);
 if (result.Succeeded)
     Console.WriteLine($&quot;Session started: {result.Value}&quot;);
 </code></pre>
-<h2 id="known-poc-limitations">Known PoC limitations</h2>
+<h2 id="known-limitations">Known limitations</h2>
 <ul>
 <li>If <code>Process.Start</code> succeeds but JAPServer crashes after the 500 ms startup window,
 the session row in the store remains with an empty <code>Result</code> field. A session status

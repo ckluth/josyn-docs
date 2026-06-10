@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ADR-002 — Introducing  as a Separate Layer — JOSYN Documentation</title>
+  <title>JOSYN.Jap.Contract — JOSYN Documentation</title>
   <link rel="stylesheet" href="../../../../../site.css">
   <script>var _sw=localStorage.getItem('sidebar-w');if(_sw)document.documentElement.style.setProperty('--sidebar-w',_sw);</script>
 </head>
@@ -16,13 +16,13 @@
 <details open>
   <summary class="nav-section">Architecture</summary>
   <a href="../../../../index.html" class="nav-link">Overview</a>
-<details>
-    <summary class="nav-subsection">Components</summary>
-    <a href="../../../../components/index.html" class="nav-link">Overview</a>
-</details>
 <details open>
-    <summary class="nav-subsection">Decisions</summary>
+    <summary class="nav-subsection">Components</summary>
     <a href="../../../index.html" class="nav-link">Overview</a>
+</details>
+<details>
+    <summary class="nav-subsection">Decisions</summary>
+    <a href="../../../../decisions/index.html" class="nav-link">Overview</a>
 </details>
 <details>
     <summary class="nav-subsection">Platform</summary>
@@ -86,115 +86,107 @@
   <div id="sidebar-resizer"></div>
   <main>
     <article>
-      <div class="origin">[josyn-platform]/decisions/ADR-002-josyn-backend.md</div><h1 id="adr-002-introducing-josyn-backend-as-a-separate-layer">ADR-002 — Introducing <code>josyn-backend</code> as a Separate Layer</h1>
-<p><strong>Date:</strong> 2026-05-29
-<strong>Status:</strong> Accepted</p>
+      <div class="origin">[josyn-jap]/josyn-jap-shared/JOSYN.Jap.Contract/README.md</div><h1 id="josyn.jap.contract">JOSYN.Jap.Contract</h1>
+<p>Part of the <strong>JOSYN</strong> (JobSystem Next) ecosystem — member of the <code>JOSYN.Jap</code> layer.</p>
+<p><code>JOSYN.Jap.Contract</code> definiert den Applikations-Vertrag zwischen den beiden
+JOSYN-Systemkomponenten: dem <strong>JobHost</strong> (Frontend) und dem <strong>JAPServer</strong> (Backend).</p>
+<p>Dieser Vertrag ist transportunabhängig — er beschreibt ausschließlich, <em>was</em> ausgetauscht
+wird, nicht <em>wie</em> (das ist Aufgabe von <code>JOSYN.Foundation.JIP</code>).</p>
 <hr />
-<h2 id="context">Context</h2>
-<p>The current JOSYN platform PoC has four repos:</p>
-<table>
-<thead>
-<tr>
-<th>Repo</th>
-<th>Role</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>josyn-foundation</code></td>
-<td>Infrastructure primitives</td>
-</tr>
-<tr>
-<td><code>josyn-jap</code></td>
-<td>Per-session JAP protocol server + shared packages</td>
-</tr>
-<tr>
-<td><code>josyn-job-host</code></td>
-<td>Job executable runtime library</td>
-</tr>
-<tr>
-<td><code>josyn-platform</code></td>
-<td>Architecture, decisions, cross-cutting docs</td>
-</tr>
-</tbody>
-</table>
-<p><strong>What is missing:</strong> the layer that <em>triggers</em> job sessions. Currently the PoC documents a
-&quot;Job Scheduler&quot; as the actor that spawns processes, but no JOSYN repo embodies it.
-In the legacy system this role is fulfilled by <code>JobSystem.Service</code>,
-<code>JobSystem.TriggerAgent</code>, <code>JobSystem.SessionStarter</code>, and several companion components.</p>
-<p>The legacy <code>SessionStarter</code> is the key migration seam. It:</p>
-<ol>
-<li>Creates a session record in the <code>JobSessions</code> SQL table</li>
-<li>Calls <code>Process.Start(JobHost.exe, sessionUID)</code></li>
-</ol>
-<p><code>JobHost.exe</code> is the architectural bottleneck of the legacy system: it loads job DLLs via
-heavy reflection into its own process space, cannot tolerate conflicting assembly versions,
-and must be rebuilt for every .NET target. This wall prevents evolution.</p>
-<hr />
-<h2 id="decision">Decision</h2>
-<p>Introduce <strong><code>josyn-backend</code></strong> as the fifth repo, representing the scheduling and
-session-orchestration layer.</p>
-<h3 id="responsibility-boundaries">Responsibility boundaries</h3>
-<table>
-<thead>
-<tr>
-<th>Layer</th>
-<th>Owns</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>josyn-backend</code></td>
-<td>Scheduling, trigger evaluation, session-store persistence, session GUID assignment, spawning JAPServer and job.exe</td>
-</tr>
-<tr>
-<td><code>josyn-jap</code></td>
-<td>The per-session JAP protocol server; receiving and fulfilling <code>GetRawArguments</code>, <code>PutRawResult</code>, <code>PutError</code></td>
-</tr>
-<tr>
-<td><code>josyn-job-host</code></td>
-<td>The runtime embedded in job executables; protocol client, argument deserialization, reflection dispatch</td>
-</tr>
-<tr>
-<td><code>josyn-foundation</code></td>
-<td>Infrastructure primitives shared by all layers</td>
-</tr>
-</tbody>
-</table>
-<p><code>josyn-jap</code> and <code>josyn-job-host</code> are <strong>unaware of <code>josyn-backend</code></strong>.
-The session GUID is the only coupling — passed as a CLI argument at spawn time.</p>
-<h3 id="the-migration-seam">The migration seam</h3>
-<p><code>SessionStarter</code> (in <code>josyn-backend</code>) replaces the <code>JobSystem.SessionStarter</code> call site:</p>
-<pre><code>Old:  SessionStarter → Process.Start(JobHost.exe, &lt;sessionUID&gt;)
+<h2 id="uberblick">Überblick</h2>
+<p>Das JOSYN Application Protocol (JAP) definiert einen minimalen, rohen Datenaustausch:</p>
+<div class="mermaid">
+sequenceDiagram
+    participant Job as Job.exe (JobHost)
+    participant Server as JAPServer
 
-New:  SessionStarter → Process.Start(JAPServer.exe, JOSYN-IPC &lt;guid&gt;)
-      SessionStarter → Process.Start(job.exe,       JOSYN-IPC &lt;guid&gt;)
-</code></pre>
-<p>This swap is the minimum viable change to move a job from the legacy model to the JOSYN model.
-Old and new can run in parallel: legacy jobs continue via the old <code>SessionStarter</code>;
-migrated jobs use the new <code>SessionStarter</code>.</p>
-<h3 id="stub-first-approach">Stub-first approach</h3>
-<p><code>josyn-backend</code> is introduced as a compilable stub today:</p>
-<ul>
-<li><code>JOSYN.Backend.SessionStarter</code> defines the contract (<code>ISessionStarter</code>) and a
-placeholder implementation that returns <code>Result.Error(&quot;Noch nicht implementiert.&quot;)</code></li>
-<li>All other planned components (<code>TriggerAgent</code>, <code>Scheduling</code>, <code>SessionStore</code>, <code>JobRepository</code>,
-<code>Service</code>, <code>WorkflowAdapter</code>) are deferred until migration begins</li>
-</ul>
+    Job-&gt;&gt;Server: GetRawArguments()
+    Server--&gt;&gt;Job: serialisierte Argumente (INI/JSON)
+    Note over Job: [JobEntryPoint] ausführen
+    Job-&gt;&gt;Server: PutRawResult(serialisiertes Ergebnis)
+
+    alt Fehlerfall
+        Job-&gt;&gt;Server: PutError(serialisierter ErrorReport als JSON)
+    end
+</div>
+<p>Der Vertrag ist bewusst auf drei Methoden reduziert. Serialisierung und Deserialisierung
+liegen im Verantwortungsbereich der jeweiligen Implementierung.</p>
 <hr />
-<h2 id="consequences">Consequences</h2>
+<h2 id="vertrag">Vertrag</h2>
+<h3 id="ijosynapplicationprotocol"><code>IJosynApplicationProtocol</code></h3>
+<table>
+<thead>
+<tr>
+<th>Methode</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GetRawArguments()</code></td>
+<td>Ruft serialisierte Job-Argumente als String ab</td>
+</tr>
+<tr>
+<td><code>PutRawResult(string)</code></td>
+<td>Übermittelt das serialisierte Job-Ergebnis</td>
+</tr>
+<tr>
+<td><code>PutError(string)</code></td>
+<td>Übermittelt einen serialisierten <code>ErrorReport</code>, falls der Transport noch aktiv ist</td>
+</tr>
+</tbody>
+</table>
+<h3 id="errorreport"><code>ErrorReport</code></h3>
+<pre><code class="language-csharp">record ErrorReport(
+    string  Message,
+    string? CallStack,
+    string? ExceptionDetails,
+    DateTimeOffset OccurredAt);
+</code></pre>
+<p>Wird via <code>PropertyBag</code> als <strong>JSON</strong> serialisiert, bevor er über <code>PutError</code> übertragen wird
+(INI ist für mehrzeilige Felder wie <code>CallStack</code> und <code>ExceptionDetails</code> ungeeignet).
+Der Server protokolliert ihn; eine weitergehende Verarbeitung ist für spätere Ausbaustufen
+vorgesehen.</p>
+<hr />
+<h2 id="fehlerrouting-im-jobhost">Fehlerrouting im JobHost</h2>
+<pre><code>Pipe-Verbindungsfehler          →  LocalLog.WriteError(...)              (nur lokal)
+Job-Fehler, Pipe noch aktiv     →  LocalLog.WriteError(...) + PutError   (lokal + remote)
+PutError selbst fehlgeschlagen  →  LocalLog.WriteError(...)              (Fallback lokal)
+</code></pre>
+<hr />
+<h2 id="fur-maintainer">Für Maintainer</h2>
+<h3 id="bauen-testen-packen">Bauen, Testen, Packen</h3>
+<pre><code>.local-build\build.cmd          # Release-Build (beide Shared-Projekte)
+.local-build\build.cmd Debug    # Debug-Build
+.local-build\pack.cmd           # NuGet-Pakete → ..\..\local-packages\
+</code></pre>
+<h3 id="abhangigkeiten">Abhängigkeiten</h3>
+<table>
+<thead>
+<tr>
+<th>Paket</th>
+<th>Rolle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JOSYN.Foundation.ResultPattern</code></td>
+<td>Fehler-als-Wert-Pattern</td>
+</tr>
+</tbody>
+</table>
+<h3 id="referenced-by">Referenced by</h3>
 <ul>
-<li><code>josyn-jap</code> is <strong>no longer called &quot;the backend&quot;</strong> in platform documentation.
-The correct term for <code>josyn-jap</code> is &quot;the JAP session server&quot; or &quot;the per-session server&quot;.
-&quot;Backend&quot; now refers exclusively to <code>josyn-backend</code>.</li>
-<li>The platform vocabulary gains a new entry: <strong>Backend</strong> → <code>josyn-backend</code></li>
-<li>The platform now has five repos; <code>josyn-platform/README.md</code> reflects this</li>
-<li>The runtime flow in <code>architecture/overview.md</code> is updated to show <code>josyn-backend</code>
-as the spawner of both <code>JAPServer.exe</code> and <code>job.exe</code></li>
-<li><code>josyn-backend</code> depends only on <code>JOSYN.Foundation.ResultPattern</code> in the stub phase.
-It will <strong>never</strong> take a NuGet dependency on <code>josyn-jap</code>; the relationship is
-purely runtime (spawn) — not a code import</li>
+<li><code>JOSYN.JobHost</code></li>
+<li><code>JOSYN.Jap.JAPServer</code></li>
 </ul>
+<h3 id="projektstruktur">Projektstruktur</h3>
+<pre><code>JOSYN.Jap.Contract\
+├── IJosynApplicationProtocol.cs    # JAP-Vertrag (3 Methoden)
+└── ErrorReport.cs                  # Fehler-Payload-Record
+</code></pre>
+<hr />
+<p><em>JOSYN.Jap.Contract — © 2026 HAEVG AG — MIT License</em></p>
 
     </article>
   </main>

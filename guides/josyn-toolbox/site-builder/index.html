@@ -21,20 +21,16 @@
     <a href="../../../architecture/components/index.html" class="nav-link">Overview</a>
 </details>
 <details>
+    <summary class="nav-subsection">Decisions</summary>
+    <a href="../../../architecture/decisions/index.html" class="nav-link">Overview</a>
+</details>
+<details>
     <summary class="nav-subsection">Platform</summary>
     <a href="../../../architecture/platform/index.html" class="nav-link">Overview</a>
 </details>
 <details>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="../../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
-</details>
-</details>
-<details>
-  <summary class="nav-section">Decisions</summary>
-  <a href="../../../decisions/index.html" class="nav-link">Overview</a>
-<details>
-    <summary class="nav-subsection">Platform</summary>
-    <a href="../../../decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details open>
@@ -257,8 +253,8 @@ git -C josyn-docs commit -m &quot;docs: site rebuild [skip ci]&quot;
 git -C josyn-docs push
 </code></pre>
 <h3 id="net-sdk-version">5. .NET SDK version</h3>
-<p>The renderer (<code>site-builder-renderer</code>) targets .NET 8. Verify the Azure DevOps agent
-image includes .NET 8 SDK, or add a <code>UseDotNet</code> task to the pipeline YAML.</p>
+<p>The renderer (<code>site-builder-renderer</code>) targets .NET 10. Verify the Azure DevOps agent
+image includes .NET 10 SDK, or add a <code>UseDotNet</code> task to the pipeline YAML.</p>
 <h3 id="preferred-ci-approach">Preferred CI approach</h3>
 <p>Rather than calling the <code>.cmd</code> wrappers, a CI pipeline should call the PS1 scripts
 directly with fully explicit paths. The assembler and renderer are two separate tasks,

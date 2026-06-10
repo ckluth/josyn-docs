@@ -21,20 +21,16 @@
     <a href="../../../architecture/components/index.html" class="nav-link">Overview</a>
 </details>
 <details>
+    <summary class="nav-subsection">Decisions</summary>
+    <a href="../../../architecture/decisions/index.html" class="nav-link">Overview</a>
+</details>
+<details>
     <summary class="nav-subsection">Platform</summary>
     <a href="../../../architecture/platform/index.html" class="nav-link">Overview</a>
 </details>
 <details>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="../../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
-</details>
-</details>
-<details>
-  <summary class="nav-section">Decisions</summary>
-  <a href="../../../decisions/index.html" class="nav-link">Overview</a>
-<details>
-    <summary class="nav-subsection">Platform</summary>
-    <a href="../../../decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details open>
@@ -428,7 +424,7 @@ with a <code>(verified current at &lt;now&gt;)</code> suffix. Do not alter findi
 </code></pre>
 <p>A violation looks like:</p>
 <pre><code>josyn-jap / docs
-  ❌ JOSYN.Jap.Shared.Contract/IJosynApplicationProtocol.cs
+  ❌ JOSYN.Jap.Contract/IJosynApplicationProtocol.cs
      GetRawArguments() — &lt;summary&gt; missing on interface method.
   ❌ JOSYN.Jap.Shared.Log/LocalLog.cs
      WriteError(string causer, string message) — implementation duplicates
@@ -436,7 +432,7 @@ with a <code>(verified current at &lt;now&gt;)</code> suffix. Do not alter findi
 </code></pre>
 <p>An unverifiable area looks like:</p>
 <pre><code>josyn-backend / tests
-  ⚠️ No test project found. Known gap — PoC stub phase. See repos/josyn-backend/overview.md Sanity Notes.
+  ⚠️ No test project found. Known gap — no tests written yet. See repos/josyn-backend/overview.md Sanity Notes.
 </code></pre>
 <hr />
 <h2 id="fixing-violations">Fixing violations</h2>

@@ -21,20 +21,16 @@
     <a href="../../../../architecture/components/index.html" class="nav-link">Overview</a>
 </details>
 <details>
+    <summary class="nav-subsection">Decisions</summary>
+    <a href="../../../../architecture/decisions/index.html" class="nav-link">Overview</a>
+</details>
+<details>
     <summary class="nav-subsection">Platform</summary>
     <a href="../../../../architecture/platform/index.html" class="nav-link">Overview</a>
 </details>
 <details>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="../../../../architecture/solution-architecture/index.html" class="nav-link">Overview</a>
-</details>
-</details>
-<details>
-  <summary class="nav-section">Decisions</summary>
-  <a href="../../../../decisions/index.html" class="nav-link">Overview</a>
-<details>
-    <summary class="nav-subsection">Platform</summary>
-    <a href="../../../../decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details>
@@ -111,7 +107,7 @@ The checks below cover the two remaining packages only.</p>
 </thead>
 <tbody>
 <tr>
-<td><code>JOSYN.Jap.Shared.Contract</code></td>
+<td><code>JOSYN.Jap.Contract</code></td>
 <td><code>JOSYN.Foundation.ResultPattern</code> only</td>
 <td>✅</td>
 </tr>
@@ -134,8 +130,8 @@ The checks below cover the two remaining packages only.</p>
 </thead>
 <tbody>
 <tr>
-<td><code>JOSYN.Jap.Shared.Contract</code></td>
-<td><code>JOSYN.Jap.Shared.Contract</code></td>
+<td><code>JOSYN.Jap.Contract</code></td>
+<td><code>JOSYN.Jap.Contract</code></td>
 <td>✅</td>
 </tr>
 <tr>
@@ -157,7 +153,7 @@ The checks below cover the two remaining packages only.</p>
 <p>NuGet library projects (<code>Shared.Contract</code>, <code>Shared.Log</code>): all required metadata present (<code>PackageId</code>, <code>Version</code>, <code>PackageLicenseExpression=MIT</code>, <code>Copyright</code>, <code>Company</code>, <code>Authors</code>, <code>PackageReadmeFile</code>, <code>PackageIcon</code>, <code>GenerateDocumentationFile=true</code>). <code>icon.png</code> and <code>README.md</code> co-located. ✅</p>
 <p>Test project (<code>Shared.Log.Test</code>): NuGet metadata absent. Required packages <code>Microsoft.NET.Test.Sdk</code>, <code>NUnit 4.5.0</code>, <code>NUnit3TestAdapter</code> present. ✅</p>
 <h3 id="directory-structure">Directory structure</h3>
-<p>✅ <code>josyn-jap-shared/</code> — assembly subdirectories <code>JOSYN.Jap.Shared.Contract/</code>, <code>JOSYN.Jap.Shared.Log/</code>, <code>JOSYN.Jap.Shared.Log.Test/</code> all match their assembly names exactly.</p>
+<p>✅ <code>josyn-jap-shared/</code> — assembly subdirectories <code>JOSYN.Jap.Contract/</code>, <code>JOSYN.Jap.Shared.Log/</code>, <code>JOSYN.Jap.Shared.Log.Test/</code> all match their assembly names exactly.</p>
 <h3 id="local-build-scripts"><code>.local-build/</code> scripts</h3>
 <p>✅ <code>josyn-jap-shared/.local-build/</code> — <code>build.cmd</code>, <code>build.release.cmd</code>, <code>build.debug.cmd</code>, <code>test.cmd</code>, <code>pack.cmd</code>, <code>clean.cmd</code> all present.</p>
 <h3 id="nuget-feed">NuGet feed</h3>
@@ -165,7 +161,7 @@ The checks below cover the two remaining packages only.</p>
 <h3 id="contracts-folders"><code>Contracts/</code> folders</h3>
 <ul>
 <li><code>JOSYN.Jap.Shared.Log</code> has <code>Contracts/ILocalLog.cs</code> for the public static <code>LocalLog</code> class. ✅</li>
-<li><code>JOSYN.Jap.Shared.Contract</code> defines interfaces directly (no static classes requiring a companion <code>Contracts/</code> folder). ✅</li>
+<li><code>JOSYN.Jap.Contract</code> defines interfaces directly (no static classes requiring a companion <code>Contracts/</code> folder). ✅</li>
 </ul>
 
     </article>

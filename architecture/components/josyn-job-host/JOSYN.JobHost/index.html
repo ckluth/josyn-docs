@@ -21,20 +21,16 @@
     <a href="../../index.html" class="nav-link">Overview</a>
 </details>
 <details>
+    <summary class="nav-subsection">Decisions</summary>
+    <a href="../../../decisions/index.html" class="nav-link">Overview</a>
+</details>
+<details>
     <summary class="nav-subsection">Platform</summary>
     <a href="../../../platform/index.html" class="nav-link">Overview</a>
 </details>
 <details>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="../../../solution-architecture/index.html" class="nav-link">Overview</a>
-</details>
-</details>
-<details>
-  <summary class="nav-section">Decisions</summary>
-  <a href="../../../../decisions/index.html" class="nav-link">Overview</a>
-<details>
-    <summary class="nav-subsection">Platform</summary>
-    <a href="../../../../decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details>
@@ -184,7 +180,7 @@ flowchart TD
     F --&gt; G[&quot;ProcessJobResult\nPropertyBag.Serialize → PutRawResult&quot;]
 </div>
 <p><strong>Transport:</strong> <code>JOSYN.Foundation.JIP</code> Named Pipes (session-isoliert per GUID-Key).
-<strong>Anwendungsprotokoll:</strong> <code>JOSYN.Jap.Shared.Contract.IJosynApplicationProtocol</code>.
+<strong>Anwendungsprotokoll:</strong> <code>JOSYN.Jap.Contract.IJosynApplicationProtocol</code>.
 <strong>Serialisierung:</strong> <code>JOSYN.Foundation.PropertyBag</code> (INI oder JSON, auto-erkannt).</p>
 <hr />
 <h2 id="attribute-referenz">Attribute-Referenz</h2>
@@ -276,7 +272,7 @@ PutError selbst fehlgeschlagen  →  LocalLog.Error(...)              (Fallback 
 <td>Argument- / Ergebnis-Serialisierung</td>
 </tr>
 <tr>
-<td><code>JOSYN.Jap.Shared.Contract</code></td>
+<td><code>JOSYN.Jap.Contract</code></td>
 <td><code>IJosynApplicationProtocol</code>-Anwendungsprotokoll</td>
 </tr>
 <tr>

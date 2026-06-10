@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>JOSYN.Backend.GlobalConfig — JOSYN Documentation</title>
+  <title>JOSYN.Backend.BootstrapConfig — JOSYN Documentation</title>
   <link rel="stylesheet" href="../../../../../site.css">
   <script>var _sw=localStorage.getItem('sidebar-w');if(_sw)document.documentElement.style.setProperty('--sidebar-w',_sw);</script>
 </head>
@@ -21,20 +21,16 @@
     <a href="../../../index.html" class="nav-link">Overview</a>
 </details>
 <details>
+    <summary class="nav-subsection">Decisions</summary>
+    <a href="../../../../decisions/index.html" class="nav-link">Overview</a>
+</details>
+<details>
     <summary class="nav-subsection">Platform</summary>
     <a href="../../../../platform/index.html" class="nav-link">Overview</a>
 </details>
 <details>
     <summary class="nav-subsection">Solution Architecture</summary>
     <a href="../../../../solution-architecture/index.html" class="nav-link">Overview</a>
-</details>
-</details>
-<details>
-  <summary class="nav-section">Decisions</summary>
-  <a href="../../../../../decisions/index.html" class="nav-link">Overview</a>
-<details>
-    <summary class="nav-subsection">Platform</summary>
-    <a href="../../../../../decisions/platform/index.html" class="nav-link">Overview</a>
 </details>
 </details>
 <details>
@@ -90,22 +86,40 @@
   <div id="sidebar-resizer"></div>
   <main>
     <article>
-      <div class="origin">[josyn-backend]/josyn-backend-bootstrap-config/JOSYN.Backend.BootstrapConfig/README.md</div><h1 id="josyn.backend.globalconfig">JOSYN.Backend.GlobalConfig</h1>
-<p><strong>Runtime configuration contract for JOSYN backend components.</strong></p>
-<p>Provides <code>IGlobalConfig</code> — the stable interface that backend components use to obtain
-connection strings and runtime paths. <code>HardcodedGlobalConfig</code> is the PoC placeholder
-implementation with compile-time developer-machine constants.</p>
-<h2 id="known-poc-limitation">Known PoC limitation</h2>
-<p><code>HardcodedGlobalConfig</code> uses hardcoded paths and connection strings. It is intentionally
-equivalent in status to the fake session key in <code>JOSYN.Jap.JAPServer</code> — a known shortcut
-that will be replaced by a real configuration source (file-based, registry, or company
-config system) when the platform moves beyond the PoC phase.</p>
+      <div class="origin">[josyn-backend]/josyn-backend-bootstrap-config/JOSYN.Backend.BootstrapConfig/README.md</div><h1 id="josyn.backend.bootstrapconfig">JOSYN.Backend.BootstrapConfig</h1>
+<p><strong>Bootstrap configuration contract for JOSYN backend components.</strong></p>
+<p>Provides <code>IBootstrapConfig</code> — the stable interface that backend components use to obtain
+connection strings and runtime paths. <code>FileBootstrapConfig</code> is the built-in implementation
+that reads from <code>josyn.bootstrap.ini</code> in the backend root directory.</p>
+<h2 id="known-limitation">Known limitation</h2>
+<p><code>FileBootstrapConfig</code> reads from a flat INI file with no encryption. It is intentionally
+a minimal bootstrap mechanism — a more sophisticated implementation (e.g. adapter-based)
+can replace it via the ADR-009 adapter mechanism without changing any consumer code.</p>
 <h2 id="usage">Usage</h2>
-<pre><code class="language-csharp">IGlobalConfig config = new HardcodedGlobalConfig();
+<pre><code class="language-csharp">var result = FileBootstrapConfig.Load(Path.Combine(backendRoot, FileBootstrapConfig.FileName));
+if (!result.Succeeded) { /* abort startup */ }
+IBootstrapConfig config = result.Value;
 var store = new SessionStore(config.SessionStoreConnectionString);
 </code></pre>
 <h2 id="dependencies">Dependencies</h2>
-<p>None. This package has no NuGet dependencies.</p>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JOSYN.Foundation.PropertyBag</code></td>
+<td>INI deserialization</td>
+</tr>
+<tr>
+<td><code>JOSYN.Foundation.ResultPattern</code></td>
+<td>Error-as-value result type</td>
+</tr>
+</tbody>
+</table>
 <hr />
 <p>MIT License — Copyright © 2026 HAEVG AG</p>
 
